@@ -95,6 +95,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'django_admin_bootstrapped',
     'django.contrib.admin',
+    'raven.contrib.django.raven_compat',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
