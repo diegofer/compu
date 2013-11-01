@@ -1,29 +1,6 @@
 {% extends 'main/shell.html' %}
 
-{% block title %} Home {% endblock %}
-
-
-{% block sidebar_left %}
-
-<div class="panel panel-default">
-
-	<div class="panel-heading">Servicios</div>
-
-
-	<div class="list-group">
-	{% for estate in estados %}
-		
-		<a href="{% url 'home' estate.0 %}" class="list-group-item"><span class="badge">{% cycle num_cola num_revision num_reparado num_entregado %}</span>{{estate.0}}</a>
-
-	{% endfor %}
-
-	</div>
-</div> <!-- end panel -->
-{% endblock sidebar_left %}
-
-
-
-
+{% block title %} Servicios {% endblock %}
 
 
 
@@ -36,7 +13,7 @@
 
 {% for servicio in servicios %}
 
-	<div class="list-group item-servicio {% if servicio.estado == servicio.EN_COLA %} servicio.EN_COLA {% elif servicio.estado == servicio.EN_REVISION %} servicio.EN_REVISION  {% elif servicio.estado == servicio.REPARADO %} servicio.REPARADO  {% endif%}"> 
+	<div class="list-group item-servicio {% if servicio.estado == servicio.EN_COLA %} en-cola {% elif servicio.estado == servicio.EN_REVISION %} en-revision  {% elif servicio.estado == servicio.REPARADO %} reparado  {% endif%}"> 
 		
 		<a href="#" class="list-group-item">
 			<div class="row">
@@ -57,7 +34,7 @@
 
 
 {% empty %}
-<h3>No hay servicios disponibles todavía</h3>
+<h3>No hay servicios creados todavía</h3>
 {% endfor %}
 
 
