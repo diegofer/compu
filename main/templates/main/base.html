@@ -6,9 +6,12 @@
 	<meta name="robots" content="noindex,nofollow,noarchive,noodp,nosnippet">
 	<title> {% block title %} {% endblock %} | Compuclínica</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" media="screen" href="{{STATIC_URL}}main/bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" media="screen" href="{{STATIC_URL}}main/bootstrap/css/bootstrap-theme.css">
+	<link rel="stylesheet" media="screen" href="{{STATIC_URL}}main/bootstrap/css/bootstrap.min.css">
+	<!-- <link rel="stylesheet" media="screen" href="{{STATIC_URL}}main/bootstrap/css/bootstrap-theme.css"> -->
+	
 	<link rel="stylesheet" href="{{STATIC_URL}}main/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="{{STATIC_URL}}main/chosen/chosen.min.css">
+	<link rel="stylesheet" href="{{STATIC_URL}}main/chosen/chosen-bootstrap.css">
 	<link rel="stylesheet" href="{{STATIC_URL}}main/css/style.css">
 
     {% block css %}{% endblock %}
@@ -37,6 +40,9 @@
 	{% block js_body %} {% endblock %}
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="{{STATIC_URL}}main/bootstrap/js/bootstrap.js"></script>	
+	<script src="{{STATIC_URL}}main/bootstrap/js/bootstrap.min.js"></script>	
+	<script src="{{STATIC_URL}}main/chosen/chosen.jquery.min.js"></script>	
+
+	<script src="{{STATIC_URL}}main/js/app.js"></script>	
 </body>
 </html>

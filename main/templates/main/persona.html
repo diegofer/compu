@@ -1,0 +1,123 @@
+{% extends 'main/shell.html' %}
+
+{% block title %}Persona{% endblock %}
+
+{% block header %}Cliente{% endblock %}
+
+
+{% block content %} 
+
+<div id="persona">
+
+	<div class="row encabezado">
+		
+		<div class="col-md-2 foto">
+			
+			<i class="fa fa-user icon-persona"></i>
+			
+		</div>
+		
+		<div class="col-md-10">
+			
+			<h1>
+				<span class="label pull-right {% if persona.tipo == persona.CLIENTE %} label-success {% else %} label-info {% endif %}">{{persona.tipo}}</span>
+				{{persona.nombre}}
+			</h1>
+			<h3>{{persona.apellido}}</h3>
+
+		</div>
+
+	</div> <!-- end row -->
+	<br/>
+
+
+	<div class="row">
+		
+		<div class="col-md-8">
+
+			<h3>Datos Personales</h3>
+
+					<table class="table table-striped">
+						<tbody>	
+							<tr>
+								<td>Cédula: </td>
+								<td>{{persona.cedula}}</td>
+							</tr>
+							<tr>
+								<td>Dirección: </td>
+								<td>{{persona.direccion}}</td>
+							</tr>
+							<tr>
+								<td>Teléfono: </td>
+								<td>{{persona.telefono}}</td>
+							</tr>
+							{% if persona.email %}
+							<tr>
+								<td>Email: </td>
+								<td>{{persona.email}}</td>
+							</tr>
+							{% endif %}
+
+						</tbody>
+						
+					</table>
+				
+			<br/>
+
+			<h3><i class="fa fa-wrench fw"></i> Servicios</h3>
+
+			{% for servicio in servicios %}
+
+
+				<div class="list-group item-servicio {% if servicio.estado == servicio.EN_COLA %} servicio.EN_COLA {% elif servicio.estado == servicio.EN_REVISION %} servicio.EN_REVISION  {% elif servicio.estado == servicio.REPARADO %} servicio.REPARADO  {% endif%}"> 
+					
+					<a href="{% url 'servicio' servicio.id %}" class="list-group-item">
+						<div class="row">
+							<div class="col-lg-2 left">		
+								<i class="fa fa-{{servicio.tipo.icon}} fa-5x icon {% if servicio.estado == servicio.EN_COLA %} en-cola {% elif servicio.estado == servicio.EN_REVISION %} en-revision  {% elif servicio.estado == servicio.REPARADO %} reparado  {% endif%}"></i><br/>
+								<span>{{servicio.tipo.nombre}}<span/>				
+							</div>	
+
+							<div class="col-lg-10 right">
+								<span class="badge pull-right">{{servicio.id}}</span>
+								<h4>{{servicio.tipo.nombre}} {{servicio.marca}} de {{servicio.cliente.nombre}}</h4>
+								<h5>Ingresó hace {{servicio.created|timesince}}</h5>	
+								<span class="label {% if servicio.estado == servicio.EN_COLA %} label-danger {% elif servicio.estado == servicio.EN_REVISION %} label-warning  {% elif servicio.estado == servicio.REPARADO %} label-success {% else %} label-default  {% endif%}">{{servicio.estado}} </span>		
+							</div>
+						</div> 
+					</a>
+				</div>  <!-- end list -->
+
+			{% empty %}
+			<h3>No hay servicios aun</h3>
+			{% endfor %}
+
+			
+		</div>  
+
+
+		<div class="col-md-4">
+
+			<h3>Editar</h3>				
+
+	
+			<a href="#" class="btn btn-info" role="button">	
+				<i class="fa fa-edit"></i>			 		 
+				Editar
+			</a>
+
+			<a href="#" class="btn btn-danger" role="button">	
+				<i class="fa fa-trash-o"></i>			 		 
+				Eliminar
+			</a>		
+				
+			
+		</div>
+
+	</div> <!-- end row -->
+
+
+
+</div><!--  end #persona-->
+
+{% endblock content %}

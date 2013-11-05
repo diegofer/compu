@@ -1,4 +1,6 @@
 {% extends 'main/shell.html' %}
+{% load main_tags %}
+{% load crispy_forms_tags %}
 
 {% block title %} Home {% endblock %}
 
@@ -7,21 +9,57 @@
 
 <div class="panel panel-default">
 
-	<div class="panel-heading">Servicios</div>
+	<div class="panel-heading">SERVICIOS</div>
 
 
-	<div class="list-group">
-	{% for estate in estados %}
-		
-		<a href="{% url 'home' estate.0 %}" class="list-group-item"><span class="badge">{% cycle num_cola num_revision num_reparado num_entregado %}</span>{{estate.0}}</a>
+	<div class="list-group nav-servicios">
 
-	{% endfor %}
+		<a href="{% url 'home' %}" class="list-group-item {% active request "^/$" %}">
+			<span class="badge">20</span> 
+			<i class="fa fa-calendar fw"></i> Actividad Reciente
+		</a>
+
+		<a href="{% url 'home' SERVICIO.EN_COLA %}" class="list-group-item {% active request "^/en-cola/" %}">
+			<span class="badge">{{num_cola}}</span>
+			<i class="fa fa-clock-o fw"></i>  En Espera
+		</a>
+
+		<a href="{% url 'home' SERVICIO.EN_REVISION %}" class="list-group-item {% active request "^/en-revision/" %}">
+			<span class="badge">{{num_revision}}</span>
+			<i class="fa fa-wrench fw"></i> En Revisión
+		</a>
+
+		<a href="{% url 'home' SERVICIO.REPARADO %}" class="list-group-item {% active request "^/reparado/" %}">
+			<span class="badge">{{num_reparado}}</span>
+			<i class="fa fa-check fw"></i> Reparados
+		</a>	
 
 	</div>
+
 </div> <!-- end panel -->
+
+
+
 {% endblock sidebar_left %}
 
 
+
+
+{% block header %}
+	{% if estado == SERVICIO.EN_COLA %}
+		<i class="fa fa-clock-o fw"></i>  Servicios en Espera
+	{% elif estado == SERVICIO.EN_REVISION%}
+		<i class="fa fa-wrench fw"></i>  Servicios en Revición
+	{% elif estado == SERVICIO.REPARADO %}
+		<i class="fa fa-check fw"></i>  Servicios Reparados
+	{% else %}
+		<i class="fa fa-calendar fw"></i>  Actividad Reciente
+	{% endif %}
+
+	<button id="servicio-btn" class="btn btn-primary btn-lg" >
+	 	Nuevo Servicio
+	</button>
+{% endblock header %}
 
 
 
@@ -29,16 +67,12 @@
 
 {% block content %}
 
-<div class="well">
-	<h1>Mantenimientos Compuclínica</h1>
-</div>
-
 
 {% for servicio in servicios %}
 
 	<div class="list-group item-servicio {% if servicio.estado == servicio.EN_COLA %} servicio.EN_COLA {% elif servicio.estado == servicio.EN_REVISION %} servicio.EN_REVISION  {% elif servicio.estado == servicio.REPARADO %} servicio.REPARADO  {% endif%}"> 
 		
-		<a href="#" class="list-group-item">
+		<a href="{% url 'servicio' servicio.id %}" class="list-group-item">
 			<div class="row">
 				<div class="col-lg-2 left">		
 					<i class="fa fa-{{servicio.tipo.icon}} fa-5x icon {% if servicio.estado == servicio.EN_COLA %} en-cola {% elif servicio.estado == servicio.EN_REVISION %} en-revision  {% elif servicio.estado == servicio.REPARADO %} reparado  {% endif%}"></i><br/>
@@ -48,12 +82,12 @@
 				<div class="col-lg-10 right">
 					<span class="badge pull-right">{{servicio.id}}</span>
 					<h4>{{servicio.tipo.nombre}} {{servicio.marca}} de {{servicio.cliente.nombre}}</h4>
-					<h5>Hace {{servicio.created|timesince}}</h5>	
-					<span class="label {% if servicio.estado == servicio.EN_COLA %} label-danger {% elif servicio.estado == servicio.EN_REVISION %} label-warning  {% elif servicio.estado == servicio.REPARADO %} label-success  {% endif%}">{{servicio.estado}} </span>		
+					<h5>Ingresó hace {{servicio.created|timesince}}</h5>	
+					<span class="label {% if servicio.estado == servicio.EN_COLA %} label-danger {% elif servicio.estado == servicio.EN_REVISION %} label-warning  {% elif servicio.estado == servicio.REPARADO %} label-success {% else %} label-default  {% endif%}">{{servicio.estado}} </span>		
 				</div>
 			</div> 
 		</a>
-	</div>  <!-- end panel -->
+	</div>  <!-- end list -->
 
 
 {% empty %}
@@ -61,4 +95,54 @@
 {% endfor %}
 
 
+
+<!--################# FORMULARIOS ##################-->
+<!-- form servicio -->
+<div id="modal-form-servicio"  class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">Ingresar Servicio</h4>
+			</div>
+
+			<div class="modal-body">				
+				{% crispy servicioForm %}   			  
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!-- form persona -->
+<div id="modal-form-persona" style="overflow-y: auto;" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">Ingresar Persona</h4>
+			</div>
+
+			<div class="modal-body">				
+				{% crispy personaForm %}   			  
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
 {% endblock content %}
+
+
+

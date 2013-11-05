@@ -19,8 +19,31 @@
 		
 		<div class="collapse navbar-collapse navbar-conten-collapse">
             <ul class="nav navbar-nav">
-                <li class="item-home"><a href="#">Home</a></li>
-                <li class="item-ayuda"><a href="#">Ayuda</a></li>
+                <li class="item-home"><a href="/">Servicios</a></li>
+                <li class="item-ayuda"><a href="#">Clientes</a></li>
+                <li class="item-ayuda"><a href="#">Personal</a></li>
+            </ul>
+
+
+            <ul class="nav navbar-nav navbar-right">
+
+                <li class="dropdown item-config">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-cog"></span>
+                        <b class="caret"></b>
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        
+                        <li><a href="/admin/main/" target="_blank">Administrar</a></li>
+                        
+                        
+                        <li role="presentation" class="divider"></li>
+                        <li> <a href="#"><span class="glyphicon glyphicon-remove"></span> Salir </a> </li>
+                    </ul>
+
+                </li>                    
+
             </ul>
 
 
@@ -41,8 +64,13 @@
 		</div>
 
 		<div class="col-lg-9">
-			{% block content %} {% endblock %}
+			
+			<div class="well well-sm">
+				<h1>{% block header %}{% endblock %}</h1>
+			</div>
+			
 
+			{% block content %} {% endblock %}
 		</div>
 
 	</div>	<!-- end row -->

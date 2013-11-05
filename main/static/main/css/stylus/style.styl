@@ -7,16 +7,19 @@ body
 	padding-top 70px
 
 
-.item-servicio
+.icon.en-cola
+	color danger
+.icon.reparado
+	color success
+.icon.en-revision
+	color warning
 
+
+
+///////// ITEM SERVICIO //////////
+.item-servicio
 	.left
 		text-align center
-		.icon.en-cola
-			color danger
-		.icon.reparado
-			color success
-		.icon.en-revision
-			color warning
 
 .item-servicio.en-cola
 	a
@@ -28,7 +31,34 @@ body
 	a
 		border-color success
 
+///////// SERVICIO DETALLE //////////
+#servicio 
+	.logo
+		text-align center
+		.icon-servicio
+			font-size 100px
+	.fecha
+		margin 0
+	h1 
+		margin-top 0
+		margin-bottom 20px
+	.estado
+		font-size 15px
 
+	.servicio-person
+		text-align center
+		.icon-person
+			font-size 60px
+
+///////// PERSONA DETALLE //////////
+#persona 
+	.foto
+		text-align center
+	.icon-persona
+		font-size 100px
+	.linea
+		height 1px 
+		background-color #A39C9C
 
 
 @media only screen and (min-width: 480px) {

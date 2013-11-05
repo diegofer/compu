@@ -1,0 +1,119 @@
+{% extends 'main/home.html' %}
+
+{% block title %} Servicio {{servicio.id}} {% endblock %}
+
+
+{% block header %}
+	Servicio Detallado
+{% endblock header %}
+
+
+
+
+{% block content %}
+
+<div id="servicio">
+
+	<div class="row">
+		
+		<div class="col-md-2 logo">
+			
+				<i class="fa fa-{{servicio.tipo.icon}} icon icon-servicio {% if servicio.estado == servicio.EN_COLA %} en-cola {% elif servicio.estado == servicio.EN_REVISION %} en-revision  {% elif servicio.estado == servicio.REPARADO %} reparado  {% endif%}"></i><br/>
+			
+				
+		
+		</div>
+		
+		<div class="col-md-10">
+			
+			<h1>
+				<span class="label label-primary pull-right">No. {{servicio.id}}</span>
+				{{servicio.tipo.nombre}} {{servicio.marca.nombre}} 
+
+			</h1>
+			<span class="label estado {% if servicio.estado == servicio.EN_COLA %} label-danger {% elif servicio.estado == servicio.EN_REVISION %} label-warning  {% elif servicio.estado == servicio.REPARADO %} label-success  {% endif%}">{{servicio.estado}} </span>
+
+		</div>
+
+	</div> <!-- end row -->
+
+
+
+
+
+	<div class="page-header">
+		<span class="fecha pull-right">{{servicio.created}}</span>
+		<h4>Ingresó hace {{servicio.created|timesince}}</h4>
+	</div>
+	
+	<div class="row">
+		
+		<div class="col-md-8">
+
+			<table class="table table-striped">
+				<tbody>	
+					<tr>
+						<td>Marca: </td>
+						<td>{{servicio.marca.nombre}}</td>
+					</tr>
+					{% if servicio.modelo %}
+					<tr>
+						<td>Modelo: </td>
+						<td>{{servicio.modelo}}</td>
+					</tr>
+					{% endif %}
+
+					{% if servicio.serial %}
+					<tr>
+						<td>Serial: </td>
+						<td>{{servicio.serial}}</td>
+					</tr>
+					{% endif %}
+
+				</tbody>
+				
+			</table>
+
+			<h3>Motivo de mantenimiento?</h3>
+			<h3>componentes?</h3>
+			
+		</div>
+
+
+		<div class="col-md-4">
+
+			<div class="panel panel-success servicio-person">
+
+				<div class="panel-heading">CLIENTE</div>
+				<div class="panel-body">
+					
+					<i class="fa fa-user icon-person"></i>
+	
+					<a href="{% url 'persona' servicio.cliente.id %}" class="btn btn-success btn-block btn-lg" role="button">				 		 
+						{{servicio.cliente.full_name}}
+					</a>		
+				</div>
+			</div>
+
+			<div class="panel panel-info servicio-person">
+
+				<div class="panel-heading">TÉCNICO</div>
+				<div class="panel-body">
+					
+					<i class="fa fa-user icon-person"></i>
+	
+					<a href="#" class="btn btn-info btn-block btn-lg" role="button">				 		 
+						{{servicio.cliente.full_name}}
+					</a>		
+				</div>
+			</div>
+
+			
+		</div>
+
+	</div> <!-- end row -->
+
+</div> <!-- end #servicio -->
+
+
+{% endblock content %}

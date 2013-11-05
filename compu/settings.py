@@ -80,6 +80,8 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
+
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -90,6 +92,7 @@ INSTALLED_APPS = (
 
     'main',
 
+    'crispy_forms',
     'south',
     'devserver',
     'debug_toolbar',
@@ -97,6 +100,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'raven.contrib.django.raven_compat',
 )
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
@@ -147,3 +152,5 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.logger.LoggingPanel',
     #'cache_panel.CachePanel',
 )
+
+

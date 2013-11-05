@@ -5,8 +5,8 @@ from django.db import models
 
 class Persona(models.Model):
 
-	CLIENTE   = 'Cliente'#'0'
-	TECNICO   = 'Técnico'#'1'
+	CLIENTE   = 'cliente'#'0'
+	TECNICO   = 'tecnico'#'1'
 	
 	TIPO_PERSONA = (
 		(CLIENTE, 'Cliente'),
@@ -24,6 +24,11 @@ class Persona(models.Model):
 
 	def __unicode__(self):
 		return "%s %s" %(self.nombre, self.apellido)
+
+	def _get_full_name(self):
+		"Returns the person's full name."
+		return '%s %s' % (self.nombre, self.apellido)
+	full_name = property(_get_full_name)
 
 
 
