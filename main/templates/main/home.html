@@ -145,4 +145,33 @@
 {% endblock content %}
 
 
+{% block js_body %} 
+<script>
 
+	$('#guardar-servicio-btn').on('click', function(){
+		var formServicio = '#form-servicio';
+
+		$.ajax({
+		    url: "{% url 'guardar_servicio' %}",
+		    type: "POST",
+		    data: $(formServicio).serialize(),
+		    success: function(data) {
+		        if (!(data['success'])) {
+		            // Here we replace the form, for the
+		            $(formServicio).replaceWith(data['form_html']);
+		        }
+		        else {
+		            // Here you can show the user a success message or do whatever you need
+		            location.reload();
+		            //$(formServicio).find('.success-message').show();
+		        }
+		    },
+		    error: function () {
+		        $(formServicio).find('.error-message').show()
+		    }
+		});
+	})
+
+		
+</script>
+{% endblock %}

@@ -6,6 +6,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm #, UserCreationForm
 from django.conf import settings
 
+from crispy_forms.utils import render_crispy_form
+from jsonview.decorators import json_view
+
 from main.models import Servicio, Persona
 from main.forms import ServicioForm, PersonaForm
 
@@ -30,7 +33,16 @@ def home(request, estado='reciente'):
 	
 	return render_to_response('main/home.html', locals(), context_instance=RequestContext(request))
 
+@json_view
+def guardar_servicio(request):
+	form = ServicioForm(request.POST or None)
 
+	if form.is_valid():
+		form.save()
+		return {'success': True}
+
+	form_html = render_crispy_form(form)
+	return {'success': False, 'form_html': form_html}
 
 
 def servicio(request, id):

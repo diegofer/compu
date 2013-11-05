@@ -16,11 +16,13 @@ class ServicioForm(ModelForm):
 
 		self.helper = FormHelper(self)
 
-		self.helper.form_action = '/formulario/'
+		#self.helper.form_action = '/guardar_servicio/'
 
-		self.helper.form_class = 'form-horizontal'
-		self.helper.label_class = 'col-lg-2'
-		self.helper.field_class = 'col-lg-8'
+		self.helper.form_id     = 'form-servicio'
+		self.helper.form_class  = 'form-horizontal'
+		self.helper.label_class = 'col-md-2'
+		self.helper.field_class = 'col-md-8'
+
 		self.helper.layout = Layout(
 			FieldWithButtons('cliente', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="cliente-btn")),
 		    FieldWithButtons('tipo', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="tipo-btn")),
@@ -28,12 +30,8 @@ class ServicioForm(ModelForm):
 		    'modelo',
 		    'serial',
 		    'estado',
-		    #StrictButton('save', css_class='btn-default'),	
-		    
-		    FormActions(
-	            StrictButton('Guardar', css_class='btn-primary'),		
-	        )  
-	     
+	    
+	        StrictButton('Guardar', css_class='btn-primary', css_id='guardar-servicio-btn'),		
 		)
 
 	class Meta:
@@ -55,7 +53,7 @@ class PersonaForm(ModelForm):
 
 		self.helper.form_class = 'form-horizontal'
 		self.helper.label_class = 'col-lg-2'
-		self.helper.field_class = 'col-lg-8 '
+		self.helper.field_class = 'col-lg-8 col-lg-offset-2'
 
 		self.helper.layout = Layout(
 			PrependedText('nombre', "<i class='fa fa-user fa-fw'></i>", placeholder="nombre"),

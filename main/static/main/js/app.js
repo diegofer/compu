@@ -31,6 +31,7 @@ $( document ).ready( function(){
 				$('#servicio-btn').on('click', this.alClickServicio);
 				$('#cliente-btn').on('click', this.alClickCliente);
 				//formServicio.on('hidden.bs.modal', this.alHideServicio);
+				formPersona.on('hidden.bs.modal', this.alHidePersona);
 			},
 
 
@@ -46,6 +47,10 @@ $( document ).ready( function(){
 
 			alHideServicio: function() {
 				//formPersona.modal('show');
+			},
+
+			alHidePersona: function() {
+				formServicio.modal('show');
 			},		
 
 		};
