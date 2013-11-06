@@ -4,6 +4,13 @@
 
 {% block title %} Home {% endblock %}
 
+{% block js_head %}
+<script>
+	var urlGuardarServicio = '{% url "guardar_servicio" %}';
+	var urlGuardarPersona = '{% url "guardar_persona" %}';
+</script>
+{% endblock js_head %}
+
 
 {% block sidebar_left %}
 
@@ -46,19 +53,27 @@
 
 
 {% block header %}
-	{% if estado == SERVICIO.EN_COLA %}
-		<i class="fa fa-clock-o fw"></i>  Servicios en Espera
-	{% elif estado == SERVICIO.EN_REVISION%}
-		<i class="fa fa-wrench fw"></i>  Servicios en Revición
-	{% elif estado == SERVICIO.REPARADO %}
-		<i class="fa fa-check fw"></i>  Servicios Reparados
-	{% else %}
-		<i class="fa fa-calendar fw"></i>  Actividad Reciente
-	{% endif %}
+	<ul class="nav navbar-nav">
+		<li class="active"><a href="#">
+		{% if estado == SERVICIO.EN_COLA %}
+			<i class="fa fa-clock-o fw"></i>  Servicios en Espera  
+		{% elif estado == SERVICIO.EN_REVISION%}
+			<i class="fa fa-wrench fw"></i>  Servicios en Revición
+		{% elif estado == SERVICIO.REPARADO %}
+			<i class="fa fa-check fw"></i>  Servicios Reparados
+		{% else %}
+			<i class="fa fa-calendar fw"></i>  Actividad Reciente
+		{% endif %}
+		</a></li>
+	</ul> <!-- end navbar-header -->
 
-	<button id="servicio-btn" class="btn btn-primary btn-lg" >
-	 	Nuevo Servicio
-	</button>
+	<form role="form" class="navbar-form navbar-right" >
+		<button id="servicio-btn" class="btn btn-primary" >
+		 	<i class="fa fa-wrench"></i> Nuevo Servicio
+		</button>
+	</form> 
+
+		
 {% endblock header %}
 
 
@@ -113,6 +128,7 @@
 
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				<button type="button" id="guardar-servicio-btn" class="btn btn-primary" data-loading-text="Guardando...">Guardar</button>
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
@@ -134,8 +150,8 @@
 			</div>
 
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				<button type="button" id="guardar-persona-btn" class="btn btn-primary" data-loading-text="Guardando...">Guardar</button>
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
@@ -148,29 +164,57 @@
 {% block js_body %} 
 <script>
 
-	$('#guardar-servicio-btn').on('click', function(){
-		var formServicio = '#form-servicio';
+	// $('#guardar-servicio-btn').on('click', function(event){
+	// 	var formServicio = '#form-servicio';
+	// 	$(event.target).button('loading');
+		
+	// 	$.ajax({
+	// 	    url: "{% url 'guardar_servicio' %}",
+	// 	    type: "POST",
+	// 	    data: $(formServicio).serialize(),
+	// 	    success: function(data) {
+	// 	        if (!(data['success'])) {
+	// 	            // Here we replace the form, for the
+	// 	            $(formServicio).replaceWith(data['form_html']);
+	// 	            $(event.target).button('reset');
+	// 	            initApp.setEvents();
+	// 	        }
+	// 	        else {
+	// 	            location.reload();
+	// 	        }
+	// 	    },
+	// 	    error: function () {
+	// 	    	console.log('tengo errores');
+	// 	        $(formServicio).find('.error-message').show()
+	// 	    }
+	// 	});
+	// });
 
-		$.ajax({
-		    url: "{% url 'guardar_servicio' %}",
-		    type: "POST",
-		    data: $(formServicio).serialize(),
-		    success: function(data) {
-		        if (!(data['success'])) {
-		            // Here we replace the form, for the
-		            $(formServicio).replaceWith(data['form_html']);
-		        }
-		        else {
-		            // Here you can show the user a success message or do whatever you need
-		            location.reload();
-		            //$(formServicio).find('.success-message').show();
-		        }
-		    },
-		    error: function () {
-		        $(formServicio).find('.error-message').show()
-		    }
-		});
-	})
+	// $('#guardar-persona-btn').on('click', function(event){
+	// 	var formPersona = '#form-persona';
+	// 	$(event.target).button('loading');
+		
+	// 	$.ajax({
+	// 	    url: "{% url 'guardar_servicio' %}",
+	// 	    type: "POST",
+	// 	    data: $(formPersona).serialize(),
+	// 	    success: function(data) {
+	// 	        if (!(data['success'])) {
+	// 	            // Here we replace the form, for the
+	// 	            $(formPersona).replaceWith(data['form_html']);
+	// 	            $(event.target).button('reset');
+
+	// 	        }
+	// 	        else {
+	// 	            location.reload();
+	// 	        }
+	// 	    },
+	// 	    error: function () {
+	// 	    	console.log('tengo errores');
+	// 	        $(formPersona).find('.error-message').show()
+	// 	    }
+	// 	});
+	// });
 
 		
 </script>

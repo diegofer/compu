@@ -33,16 +33,6 @@ def home(request, estado='reciente'):
 	
 	return render_to_response('main/home.html', locals(), context_instance=RequestContext(request))
 
-@json_view
-def guardar_servicio(request):
-	form = ServicioForm(request.POST or None)
-
-	if form.is_valid():
-		form.save()
-		return {'success': True}
-
-	form_html = render_crispy_form(form)
-	return {'success': False, 'form_html': form_html}
 
 
 def servicio(request, id):
@@ -64,5 +54,33 @@ def servicio(request, id):
 
 def persona(request, id):
 	persona = Persona.objects.get(id=id)
-	servicios = Servicio.objects.filter(cliente__pk=persona.id)
+	servicios = Servicio.objects.filter(cliente__pk=persona.id).order_by('-updated')
 	return render_to_response('main/persona.html', locals(), context_instance=RequestContext(request))
+
+
+
+######## OPERACIONES CRUD #############
+
+@json_view
+def guardar_servicio(request):
+	form = ServicioForm(request.POST or None)
+
+	if form.is_valid():
+		form.save()
+		return {'success': True}
+
+	form_html = render_crispy_form(form, context=RequestContext(request))
+	return {'success': False, 'form_html': form_html}
+
+
+@json_view
+def guardar_persona(request):
+    form = PersonaForm(request.POST or None)
+    
+    if form.is_valid():
+        persona = form.save()
+        print persona
+        return {'success': True, 'persona_id': persona.id, 'persona': persona.full_name}
+
+    form_html = render_crispy_form(form, context=RequestContext(request))
+    return {'success': False, 'form_html': form_html}
