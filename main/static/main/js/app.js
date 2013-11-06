@@ -8,8 +8,10 @@ $( document ).ready( function(){
 	// console.log(item);
 	function inicializar() {
 
-		formServicioModal = $('#modal-form-servicio');
-		formPersonaModal  = $('#modal-form-persona');
+		modalServicio      = $('#modal-form-servicio');
+		modalPersona       = $('#modal-form-persona');
+		modalTipoServicio  = $('#modal-form-tipo-servicio');
+		modalMarca         = $('#modal-form-marca');
 
 		var compu = {
 
@@ -30,58 +32,97 @@ $( document ).ready( function(){
 			setEvents: function(arg) {
 				$('#servicio-btn').on('click', this.alClickServicio);
 				$('#cliente-btn').on('click', this.alClickCliente);
+				$('#tipo-btn').on('click', this.alClickTipo);
+				$('#marca-btn').on('click', this.alClickMarca);
+
 
 				$('#guardar-servicio-btn').on('click', this.guardarServicio);
 				$('#guardar-persona-btn').on('click', this.guardarPersona);
+				$('#guardar-tipo-servicio-btn').on('click', this.guardarTipoServicio);
+				$('#guardar-marca-btn').on('click', this.guardarMarca);
 
-				formPersonaModal.on('hidden.bs.modal', this.alHidePersona);
+				modalServicio.on('hidden.bs.modal', this.alHideServicio);
+				modalPersona.on('hidden.bs.modal', this.alHidePersona);			
+				modalTipoServicio.on('hidden.bs.modal', this.alHideTipoServicio);			
+				modalMarca.on('hidden.bs.modal', this.alHideMarca);			
 			},
 
 			clearEvents: function() {
 				$('#servicio-btn').off('click', this.alClickServicio);
 				$('#cliente-btn').off('click', this.alClickCliente);
+				$('#tipo-btn').off('click', this.alClickTipo);
+				$('#marca-btn').off('click', this.alClickMarca);
 
 				$('#guardar-servicio-btn').off('click', this.guardarServicio);
 				$('#guardar-persona-btn').off('click', this.guardarPersona);
+				$('#guardar-tipo-servicio-btn').off('click', this.guardarTipoServicio);
+				$('#guardar-marca-btn').off('click', this.guardarMarca);
 
-				formPersonaModal.off('hidden.bs.modal', this.alHidePersona);
+				modalServicio.on('hidden.bs.modal', this.alHideServicio);
+				modalPersona.off('hidden.bs.modal', this.alHidePersona);
+				modalTipoServicio.off('hidden.bs.modal', this.alHideTipoServicio);			
+				modalMarca.off('hidden.bs.modal', this.alHideMarca);
 			},
 			
 		
 
 
 			alClickServicio: function(event) {	
-				formServicioModal.modal('show');
 				event.preventDefault();
+				modalServicio.modal('show');		
 			},
 
 
 			alClickCliente: function() {
-				console.log('click en agregar cliente');
-				formServicioModal.modal('hide');
-				formPersonaModal.modal('show');
+				modalServicio.modal('hide');
+				modalPersona.modal('show');
 			},
 
+
+			alClickTipo: function() {
+				modalServicio.modal('hide');
+				modalTipoServicio.modal('show');
+			},
+
+			alClickMarca: function() {
+				modalServicio.modal('hide');
+				modalMarca.modal('show');
+			},
+			
+
 			alHideServicio: function() {
-				//formPersonaModal.modal('show');
+				$('#form-servicio ')[0].reset();
+				$('#id_cliente').trigger("chosen:updated");
 			},
 
 			alHidePersona: function() {
-				formServicioModal.modal('show');
+				$('#form-persona ')[0].reset();
+				modalServicio.modal('show');
 			},	
+
+
+			alHideTipoServicio: function() {
+				$('#form-tipo-servicio')[0].reset();
+				modalServicio.modal('show');
+			},
+
+
+			alHideMarca: function(arg) {
+				$('#form-marca ')[0].reset();
+				modalServicio.modal('show');
+			},
+			
+			
+
+
 
 			/////////	AJAX METODOS  /////////
 
 			guardarServicio: function() {
-				// compu.ajax({
-				// 	url: urlGuardarServicio,
-				// 	form: '#form-servicio',
-				// });
-
-				var select = $('#form-servicio #id_cliente')
-        			.append('<option value="79">hola soy yo</opotion>');
-        		select.val("79");
-        		select.trigger("chosen:updated");
+				compu.ajax({
+					url: urlGuardarServicio,
+					form: '#form-servicio',
+				});
 			},
 
 
@@ -89,6 +130,22 @@ $( document ).ready( function(){
 				compu.ajax({
 					url: urlGuardarPersona,
 					form: '#form-persona'
+				});
+			},
+
+
+			guardarTipoServicio: function() {
+				compu.ajax({
+					url: urlGuardarTipoServicio,
+					form: '#form-tipo-servicio'
+				});
+			},
+
+
+			guardarMarca: function() {
+				compu.ajax({
+					url: urlGuardarMarca,
+					form: '#form-marca'
 				});
 			},
 				
@@ -111,14 +168,26 @@ $( document ).ready( function(){
 				        else {
 				        	if (options.url == urlGuardarServicio) {
 				        		location.reload();
-				        	}
+				        	};
 				        	if (options.url == urlGuardarPersona) {
-				        		formPersonaModal.modal('hide');  // cierro el formulario persona
+				        		modalPersona.modal('hide');  // cierro el formulario persona
 				        		var select = $('#form-servicio #id_cliente')
-				        			.append('<option value="'+ data['persona_id']+'">'+data['persona']+'</opotion>');
-				        		select.val(''+data.persona_id+'');
+				        			.append('<option value="'+ data['value']+'">'+data['nombre']+'</opotion>');
+				        		select.val(''+data.value+'');
 				        		select.trigger("chosen:updated");
-				        	}
+				        	};
+				        	if (options.url == urlGuardarTipoServicio) {
+				        		modalTipoServicio.modal('hide');
+				        		var select = $('#form-servicio #id_tipo')
+				        			.append('<option value="'+ data['value']+'">'+data['nombre']+'</opotion>');
+				        		select.val(''+data.value+'');
+				        	};
+				        	if (options.url == urlGuardarMarca) {
+				        		modalMarca.modal('hide');
+				        		var select = $('#form-servicio #id_marca')
+				        			.append('<option value="'+ data['value']+'">'+data['nombre']+'</opotion>');
+				        		select.val(''+data.value+'');
+				        	};
 
 				            
 				        }
@@ -129,6 +198,8 @@ $( document ).ready( function(){
 				    }
 				});
 			},
+
+			
 			
 					
 

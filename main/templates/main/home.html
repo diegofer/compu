@@ -6,8 +6,10 @@
 
 {% block js_head %}
 <script>
-	var urlGuardarServicio = '{% url "guardar_servicio" %}';
-	var urlGuardarPersona = '{% url "guardar_persona" %}';
+	var urlGuardarServicio     = '{% url "guardar_servicio" %}';
+	var urlGuardarPersona      = '{% url "guardar_persona" %}';
+	var urlGuardarTipoServicio = '{% url "guardar_tipo_servicio" %}';
+	var urlGuardarMarca        = '{% url "guardar_marca" %}';
 </script>
 {% endblock js_head %}
 
@@ -95,7 +97,7 @@
 				</div>	
 
 				<div class="col-lg-10 right">
-					<span class="badge pull-right">{{servicio.id}}</span>
+					<span class="badge pull-right">No. {{servicio.id}}</span>
 					<h4>{{servicio.tipo.nombre}} {{servicio.marca}} de {{servicio.cliente.nombre}}</h4>
 					<h5>Ingresó hace {{servicio.created|timesince}}</h5>	
 					<span class="label {% if servicio.estado == servicio.EN_COLA %} label-danger {% elif servicio.estado == servicio.EN_REVISION %} label-warning  {% elif servicio.estado == servicio.REPARADO %} label-success {% else %} label-default  {% endif%}">{{servicio.estado}} </span>		
@@ -136,7 +138,7 @@
 
 
 <!-- form persona -->
-<div id="modal-form-persona" style="overflow-y: auto;" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="modal-form-persona"  class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 
@@ -157,65 +159,55 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<!-- form tipo-servicio -->
+<div id="modal-form-tipo-servicio"  class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">Ingresar Tipo de Servicio</h4>
+			</div>
+
+			<div class="modal-body">				
+				{% crispy tipoServicioForm %}			  
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				<button type="button" id="guardar-tipo-servicio-btn" class="btn btn-primary" data-loading-text="Guardando...">Guardar</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!-- form marca -->
+<div id="modal-form-marca"  class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">Ingresar una Marca</h4>
+			</div>
+
+			<div class="modal-body">				
+				{% crispy marcaForm %}	  
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				<button type="button" id="guardar-marca-btn" class="btn btn-primary" data-loading-text="Guardando...">Guardar</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 {% endblock content %}
 
 
-{% block js_body %} 
-<script>
 
-	// $('#guardar-servicio-btn').on('click', function(event){
-	// 	var formServicio = '#form-servicio';
-	// 	$(event.target).button('loading');
-		
-	// 	$.ajax({
-	// 	    url: "{% url 'guardar_servicio' %}",
-	// 	    type: "POST",
-	// 	    data: $(formServicio).serialize(),
-	// 	    success: function(data) {
-	// 	        if (!(data['success'])) {
-	// 	            // Here we replace the form, for the
-	// 	            $(formServicio).replaceWith(data['form_html']);
-	// 	            $(event.target).button('reset');
-	// 	            initApp.setEvents();
-	// 	        }
-	// 	        else {
-	// 	            location.reload();
-	// 	        }
-	// 	    },
-	// 	    error: function () {
-	// 	    	console.log('tengo errores');
-	// 	        $(formServicio).find('.error-message').show()
-	// 	    }
-	// 	});
-	// });
 
-	// $('#guardar-persona-btn').on('click', function(event){
-	// 	var formPersona = '#form-persona';
-	// 	$(event.target).button('loading');
-		
-	// 	$.ajax({
-	// 	    url: "{% url 'guardar_servicio' %}",
-	// 	    type: "POST",
-	// 	    data: $(formPersona).serialize(),
-	// 	    success: function(data) {
-	// 	        if (!(data['success'])) {
-	// 	            // Here we replace the form, for the
-	// 	            $(formPersona).replaceWith(data['form_html']);
-	// 	            $(event.target).button('reset');
 
-	// 	        }
-	// 	        else {
-	// 	            location.reload();
-	// 	        }
-	// 	    },
-	// 	    error: function () {
-	// 	    	console.log('tengo errores');
-	// 	        $(formPersona).find('.error-message').show()
-	// 	    }
-	// 	});
-	// });
-
-		
-</script>
-{% endblock %}

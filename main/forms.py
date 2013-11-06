@@ -7,7 +7,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons
 
-from main.models import Servicio, Persona
+from main.models import Servicio, Persona, TipoServicio, Marca
 
 class ServicioForm(ModelForm):
 
@@ -69,3 +69,52 @@ class PersonaForm(ModelForm):
     class Meta:
         model = Persona
 		
+
+
+class TipoServicioForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(TipoServicioForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper(self)
+
+        self.fields['nombre'].label = ""
+        self.fields['icon'].label = ""
+
+        self.helper.form_id     = 'form-tipo-servicio'
+        self.helper.form_class  = 'form-horizontal'
+        self.helper.field_class = 'col-lg-8 col-lg-offset-2'
+
+        self.helper.layout = Layout(
+            PrependedText('nombre', "<i class='fa fa-wrench fa-fw'></i>", placeholder="nombre"),
+            PrependedText('icon', "<i class='fa fa-rocket fa-fw'></i>", placeholder="icono"),
+        )
+    
+
+    class Meta:
+        model = TipoServicio
+
+
+
+
+class MarcaForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(MarcaForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper(self)
+
+        self.fields['nombre'].label = ""
+
+        self.helper.form_id     = 'form-marca'
+        self.helper.form_class  = 'form-horizontal'
+        self.helper.field_class = 'col-lg-8 col-lg-offset-2'
+
+        self.helper.layout = Layout(
+            PrependedText('nombre', "<i class='fa fa-wrench fa-fw'></i>", placeholder="nombre"),
+        )
+    
+
+    class Meta:
+        model = Marca
+        

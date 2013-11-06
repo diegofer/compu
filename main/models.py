@@ -42,7 +42,7 @@ class TipoServicio(models.Model):
 
 		
 class Marca(models.Model):
-	nombre = models.CharField(max_length=50)
+	nombre = models.CharField(max_length=50, unique=True)
 
 	def __unicode__(self):
 		return self.nombre
