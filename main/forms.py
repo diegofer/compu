@@ -24,9 +24,9 @@ class ServicioForm(ModelForm):
 		self.helper.field_class = 'col-md-8'
 
 		self.helper.layout = Layout(
-			FieldWithButtons('cliente', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="cliente-btn")),
-		    FieldWithButtons('tipo', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="tipo-btn")),
-		    FieldWithButtons('marca', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="marca-btn")),
+			FieldWithButtons('cliente', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="cliente-btn", css_class="btn-default btn-sm")),
+		    FieldWithButtons('tipo', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="tipo-btn", css_class="btn-default btn-sm")),
+		    FieldWithButtons('marca', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="marca-btn", css_class="btn-default btn-sm")),
 		    'modelo',
 		    'serial',
 		    'estado',		

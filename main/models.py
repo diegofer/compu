@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-
+from .choices import ICON 
 
 
 class Persona(models.Model):
@@ -34,7 +34,7 @@ class Persona(models.Model):
 
 class TipoServicio(models.Model):
 	nombre = models.CharField(max_length=50)
-	icon   = models.CharField(max_length=20)
+	icon   = models.CharField(max_length=20, choices=ICON)
 
 	def __unicode__(self):
 		return self.nombre

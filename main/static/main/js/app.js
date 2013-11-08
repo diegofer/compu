@@ -8,33 +8,25 @@ $( document ).ready( function(){
 	// console.log(item);
 	function inicializar() {
 
-		modalServicio      = $('#modal-form-servicio');
-		modalPersona       = $('#modal-form-persona');
-		modalTipoServicio  = $('#modal-form-tipo-servicio');
-		modalMarca         = $('#modal-form-marca');
+		var modalServicio      = $('#modal-form-servicio'),
+			modalPersona       = $('#modal-form-persona'),
+		    modalTipoServicio  = $('#modal-form-tipo-servicio'),
+			modalMarca         = $('#modal-form-marca'),
+
+			formServicio     = modalServicio.find('form').html(),
+			formPersona      = modalPersona.find('form').html(),
+			formTipo         = modalTipoServicio.find('form').html(),
+			formMarca        = modalMarca.find('form').html();
+
+
 
 		var compu = {
 
 			initCompu: function() {
-				this.setChosen();						
-				this.setEvents();
-			},
-				
+				this.setActionsFormServicio();	
+				this.setActionsFormTipo();					
 
-			setChosen: function() {
-				$('#id_cliente').chosen({
-			        no_results_text: "Oops, no se encontraron resultados!",
-			        width: "100%"
-			    });
-			},
-			
-
-			setEvents: function(arg) {
-				$('#servicio-btn').on('click', this.alClickServicio);
-				$('#cliente-btn').on('click', this.alClickCliente);
-				$('#tipo-btn').on('click', this.alClickTipo);
-				$('#marca-btn').on('click', this.alClickMarca);
-
+				$('#servicio-btn').on('click',{modal:modalServicio}, this.showModal);
 
 				$('#guardar-servicio-btn').on('click', this.guardarServicio);
 				$('#guardar-persona-btn').on('click', this.guardarPersona);
@@ -44,72 +36,76 @@ $( document ).ready( function(){
 				modalServicio.on('hidden.bs.modal', this.alHideServicio);
 				modalPersona.on('hidden.bs.modal', this.alHidePersona);			
 				modalTipoServicio.on('hidden.bs.modal', this.alHideTipoServicio);			
-				modalMarca.on('hidden.bs.modal', this.alHideMarca);			
+				modalMarca.on('hidden.bs.modal', this.alHideMarca);		
 			},
 
-			clearEvents: function() {
-				$('#servicio-btn').off('click', this.alClickServicio);
-				$('#cliente-btn').off('click', this.alClickCliente);
-				$('#tipo-btn').off('click', this.alClickTipo);
-				$('#marca-btn').off('click', this.alClickMarca);
 
-				$('#guardar-servicio-btn').off('click', this.guardarServicio);
-				$('#guardar-persona-btn').off('click', this.guardarPersona);
-				$('#guardar-tipo-servicio-btn').off('click', this.guardarTipoServicio);
-				$('#guardar-marca-btn').off('click', this.guardarMarca);
+			setActionsFormServicio: function() {
+				$('#cliente-btn').on('click', {modal:modalPersona}, this.showModal);
+				$('#tipo-btn').on('click', {modal:modalTipoServicio}, this.showModal);
+				$('#marca-btn').on('click', {modal:modalMarca}, this.showModal);
 
-				modalServicio.on('hidden.bs.modal', this.alHideServicio);
-				modalPersona.off('hidden.bs.modal', this.alHidePersona);
-				modalTipoServicio.off('hidden.bs.modal', this.alHideTipoServicio);			
-				modalMarca.off('hidden.bs.modal', this.alHideMarca);
+				$('#id_cliente,#id_tipo,#id_marca').select2({
+					formatNoMatches: function(m){return 'Oops, no se encontraron resultados!';}
+				});
 			},
+
+
+				clearActionsFormServico: function() {
+					$('#cliente-btn, #tipo-btn, #marca-btn').off();
+					$('#id_cliente').select2("destroy");
+					$('#id_tipo').select2("destroy");
+					$('#id_marca').select2("destroy");
+				},
+				
 			
-		
 
+			setActionsFormTipo: function() {
+				function format(state) {
+				    if (!state.id) return state.text; // optgroup
+				    return "<i class='fa fa-fw fa-"+state.text+"'></i> "+ state.text; //state.text;
+				}
 
-			alClickServicio: function(event) {	
+			    $('#id_icon').select2({
+			    	formatResult: format,
+				    formatSelection: format,
+				    escapeMarkup: function(m) { return m; }
+			    });
+			},
+
+				clearActionsFormTipo: function() {
+					$('#id_icon').select2("destroy");
+				},
+			
+			
+			showModal: function(event) {	
+				
 				event.preventDefault();
-				modalServicio.modal('show');		
+				console.log('estoy mostrando una modal');
+				event.data.modal.modal('show');		
 			},
 
-
-			alClickCliente: function() {
-				modalServicio.modal('hide');
-				modalPersona.modal('show');
-			},
-
-
-			alClickTipo: function() {
-				modalServicio.modal('hide');
-				modalTipoServicio.modal('show');
-			},
-
-			alClickMarca: function() {
-				modalServicio.modal('hide');
-				modalMarca.modal('show');
-			},
-			
 
 			alHideServicio: function() {
-				$('#form-servicio ')[0].reset();
-				$('#id_cliente').trigger("chosen:updated");
+				compu.clearActionsFormServico();
+				$('#form-servicio').html(formServicio);
+				compu.setActionsFormServicio();
 			},
 
 			alHidePersona: function() {
-				$('#form-persona ')[0].reset();
-				modalServicio.modal('show');
+				$('#form-persona ').html(formPersona);
 			},	
 
 
 			alHideTipoServicio: function() {
-				$('#form-tipo-servicio')[0].reset();
-				modalServicio.modal('show');
+				clearActionsFormTipo();
+				$('#form-tipo-servicio').html(formTipo);
+				compu.setActionsFormTipo();
 			},
 
 
-			alHideMarca: function(arg) {
-				$('#form-marca ')[0].reset();
-				modalServicio.modal('show');
+			alHideMarca: function() {
+				$('#form-marca').html(formMarca);
 			},
 			
 			
@@ -118,34 +114,47 @@ $( document ).ready( function(){
 
 			/////////	AJAX METODOS  /////////
 
-			guardarServicio: function() {
+			guardarServicio: function(event) {
+				var $btn =  $(event.target).button('loading');
+
 				compu.ajax({
-					url: urlGuardarServicio,
-					form: '#form-servicio',
+					url  : urlGuardarServicio,
+					form : '#form-servicio',
+					btn  : $btn
 				});
 			},
 
 
 			guardarPersona: function() {
+				var $btn =  $(event.target).button('loading');
+
+				$(event.target).button('loading');
 				compu.ajax({
-					url: urlGuardarPersona,
-					form: '#form-persona'
+					url  : urlGuardarPersona,
+					form : '#form-persona',
+					btn  : $btn
 				});
 			},
 
 
 			guardarTipoServicio: function() {
+				var $btn =  $(event.target).button('loading');
+
 				compu.ajax({
-					url: urlGuardarTipoServicio,
-					form: '#form-tipo-servicio'
+					url  : urlGuardarTipoServicio,
+					form : '#form-tipo-servicio',
+					btn  : $btn
 				});
 			},
 
 
 			guardarMarca: function() {
+				var $btn =  $(event.target).button('loading');
+
 				compu.ajax({
-					url: urlGuardarMarca,
-					form: '#form-marca'
+					url  : urlGuardarMarca,
+					form : '#form-marca',
+					btn  : $btn
 				});
 			},
 				
@@ -160,37 +169,22 @@ $( document ).ready( function(){
 
 				    success: function(data) {
 				        if (!(data['success'])) {
-				            $(options.form).replaceWith(data['form_html']);
-				            //$(event.target).button('reset');
-				          	compu.clearEvents();
-				            compu.setEvents();
+				            $(options.form).replaceWith(data['form_html']); // OJO replace mata los listener y referencias...
+				            
+				            if (options.url == urlGuardarServicio) compu.setActionsFormServicio();
+				            if (options.url == urlGuardarTipoServicio) compu.setActionsFormTipo();      
 				        }
 				        else {
-				        	if (options.url == urlGuardarServicio) {
-				        		location.reload();
-				        	};
-				        	if (options.url == urlGuardarPersona) {
-				        		modalPersona.modal('hide');  // cierro el formulario persona
-				        		var select = $('#form-servicio #id_cliente')
-				        			.append('<option value="'+ data['value']+'">'+data['nombre']+'</opotion>');
-				        		select.val(''+data.value+'');
-				        		select.trigger("chosen:updated");
-				        	};
-				        	if (options.url == urlGuardarTipoServicio) {
-				        		modalTipoServicio.modal('hide');
-				        		var select = $('#form-servicio #id_tipo')
-				        			.append('<option value="'+ data['value']+'">'+data['nombre']+'</opotion>');
-				        		select.val(''+data.value+'');
-				        	};
-				        	if (options.url == urlGuardarMarca) {
-				        		modalMarca.modal('hide');
-				        		var select = $('#form-servicio #id_marca')
-				        			.append('<option value="'+ data['value']+'">'+data['nombre']+'</opotion>');
-				        		select.val(''+data.value+'');
-				        	};
+				        	if (options.url == urlGuardarServicio) location.reload();
+	
+				        	if (options.url == urlGuardarPersona) compu.successOk('#id_cliente', data, modalPersona);
 
-				            
+				        	if (options.url == urlGuardarTipoServicio) compu.successOk('#id_tipo', data, modalTipoServicio);
+			
+				        	if (options.url == urlGuardarMarca) compu.successOk('#id_marca', data, modalMarca);			            
 				        }
+
+				        options.btn.button('reset');
 				    },
 				    error: function () {
 				    	console.log('tengo errores');
@@ -199,9 +193,15 @@ $( document ).ready( function(){
 				});
 			},
 
+
+			successOk: function(selector, data, modal) {
+				var select = $('#form-servicio '+selector).append('<option value="'+ data['value']+'">'+data['nombre']+'</opotion>');
+        		select.val(''+data.value+'');	
+        		select.trigger('change');		
+        		modal.modal('hide');
+			},
 			
-			
-					
+
 
 		};
 
