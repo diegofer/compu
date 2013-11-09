@@ -46,6 +46,9 @@
 .naranja {
   color: #ee7836;
 }
+.center {
+  text-align: center;
+}
 body {
   padding-top: 70px;
 }
@@ -64,17 +67,11 @@ select {
 .icon.en-revision {
   color: #f0ad4e;
 }
+.icon.entregado {
+  color: #5bc0de;
+}
 .item-servicio .left {
   text-align: center;
-}
-.item-servicio.en-cola a {
-  border-color: #d9534f;
-}
-.item-servicio.en-revision a {
-  border-color: #f0ad4e;
-}
-.item-servicio.reparado a {
-  border-color: #5cb85c;
 }
 #servicio .logo {
   text-align: center;

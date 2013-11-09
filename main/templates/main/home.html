@@ -10,6 +10,7 @@
 	var urlGuardarPersona      = '{% url "guardar_persona" %}';
 	var urlGuardarTipoServicio = '{% url "guardar_tipo_servicio" %}';
 	var urlGuardarMarca        = '{% url "guardar_marca" %}';
+	var urlGuardarComponente   = '{% url "guardar_componente" %}';
 </script>
 {% endblock js_head %}
 
@@ -24,8 +25,8 @@
 	<div class="list-group nav-servicios">
 
 		<a href="{% url 'home' %}" class="list-group-item {% active request "^/$" %}">
-			<span class="badge">20</span> 
-			<i class="fa fa-calendar fw"></i> Actividad Reciente
+			<span class="badge">{{num_total}}</span> 
+			<i class="fa fa-calendar fw"></i> Vista General
 		</a>
 
 		<a href="{% url 'home' SERVICIO.EN_COLA %}" class="list-group-item {% active request "^/en-cola/" %}">
@@ -41,6 +42,11 @@
 		<a href="{% url 'home' SERVICIO.REPARADO %}" class="list-group-item {% active request "^/reparado/" %}">
 			<span class="badge">{{num_reparado}}</span>
 			<i class="fa fa-check fw"></i> Reparados
+		</a>
+
+		<a href="{% url 'home' SERVICIO.ENTREGADO %}" class="list-group-item {% active request "^/entregado/" %}">
+			<span class="badge">{{num_entregado}}</span>
+			<i class="fa fa-smile-o fw"></i> Entregados
 		</a>	
 
 	</div>
@@ -87,12 +93,12 @@
 
 {% for servicio in servicios %}
 
-	<div class="list-group item-servicio {% if servicio.estado == servicio.EN_COLA %} servicio.EN_COLA {% elif servicio.estado == servicio.EN_REVISION %} servicio.EN_REVISION  {% elif servicio.estado == servicio.REPARADO %} servicio.REPARADO  {% endif%}"> 
+	<div class="list-group item-servicio {{servicio.estado}}"> 
 		
 		<a href="{% url 'servicio' servicio.id %}" class="list-group-item">
 			<div class="row">
 				<div class="col-lg-2 left">		
-					<i class="fa fa-{{servicio.tipo.icon}} fa-5x icon {% if servicio.estado == servicio.EN_COLA %} en-cola {% elif servicio.estado == servicio.EN_REVISION %} en-revision  {% elif servicio.estado == servicio.REPARADO %} reparado  {% endif%}"></i><br/>
+					<i class="fa fa-{{servicio.tipo.icon}} fa-5x icon {{servicio.estado}}"></i><br/>
 					<span>{{servicio.tipo.nombre}}<span/>				
 				</div>	
 
@@ -100,7 +106,7 @@
 					<span class="badge pull-right">No. {{servicio.id}}</span>
 					<h4>{{servicio.tipo.nombre}} {{servicio.marca}} de {{servicio.cliente.nombre}}</h4>
 					<h5>Ingresó hace {{servicio.created|timesince}}</h5>	
-					<span class="label {% if servicio.estado == servicio.EN_COLA %} label-danger {% elif servicio.estado == servicio.EN_REVISION %} label-warning  {% elif servicio.estado == servicio.REPARADO %} label-success {% else %} label-default  {% endif%}">{{servicio.estado}} </span>		
+					<span class="label {{servicio.estado|labelizar}}">{{servicio.estado}} </span>		
 				</div>
 			</div> 
 		</a>
@@ -200,6 +206,29 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 				<button type="button" id="guardar-marca-btn" class="btn btn-primary" data-loading-text="Guardando...">Guardar</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!-- form componente -->
+<div id="modal-form-componente"  class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">Ingresar componente</h4>
+			</div>
+
+			<div class="modal-body">				
+				{% crispy componenteForm %}	  
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				<button type="button" id="guardar-componente-btn" class="btn btn-primary" data-loading-text="Guardando...">Guardar</button>
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->

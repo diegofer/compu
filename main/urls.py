@@ -8,6 +8,7 @@ urlpatterns = patterns('',
   	url(r'^guardar_persona/$', 'main.views.guardar_persona', name='guardar_persona' ),
   	url(r'^guardar_tipo_servicio/$', 'main.views.guardar_tipo_servicio', name='guardar_tipo_servicio' ),
   	url(r'^guardar_marca/$', 'main.views.guardar_marca', name='guardar_marca' ),
+  	url(r'^guardar_componente/$', 'main.views.guardar_componente', name='guardar_componente' ),
 
    
     url(r'^servicio/(\d+)/$', 'main.views.servicio', name='servicio' ),

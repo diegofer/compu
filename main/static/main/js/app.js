@@ -12,11 +12,13 @@ $( document ).ready( function(){
 			modalPersona       = $('#modal-form-persona'),
 		    modalTipoServicio  = $('#modal-form-tipo-servicio'),
 			modalMarca         = $('#modal-form-marca'),
+			modalComponente    = $('#modal-form-componente'),
 
 			formServicio     = modalServicio.find('form').html(),
 			formPersona      = modalPersona.find('form').html(),
 			formTipo         = modalTipoServicio.find('form').html(),
-			formMarca        = modalMarca.find('form').html();
+			formMarca        = modalMarca.find('form').html(),
+			formComponente   = modalComponente.find('form').html();
 
 
 
@@ -24,7 +26,8 @@ $( document ).ready( function(){
 
 			initCompu: function() {
 				this.setActionsFormServicio();	
-				this.setActionsFormTipo();					
+				this.setActionsFormTipo();	
+				this.setActionsFormComponente();				
 
 				$('#servicio-btn').on('click',{modal:modalServicio}, this.showModal);
 
@@ -32,11 +35,13 @@ $( document ).ready( function(){
 				$('#guardar-persona-btn').on('click', this.guardarPersona);
 				$('#guardar-tipo-servicio-btn').on('click', this.guardarTipoServicio);
 				$('#guardar-marca-btn').on('click', this.guardarMarca);
+				$('#guardar-componente-btn').on('click', this.guardarComponente);
 
 				modalServicio.on('hidden.bs.modal', this.alHideServicio);
 				modalPersona.on('hidden.bs.modal', this.alHidePersona);			
 				modalTipoServicio.on('hidden.bs.modal', this.alHideTipoServicio);			
 				modalMarca.on('hidden.bs.modal', this.alHideMarca);		
+				modalComponente.on('hidden.bs.modal', this.alHideComponente);		
 			},
 
 
@@ -44,8 +49,9 @@ $( document ).ready( function(){
 				$('#cliente-btn').on('click', {modal:modalPersona}, this.showModal);
 				$('#tipo-btn').on('click', {modal:modalTipoServicio}, this.showModal);
 				$('#marca-btn').on('click', {modal:modalMarca}, this.showModal);
+				$('#componentes-btn').on('click', {modal:modalComponente}, this.showModal);
 
-				$('#id_cliente,#id_tipo,#id_marca').select2({
+				$('#id_cliente,#id_tipo,#id_marca,#id_componentes').select2({
 					formatNoMatches: function(m){return 'Oops, no se encontraron resultados!';}
 				});
 			},
@@ -56,32 +62,46 @@ $( document ).ready( function(){
 					$('#id_cliente').select2("destroy");
 					$('#id_tipo').select2("destroy");
 					$('#id_marca').select2("destroy");
+					$('#id_componentes').select2("destroy");
 				},
-				
-			
+						
 
 			setActionsFormTipo: function() {
-				function format(state) {
-				    if (!state.id) return state.text; // optgroup
-				    return "<i class='fa fa-fw fa-"+state.text+"'></i> "+ state.text; //state.text;
-				}
-
-			    $('#id_icon').select2({
-			    	formatResult: format,
-				    formatSelection: format,
+			    $('#form-tipo-servicio #id_icon').select2({
+			    	formatResult: compu.iconFormat,
+				    formatSelection: compu.iconFormat,
 				    escapeMarkup: function(m) { return m; }
 			    });
 			},
 
 				clearActionsFormTipo: function() {
-					$('#id_icon').select2("destroy");
+					$('#form-tipo-servicio #id_icon').select2("destroy");
+				},
+			
+			setActionsFormComponente: function() {
+				$('#form-componente #id_icon').select2({
+			    	formatResult: compu.iconFormat,
+				    formatSelection: compu.iconFormat,
+				    escapeMarkup: function(m) { return m; }
+			    });
+			},
+
+
+				clearActionsFormComponente: function() {
+					$('#form-componente #id_icon').select2("destroy");
+				},
+				
+
+				iconFormat: function(state) {
+					if (!state.id) return state.text; // optgroup
+				    return "<i class='fa fa-fw fa-"+state.text+"'></i> "+ state.text; //state.text;
 				},
 			
 			
 			showModal: function(event) {	
-				
 				event.preventDefault();
-				console.log('estoy mostrando una modal');
+				var selectedItems = $('#id_componentes').select2("val");
+				console.log(selectedItems);
 				event.data.modal.modal('show');		
 			},
 
@@ -98,7 +118,7 @@ $( document ).ready( function(){
 
 
 			alHideTipoServicio: function() {
-				clearActionsFormTipo();
+				compu.clearActionsFormTipo();
 				$('#form-tipo-servicio').html(formTipo);
 				compu.setActionsFormTipo();
 			},
@@ -107,6 +127,14 @@ $( document ).ready( function(){
 			alHideMarca: function() {
 				$('#form-marca').html(formMarca);
 			},
+
+
+			alHideComponente: function() {
+				compu.clearActionsFormComponente()
+				$('#form-componente').html(formComponente);
+				compu.setActionsFormComponente();
+			},
+			
 			
 			
 
@@ -115,6 +143,7 @@ $( document ).ready( function(){
 			/////////	AJAX METODOS  /////////
 
 			guardarServicio: function(event) {
+				console.log($('#form-servicio').serialize());
 				var $btn =  $(event.target).button('loading');
 
 				compu.ajax({
@@ -157,6 +186,16 @@ $( document ).ready( function(){
 					btn  : $btn
 				});
 			},
+
+			guardarComponente: function() {
+				var $btn =  $(event.target).button('loading');
+
+				compu.ajax({
+					url  : urlGuardarComponente,
+					form : '#form-componente',
+					btn  : $btn
+				});
+			},
 				
 
 
@@ -172,16 +211,19 @@ $( document ).ready( function(){
 				            $(options.form).replaceWith(data['form_html']); // OJO replace mata los listener y referencias...
 				            
 				            if (options.url == urlGuardarServicio) compu.setActionsFormServicio();
-				            if (options.url == urlGuardarTipoServicio) compu.setActionsFormTipo();      
+				            if (options.url == urlGuardarTipoServicio) compu.setActionsFormTipo(); 
+				            if (options.url == urlGuardarComponente) compu.setActionsFormComponente();     
 				        }
 				        else {
-				        	if (options.url == urlGuardarServicio) location.reload();
+				        	if (options.url == urlGuardarServicio) window.location.href='/';
 	
 				        	if (options.url == urlGuardarPersona) compu.successOk('#id_cliente', data, modalPersona);
 
 				        	if (options.url == urlGuardarTipoServicio) compu.successOk('#id_tipo', data, modalTipoServicio);
 			
 				        	if (options.url == urlGuardarMarca) compu.successOk('#id_marca', data, modalMarca);			            
+				        	
+				        	if (options.url == urlGuardarComponente) compu.successOk('#id_componentes', data, modalComponente);			            
 				        }
 
 				        options.btn.button('reset');
@@ -196,8 +238,15 @@ $( document ).ready( function(){
 
 			successOk: function(selector, data, modal) {
 				var select = $('#form-servicio '+selector).append('<option value="'+ data['value']+'">'+data['nombre']+'</opotion>');
-        		select.val(''+data.value+'');	
-        		select.trigger('change');		
+				if (selector == '#id_componentes') {
+					var selectedItems = $(selector).select2("val");
+					selectedItems.push(''+data.value+'');
+					$(selector).select2("val", selectedItems);
+				} else {
+					select.val(''+data.value+'');	
+        		    select.trigger('change');
+        		}
+								
         		modal.modal('hide');
 			},
 			

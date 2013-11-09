@@ -102,6 +102,7 @@ ICON = (
 		    ('group', 'group'),
 		    ('hdd-o', 'hdd-o'),
 		    ('hdd-o fa-rotate-270', 'cpu'),
+		    ('eraser', 'memoria'),
 		    ('headphones', 'headphones'),
 		    ('heart', 'heart'),
 		    ('heart-o', 'heart-o'),

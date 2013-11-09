@@ -18,7 +18,7 @@ class Persona(models.Model):
 	cedula    = models.CharField(max_length=20, unique=True)
 	direccion = models.CharField(max_length=255)
 	telefono  = models.CharField(max_length=15)
-	email     = models.EmailField(max_length=255, unique=True)
+	email     = models.EmailField(max_length=255, unique=True, blank=True)
 	tipo      = models.CharField(max_length=50, choices=TIPO_PERSONA)
 	
 
@@ -33,7 +33,7 @@ class Persona(models.Model):
 
 
 class TipoServicio(models.Model):
-	nombre = models.CharField(max_length=50)
+	nombre = models.CharField(max_length=50, unique=True)
 	icon   = models.CharField(max_length=20, choices=ICON)
 
 	def __unicode__(self):
@@ -46,6 +46,16 @@ class Marca(models.Model):
 
 	def __unicode__(self):
 		return self.nombre
+
+
+
+class Componente(models.Model):
+	nombre = models.CharField(max_length=50, unique=True)
+	icon   = models.CharField(max_length=20, choices=ICON)
+
+	def __unicode__(self):
+		return self.nombre
+	
 
 
 class Servicio(models.Model):
@@ -62,14 +72,16 @@ class Servicio(models.Model):
 	    (ENTREGADO, 'Entregado'),
 	)
 
-	cliente    = models.ForeignKey(Persona)
-	tipo       = models.ForeignKey(TipoServicio)
-	marca      = models.ForeignKey(Marca)
-	modelo     = models.CharField(max_length=50, blank=True, null=True)
-	serial     = models.CharField(max_length=50, blank=True, null=True)
-	created    = models.DateTimeField(auto_now_add = True) 
-	updated    = models.DateTimeField(auto_now = True)
-	estado     = models.CharField(max_length=12, choices=ESTADO, default=EN_COLA)
+	cliente     = models.ForeignKey(Persona)
+	tipo        = models.ForeignKey(TipoServicio)
+	marca       = models.ForeignKey(Marca)
+	modelo      = models.CharField(max_length=50, blank=True)
+	serial      = models.CharField(max_length=50, blank=True)
+	motivo      = models.TextField()
+	componentes = models.ManyToManyField(Componente, blank=True, null=True)
+	created     = models.DateTimeField(auto_now_add = True) 
+	updated     = models.DateTimeField(auto_now = True)
+	estado      = models.CharField(max_length=12, choices=ESTADO, default=EN_COLA, blank=True)
 
 	def __unicode__(self):
 		return "%s de %s" %( self.tipo.nombre, self.cliente.nombre )

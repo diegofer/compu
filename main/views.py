@@ -10,7 +10,7 @@ from crispy_forms.utils import render_crispy_form
 from jsonview.decorators import json_view
 
 from main.models import Servicio, Persona
-from main.forms import ServicioForm, PersonaForm, TipoServicioForm, MarcaForm
+from main.forms import ServicioForm, PersonaForm, TipoServicioForm, MarcaForm, ComponenteForm
 
 
 def home(request, estado='reciente'):
@@ -19,6 +19,7 @@ def home(request, estado='reciente'):
 	else:
 		servicios = Servicio.objects.filter(estado__exact=estado)
 
+	num_total     = Servicio.objects.all().count()	
 	num_cola      = Servicio.objects.filter(estado__exact=Servicio.EN_COLA).count()
 	num_revision  = Servicio.objects.filter(estado__exact=Servicio.EN_REVISION).count()
 	num_reparado  = Servicio.objects.filter(estado__exact=Servicio.REPARADO).count()
@@ -31,6 +32,7 @@ def home(request, estado='reciente'):
 	personaForm       = PersonaForm()
 	tipoServicioForm  = TipoServicioForm()
 	marcaForm         = MarcaForm()
+	componenteForm    = ComponenteForm()
 
 	
 	return render_to_response('main/home.html', locals(), context_instance=RequestContext(request))
@@ -39,7 +41,9 @@ def home(request, estado='reciente'):
 
 def servicio(request, id):
 	servicio = Servicio.objects.get(id=id)
+	componentes = servicio.componentes.all()
 
+	num_total     = Servicio.objects.all().count()	
 	num_cola = Servicio.objects.filter(estado__exact=Servicio.EN_COLA).count()
 	num_revision = Servicio.objects.filter(estado__exact=Servicio.EN_REVISION).count()
 	num_reparado = Servicio.objects.filter(estado__exact=Servicio.REPARADO).count()
@@ -51,6 +55,7 @@ def servicio(request, id):
 	personaForm       = PersonaForm()
 	tipoServicioForm  = TipoServicioForm()
 	marcaForm         = MarcaForm()
+	componenteForm    = ComponenteForm()
 
 	return render_to_response('main/servicio.html', locals(), context_instance=RequestContext(request))
 
@@ -59,7 +64,7 @@ def servicio(request, id):
 
 def persona(request, id):
 	persona = Persona.objects.get(id=id)
-	servicios = Servicio.objects.filter(cliente__pk=persona.id).order_by('-updated')
+	servicios = Servicio.objects.filter(cliente__pk=persona.id).order_by('-created')
 	return render_to_response('main/persona.html', locals(), context_instance=RequestContext(request))
 
 
@@ -71,9 +76,12 @@ def guardar_servicio(request):
 	form = ServicioForm(request.POST or None)
 
 	if form.is_valid():
-		form.save()
+		new_servicio = form.save(commit=False)
+		new_servicio.estado = Servicio.EN_COLA
+		new_servicio.save()
+		form.save_m2m()
 		return {'success': True}
-
+	print form.errors
 	form_html = render_crispy_form(form, context=RequestContext(request))
 	return {'success': False, 'form_html': form_html}
 
@@ -110,5 +118,17 @@ def guardar_marca(request):
         marca = form.save()
         return {'success': True, 'value': marca.id, 'nombre': marca.nombre}
 
+    form_html = render_crispy_form(form, context=RequestContext(request))
+    return {'success': False, 'form_html': form_html}
+
+
+@json_view
+def guardar_componente(request):
+    form = ComponenteForm(request.POST or None)
+
+    if form.is_valid():
+        componente = form.save()
+        return {'success': True, 'value': componente.id, 'nombre': componente.nombre }
+    print form.errors
     form_html = render_crispy_form(form, context=RequestContext(request))
     return {'success': False, 'form_html': form_html}

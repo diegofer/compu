@@ -7,7 +7,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons
 
-from main.models import Servicio, Persona, TipoServicio, Marca
+from main.models import Servicio, Persona, TipoServicio, Marca, Componente
 
 class ServicioForm(ModelForm):
 
@@ -20,8 +20,8 @@ class ServicioForm(ModelForm):
 
 		self.helper.form_id     = 'form-servicio'
 		self.helper.form_class  = 'form-horizontal'
-		self.helper.label_class = 'col-md-2'
-		self.helper.field_class = 'col-md-8'
+		self.helper.label_class = 'col-md-3'
+		self.helper.field_class = 'col-md-9'
 
 		self.helper.layout = Layout(
 			FieldWithButtons('cliente', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="cliente-btn", css_class="btn-default btn-sm")),
@@ -29,11 +29,14 @@ class ServicioForm(ModelForm):
 		    FieldWithButtons('marca', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="marca-btn", css_class="btn-default btn-sm")),
 		    'modelo',
 		    'serial',
-		    'estado',		
+            Field('motivo', rows="3", css_class='input-xlarge'),
+            FieldWithButtons('componentes', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="componentes-btn", css_class="btn-default")),
+            #'estado',
 		)
 
 	class Meta:
 		model = Servicio
+        exclude = ['estado']
 
 class PersonaForm(ModelForm):
 
@@ -86,7 +89,7 @@ class TipoServicioForm(ModelForm):
         self.helper.field_class = 'col-lg-8 col-lg-offset-2'
 
         self.helper.layout = Layout(
-            PrependedText('nombre', "<i class='fa fa-wrench fa-fw'></i>", placeholder="nombre"),
+            PrependedText('nombre', "<i class='fa fa-crosshairs'></i>", placeholder="nombre"),
             PrependedText('icon', "<i class='fa fa-rocket fa-fw'></i>", placeholder="icono"),
         )
     
@@ -111,10 +114,36 @@ class MarcaForm(ModelForm):
         self.helper.field_class = 'col-lg-8 col-lg-offset-2'
 
         self.helper.layout = Layout(
-            PrependedText('nombre', "<i class='fa fa-wrench fa-fw'></i>", placeholder="nombre"),
+            PrependedText('nombre', "<i class='fa fa-crosshairs'></i>", placeholder="nombre"),
         )
     
 
     class Meta:
         model = Marca
+
+
+
+class ComponenteForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ComponenteForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper(self)
+
+        self.fields['nombre'].label = ""
+        self.fields['icon'].label = ""
+
+        self.helper.form_id   = 'form-componente'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.field_class  = 'col-md-8 col-md-offset-2'
+
+        self.helper.layout = Layout(
+            PrependedText('nombre', "<i class='fa fa-crosshairs'></i>", placeholder='nombre'),
+            PrependedText('icon', "<i class='fa fa-puzzle-piece fa-fw'></i>", placeholder='icono'),           
+        )
+
+    class Meta:
+        model = Componente
+        
+        
         

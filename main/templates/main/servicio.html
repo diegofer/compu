@@ -1,4 +1,5 @@
 {% extends 'main/home.html' %}
+{% load main_tags %}
 
 {% block title %} Servicio {{servicio.id}} {% endblock %}
 
@@ -16,11 +17,13 @@
 
 <div id="servicio">
 
+	
+
 	<div class="row">
 		
 		<div class="col-md-2 logo">
 			
-				<i class="fa fa-{{servicio.tipo.icon}} icon icon-servicio {% if servicio.estado == servicio.EN_COLA %} en-cola {% elif servicio.estado == servicio.EN_REVISION %} en-revision  {% elif servicio.estado == servicio.REPARADO %} reparado  {% endif%}"></i><br/>
+				<i class="fa fa-{{servicio.tipo.icon}} icon icon-servicio {{servicio.estado}}"></i><br/>
 			
 				
 		
@@ -33,7 +36,7 @@
 				{{servicio.tipo.nombre}} {{servicio.marca.nombre}} 
 
 			</h1>
-			<span class="label estado {% if servicio.estado == servicio.EN_COLA %} label-danger {% elif servicio.estado == servicio.EN_REVISION %} label-warning  {% elif servicio.estado == servicio.REPARADO %} label-success  {% endif%}">{{servicio.estado}} </span>
+			<span class="label estado {{servicio.estado|labelizar}} ">{{servicio.estado}} </span>
 
 		</div>
 
@@ -74,12 +77,40 @@
 
 				</tbody>
 				
-			</table>
+			</table><br/>
 
-			<h3>Motivo de mantenimiento?</h3>
-			<h3>componentes?</h3>
+
+			<h3>
+				<i class="fa fa-dot-circle-o"></i>
+				&nbsp; Motivo de Mantenimiento
+			</h3>
+
+			<div class="alert alert-info">{{servicio.motivo}}</div>
 			
-		</div>
+			<br/>
+			<h3>
+				<i class="fa fa-puzzle-piece"></i>
+				&nbsp; Componentes
+			</h3>
+
+			<div class="row componentes">
+
+			{% for componente in componentes %}
+				<div class="col-md-4 center">
+			    	<!-- <div class="well well-sm"> -->
+			    	<div class="list-group">
+			    		<a href="#" class="list-group-item">
+					        <i class="fa fa-4x fa-{{componente.icon}}"></i>
+					    	<h6>{{componente.nombre|upper}}</h6>
+				    	</a>
+				   </div>
+				</div>
+			{% empty %}
+				No hay componentes
+			{% endfor %}
+
+			</div> <!-- end row componentes  -->
+		</div> 
 
 
 		<div class="col-md-4">
