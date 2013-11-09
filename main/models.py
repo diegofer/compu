@@ -79,6 +79,7 @@ class Servicio(models.Model):
 	serial      = models.CharField(max_length=50, blank=True)
 	motivo      = models.TextField()
 	componentes = models.ManyToManyField(Componente, blank=True, null=True)
+	tecnico     = models.ForeignKey(Persona, related_name='tecnico_de', blank=True, null=True)
 	created     = models.DateTimeField(auto_now_add = True) 
 	updated     = models.DateTimeField(auto_now = True)
 	estado      = models.CharField(max_length=12, choices=ESTADO, default=EN_COLA, blank=True)

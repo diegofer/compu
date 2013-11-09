@@ -30,13 +30,12 @@ class ServicioForm(ModelForm):
 		    'modelo',
 		    'serial',
             Field('motivo', rows="3", css_class='input-xlarge'),
-            FieldWithButtons('componentes', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="componentes-btn", css_class="btn-default")),
-            #'estado',
+            FieldWithButtons('componentes', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="componentes-btn", css_class="btn-default")),      
 		)
 
 	class Meta:
 		model = Servicio
-        exclude = ['estado']
+        exclude = ['estado', 'tecnico']
 
 class PersonaForm(ModelForm):
 
