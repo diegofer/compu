@@ -1,5 +1,6 @@
 {% extends 'main/home.html' %}
 {% load main_tags %}
+{% load crispy_forms_tags %}
 
 {% block title %} Servicio {{servicio.id}} {% endblock %}
 
@@ -128,18 +129,31 @@
 				</div>
 			</div>
 
-			<div class="panel panel-info servicio-person">
-
-				<div class="panel-heading">TÉCNICO</div>
-				<div class="panel-body">
-					
-					<i class="fa fa-user icon-person"></i>
-	
-					<a href="#" class="btn btn-info btn-block btn-lg" role="button">				 		 
-						{{servicio.cliente.full_name}}
-					</a>		
+			
+				
+				{% if servicio.tecnico %}
+				<div class="panel panel-info servicio-person">
+					<div class="panel-heading">TÉCNICO</div>
+					<div class="panel-body">
+						
+						<i class="fa fa-user icon-person"></i>
+		
+						<a href="{% url 'persona' servicio.tecnico.id %}" class="btn btn-info btn-block btn-lg" role="button">				 		 
+							{{servicio.tecnico.full_name}}
+						</a>		
+					</div>
 				</div>
-			</div>
+				{% else %}
+				<div id="panel-tecnico" class="panel panel-danger servicio-person">
+					<div class="panel-heading">TÉCNICO NO ASIGNADO</div>
+					<div class="panel-body">
+						{% crispy servicioTecnicoForm %}
+					</div>		
+				</div>
+				
+
+				{% endif %}
+			
 
 			
 		</div>

@@ -10,7 +10,7 @@ from crispy_forms.utils import render_crispy_form
 from jsonview.decorators import json_view
 
 from main.models import Servicio, Persona
-from main.forms import ServicioForm, PersonaForm, TipoServicioForm, MarcaForm, ComponenteForm
+from main.forms import ServicioForm, PersonaForm, TipoServicioForm, MarcaForm, ComponenteForm, ServicioTecnicoForm
 
 
 def home(request, estado='reciente'):
@@ -56,6 +56,7 @@ def servicio(request, id):
 	tipoServicioForm  = TipoServicioForm()
 	marcaForm         = MarcaForm()
 	componenteForm    = ComponenteForm()
+	servicioTecnicoForm = ServicioTecnicoForm()
 
 	return render_to_response('main/servicio.html', locals(), context_instance=RequestContext(request))
 
@@ -87,6 +88,22 @@ def guardar_servicio(request):
 
 
 @json_view
+def guardar_servicio_tecnico(request):
+	print request.POST
+	servicio = Servicio.objects.get(pk=request.POST['id_servicio'])
+	form = ServicioTecnicoForm(request.POST or None, instance=servicio)
+
+	if request.POST['tecnico']:
+		
+		if form.is_valid():
+			servicio = form.save(commit=False)
+			return {'success': True, 'tecnico': servicio.tecnico.full_name, 'url_tecnico': servicio.tecnico.get_absolute_url() }
+		print form.errors 
+	form_html = render_crispy_form(form, context=RequestContext(request))
+	return {'success': False, 'form_html': form_html, 'id_servicio': servicio.id}
+
+
+@json_view
 def guardar_persona(request):
     form = PersonaForm(request.POST or None)
     
@@ -104,7 +121,7 @@ def guardar_tipo_servicio(request):
     
     if form.is_valid():
         tipo = form.save()
-        return {'success': True, 'value': tipo.id, 'nombre': tipo.nombre}
+        return {'success': True, 'value': tipo.id, 'nombre': tipo.nombre,}
 
     form_html = render_crispy_form(form, context=RequestContext(request))
     return {'success': False, 'form_html': form_html}

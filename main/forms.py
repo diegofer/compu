@@ -4,38 +4,65 @@ from django.forms import ModelForm
 from django.forms.models import inlineformset_factory
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field
+from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Hidden
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons
 
 from main.models import Servicio, Persona, TipoServicio, Marca, Componente
 
 class ServicioForm(ModelForm):
 
-	def __init__(self, *args, **kwargs):
-		super(ServicioForm, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(ServicioForm, self).__init__(*args, **kwargs)
 
-		self.helper = FormHelper(self)
+        self.fields['cliente'].queryset = Persona.objects.filter(tipo__exact=Persona.CLIENTE)
+        self.helper = FormHelper(self)
 
-		#self.helper.form_action = '/guardar_servicio/'
+        self.helper.form_id     = 'form-servicio'
+        self.helper.form_class  = 'form-horizontal'
+        self.helper.label_class = 'col-md-3'
+        self.helper.field_class = 'col-md-9'
 
-		self.helper.form_id     = 'form-servicio'
-		self.helper.form_class  = 'form-horizontal'
-		self.helper.label_class = 'col-md-3'
-		self.helper.field_class = 'col-md-9'
-
-		self.helper.layout = Layout(
-			FieldWithButtons('cliente', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="cliente-btn", css_class="btn-default btn-sm")),
-		    FieldWithButtons('tipo', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="tipo-btn", css_class="btn-default btn-sm")),
-		    FieldWithButtons('marca', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="marca-btn", css_class="btn-default btn-sm")),
-		    'modelo',
-		    'serial',
+        self.helper.layout = Layout(
+            FieldWithButtons('cliente', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="cliente-btn", css_class="btn-default btn-sm")),
+            FieldWithButtons('tipo', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="tipo-btn", css_class="btn-default btn-sm")),
+            FieldWithButtons('marca', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="marca-btn", css_class="btn-default btn-sm")),
+            'modelo',
+            'serial',
             Field('motivo', rows="3", css_class='input-xlarge'),
             FieldWithButtons('componentes', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="componentes-btn", css_class="btn-default")),      
-		)
-
-	class Meta:
-		model = Servicio
+        )
+    
+    class Meta:
+        model = Servicio
         exclude = ['estado', 'tecnico']
+
+
+
+
+class ServicioTecnicoForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ServicioTecnicoForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper(self)
+
+        self.fields['tecnico'].label = ""
+        self.fields['tecnico'].queryset = Persona.objects.filter(tipo__exact=Persona.TECNICO)
+
+        self.helper.form_id     = 'form-servicio-tecnico'
+
+
+        self.helper.layout = Layout(
+            'tecnico',
+            Hidden('id_servicio', '{{servicio.id}}'),
+            StrictButton('Asignar Tecnico', css_id="guardar-servicio-tecnico-btn", data_loading_text="Guardando...", css_class="btn-danger btn-block btn-lg"),
+        )
+    
+
+    class Meta:
+        model = Servicio
+        fields = ['tecnico']
+        
 
 class PersonaForm(ModelForm):
 
@@ -70,7 +97,9 @@ class PersonaForm(ModelForm):
 
     class Meta:
         model = Persona
-		
+
+
+
 
 
 class TipoServicioForm(ModelForm):

@@ -25,13 +25,16 @@ $( document ).ready( function(){
 		var compu = {
 
 			initCompu: function() {
+				
 				this.setActionsFormServicio();	
+				this.setActionsFormServicioTecnico();
 				this.setActionsFormTipo();	
 				this.setActionsFormComponente();				
 
 				$('#servicio-btn').on('click',{modal:modalServicio}, this.showModal);
 
 				$('#guardar-servicio-btn').on('click', this.guardarServicio);
+				
 				$('#guardar-persona-btn').on('click', this.guardarPersona);
 				$('#guardar-tipo-servicio-btn').on('click', this.guardarTipoServicio);
 				$('#guardar-marca-btn').on('click', this.guardarMarca);
@@ -65,6 +68,19 @@ $( document ).ready( function(){
 					$('#id_componentes').select2("destroy");
 				},
 						
+
+				setActionsFormServicioTecnico: function() {
+					$('#id_tecnico').select2();
+					$('#guardar-servicio-tecnico-btn').on('click', this.guardarServicioTecnico);
+				},
+
+
+					clearActionsFormServicoTecnico: function() {
+						$('#id_tecnico').select2("destroy");
+						$('#guardar-servicio-tecnico-btn').off();
+					},
+					
+			
 
 			setActionsFormTipo: function() {
 			    $('#form-tipo-servicio #id_icon').select2({
@@ -154,6 +170,17 @@ $( document ).ready( function(){
 			},
 
 
+				guardarServicioTecnico: function() {
+					var $btn =  $(event.target).button('loading');
+					compu.ajax({
+						url  : urlGuardarServicioTecnico,
+						form : '#form-servicio-tecnico',
+						btn  : $btn
+					});
+				},
+				
+
+
 			guardarPersona: function() {
 				var $btn =  $(event.target).button('loading');
 
@@ -211,11 +238,24 @@ $( document ).ready( function(){
 				            $(options.form).replaceWith(data['form_html']); // OJO replace mata los listener y referencias...
 				            
 				            if (options.url == urlGuardarServicio) compu.setActionsFormServicio();
+				            if (options.url == urlGuardarServicioTecnico) {
+				            	compu.clearActionsFormServicoTecnico();
+				            	compu.setActionsFormServicioTecnico();
+				            	$(options.form).find('.form-group').addClass('has-error');
+				            	$(options.form).find('input[name="id_servicio"]').val(data.id_servicio);
+
+				            };
 				            if (options.url == urlGuardarTipoServicio) compu.setActionsFormTipo(); 
 				            if (options.url == urlGuardarComponente) compu.setActionsFormComponente();     
 				        }
 				        else {
 				        	if (options.url == urlGuardarServicio) window.location.href='/';
+
+				        	if (options.url == urlGuardarServicioTecnico ) {
+				        		var panelTecnico = $('#panel-tecnico').removeClass('panel-danger').addClass('panel-info');
+				        		panelTecnico.find('.panel-heading').text('TÉCNICO');
+				        		panelTecnico.find('.panel-body').html("<a href='"+data.url_tecnico+"' class='btn btn-info btn-block btn-lg'>"+data.tecnico+"</a>");
+				        	}
 	
 				        	if (options.url == urlGuardarPersona) compu.successOk('#id_cliente', data, modalPersona);
 

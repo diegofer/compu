@@ -30,6 +30,10 @@ class Persona(models.Model):
 		return '%s %s' % (self.nombre, self.apellido)
 	full_name = property(_get_full_name)
 
+	def get_absolute_url(self):
+		from django.core.urlresolvers import reverse
+		return reverse('main.views.persona', args=[str(self.id)])
+
 
 
 class TipoServicio(models.Model):
