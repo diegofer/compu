@@ -25,9 +25,6 @@
 		<div class="col-md-2 logo">
 			
 				<i class="fa fa-{{servicio.tipo.icon}} icon icon-servicio {{servicio.estado}}"></i><br/>
-			
-				
-		
 		</div>
 		
 		<div class="col-md-10">
@@ -37,7 +34,27 @@
 				{{servicio.tipo.nombre}} {{servicio.marca.nombre}} 
 
 			</h1>
-			<span class="label estado {{servicio.estado|labelizar}} ">{{servicio.estado}} </span>
+			<!-- <span class="label estado {{servicio.estado|labelizar}} ">{{servicio.estado}} </span> -->
+
+			<div id="conten-estado"  class="btn-group">
+			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.EN_COLA}}" id="{{servicio.EN_COLA}}"> 
+			    	<i class="fa fa-clock-o fw"></i> 
+			    </button>
+			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.EN_REVISION}}" id="{{servicio.EN_REVISION}}">
+			    	<i class="fa fa-wrench"></i>
+			    </button>
+			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.REPARADO}}" id="{{servicio.REPARADO}}">
+			    	<i class="fa fa-check"></i>
+			    </button>
+			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.ENTREGADO}}" id="{{servicio.ENTREGADO}}">
+			    	<i class="fa fa-smile-o"></i>
+			    </button>			    
+			</div>
+
+			<input id="servicio-id" type="hidden" value="{{servicio.id}}">
+			{% csrf_token %}
+
+
 
 		</div>
 
@@ -58,6 +75,10 @@
 
 			<table class="table table-striped">
 				<tbody>	
+					<tr>
+						<td>Estado:</td>
+						<td id="td-estado">{{servicio.estado}}</td>
+					</tr>
 					<tr>
 						<td>Marca: </td>
 						<td>{{servicio.marca.nombre}}</td>

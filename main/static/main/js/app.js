@@ -32,6 +32,7 @@ $( document ).ready( function(){
 				this.setActionsFormComponente();				
 
 				$('#servicio-btn').on('click',{modal:modalServicio}, this.showModal);
+					$('.estado-btn').on('click', this.guardarEstado);
 
 				$('#guardar-servicio-btn').on('click', this.guardarServicio);
 				
@@ -46,6 +47,10 @@ $( document ).ready( function(){
 				modalMarca.on('hidden.bs.modal', this.alHideMarca);		
 				modalComponente.on('hidden.bs.modal', this.alHideComponente);		
 			},
+
+
+			
+			
 
 
 			setActionsFormServicio: function() {
@@ -169,6 +174,33 @@ $( document ).ready( function(){
 				});
 			},
 
+				guardarEstado: function(event) {
+					var data = {
+						estado: event.currentTarget.id,
+						servicio_id: $('#servicio-id').val(),
+						csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+					};
+					$.post(urlGuardarServicioEstado, data)
+						.done(function(data){
+							$('.icon-servicio').removeClass('en-cola en-revision reparado entregado').addClass(data.estado);
+							$('#td-estado').text(data.estado);
+
+							$('.estado-btn').removeClass().addClass('estado-btn btn btn-default');
+							if (data.estado == 'en-cola') {
+								$(event.currentTarget).removeClass().addClass('estado-btn btn btn-danger active');
+							}
+							if (data.estado == 'en-revision') {
+								$(event.currentTarget).removeClass().addClass('estado-btn btn btn-warning active');
+							}
+							if (data.estado == 'reparado') {
+								$(event.currentTarget).removeClass().addClass('estado-btn btn btn-success active');
+							}
+							if (data.estado == 'entregado') {
+								$(event.currentTarget).removeClass().addClass('estado-btn btn btn-info active');
+							}							
+						});
+				},
+
 
 				guardarServicioTecnico: function() {
 					var $btn =  $(event.target).button('loading');
@@ -249,7 +281,7 @@ $( document ).ready( function(){
 				            if (options.url == urlGuardarComponente) compu.setActionsFormComponente();     
 				        }
 				        else {
-				        	if (options.url == urlGuardarServicio) window.location.href='/';
+				        	if (options.url == urlGuardarServicio) return window.location.href= data.url;
 
 				        	if (options.url == urlGuardarServicioTecnico ) {
 				        		var panelTecnico = $('#panel-tecnico').removeClass('panel-danger').addClass('panel-info');

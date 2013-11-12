@@ -5,6 +5,8 @@ from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm #, UserCreationForm
 from django.conf import settings
+from django.core.urlresolvers import reverse
+import json
 
 from crispy_forms.utils import render_crispy_form
 from jsonview.decorators import json_view
@@ -81,7 +83,7 @@ def guardar_servicio(request):
 		new_servicio.estado = Servicio.EN_COLA
 		new_servicio.save()
 		form.save_m2m()
-		return {'success': True}
+		return {'success': True, 'url': new_servicio.get_absolute_url()}
 	print form.errors
 	form_html = render_crispy_form(form, context=RequestContext(request))
 	return {'success': False, 'form_html': form_html}
@@ -89,18 +91,30 @@ def guardar_servicio(request):
 
 @json_view
 def guardar_servicio_tecnico(request):
-	print request.POST
 	servicio = Servicio.objects.get(pk=request.POST['id_servicio'])
 	form = ServicioTecnicoForm(request.POST or None, instance=servicio)
 
 	if request.POST['tecnico']:
 		
 		if form.is_valid():
-			servicio = form.save(commit=False)
+			servicio = form.save()
 			return {'success': True, 'tecnico': servicio.tecnico.full_name, 'url_tecnico': servicio.tecnico.get_absolute_url() }
 		print form.errors 
 	form_html = render_crispy_form(form, context=RequestContext(request))
 	return {'success': False, 'form_html': form_html, 'id_servicio': servicio.id}
+
+
+@json_view
+def guardar_servicio_estado(request):
+	estado       = request.POST['estado']
+	servicio_id  = request.POST['servicio_id']
+
+	servicio = Servicio.objects.get(pk=servicio_id)
+	servicio.estado = estado
+	servicio.save(update_fields=['estado'])
+
+	return {'success': True, 'estado':servicio.estado}
+
 
 
 @json_view

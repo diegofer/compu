@@ -21,3 +21,15 @@ def labelizar(estado):
 		return 'label-success'
 	else:
 		return 'label-info'
+
+@register.filter
+def estado_btn(estado, btn_id):
+	if estado == Servicio.EN_COLA and btn_id == Servicio.EN_COLA:
+		return 'btn-danger active'
+	if estado == Servicio.EN_REVISION and btn_id == Servicio.EN_REVISION:
+		return 'btn-warning active'
+	if estado == Servicio.REPARADO and btn_id == Servicio.REPARADO:
+		return 'btn-success active'
+	if estado == Servicio.ENTREGADO and btn_id == Servicio.ENTREGADO:
+		return 'btn-info active'
+	return 'btn-default'

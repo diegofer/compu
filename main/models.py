@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.core.urlresolvers import reverse
+
 from .choices import ICON 
 
 
@@ -31,7 +33,6 @@ class Persona(models.Model):
 	full_name = property(_get_full_name)
 
 	def get_absolute_url(self):
-		from django.core.urlresolvers import reverse
 		return reverse('main.views.persona', args=[str(self.id)])
 
 
@@ -90,4 +91,7 @@ class Servicio(models.Model):
 
 	def __unicode__(self):
 		return "%s de %s" %( self.tipo.nombre, self.cliente.nombre )
+
+	def get_absolute_url(self):
+		return reverse('main.views.servicio', args=[str(self.id)])
 
