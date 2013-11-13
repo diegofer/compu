@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, DateTimeField, DateTimeInput
 from django.forms.models import inlineformset_factory
+from django.utils.translation import ugettext as _
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Hidden
@@ -23,6 +24,7 @@ class ServicioForm(ModelForm):
         self.helper.field_class = 'col-md-9'
 
         self.helper.layout = Layout(
+            AppendedText('plazo', "<i class='fa fa-calendar'></i>"),
             FieldWithButtons('cliente', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="cliente-btn", css_class="btn-default btn-sm")),
             FieldWithButtons('tipo', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="tipo-btn", css_class="btn-default btn-sm")),
             FieldWithButtons('marca', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="marca-btn", css_class="btn-default btn-sm")),
@@ -30,13 +32,16 @@ class ServicioForm(ModelForm):
             'serial',
             Field('motivo', rows="3", css_class='input-xlarge'),
             FieldWithButtons('componentes', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="componentes-btn", css_class="btn-default")),      
+            
         )
     
     class Meta:
         model = Servicio
         exclude = ['estado', 'tecnico']
-
-
+        localized_fields = ('plazo',)
+        widgets = {
+            'plazo': DateTimeInput(format='%d-%b-%Y  %I %p'),
+        }
 
 
 class ServicioTecnicoForm(ModelForm):
@@ -47,6 +52,7 @@ class ServicioTecnicoForm(ModelForm):
         self.helper = FormHelper(self)
 
         self.fields['tecnico'].label = ""
+
         self.fields['tecnico'].queryset = Persona.objects.filter(tipo__exact=Persona.TECNICO)
 
         self.helper.form_id     = 'form-servicio-tecnico'
@@ -71,17 +77,9 @@ class PersonaForm(ModelForm):
 
         self.helper = FormHelper(self)
 
-        self.fields['nombre'].label = ""
-        self.fields['apellido'].label = ""
-        self.fields['cedula'].label = ""
-        self.fields['direccion'].label = ""
-        self.fields['telefono'].label = ""
-        self.fields['email'].label = ""
-        self.fields['tipo'].label = ""
-
+        self.helper.form_show_labels = False
         self.helper.form_id     = 'form-persona'
         self.helper.form_class  = 'form-horizontal'
-        self.helper.label_class = 'col-lg-2'
         self.helper.field_class = 'col-lg-8 col-lg-offset-2'
 
         self.helper.layout = Layout(
@@ -109,9 +107,7 @@ class TipoServicioForm(ModelForm):
 
         self.helper = FormHelper(self)
 
-        self.fields['nombre'].label = ""
-        self.fields['icon'].label = ""
-
+        self.helper.form_show_labels = False
         self.helper.form_id     = 'form-tipo-servicio'
         self.helper.form_class  = 'form-horizontal'
         self.helper.field_class = 'col-lg-8 col-lg-offset-2'
@@ -134,9 +130,8 @@ class MarcaForm(ModelForm):
         super(MarcaForm, self).__init__(*args, **kwargs)
 
         self.helper = FormHelper(self)
-
-        self.fields['nombre'].label = ""
-
+        
+        self.helper.form_show_labels = False
         self.helper.form_id     = 'form-marca'
         self.helper.form_class  = 'form-horizontal'
         self.helper.field_class = 'col-lg-8 col-lg-offset-2'
@@ -158,9 +153,7 @@ class ComponenteForm(ModelForm):
 
         self.helper = FormHelper(self)
 
-        self.fields['nombre'].label = ""
-        self.fields['icon'].label = ""
-
+        self.helper.form_show_labels = False
         self.helper.form_id   = 'form-componente'
         self.helper.form_class = 'form-horizontal'
         self.helper.field_class  = 'col-md-8 col-md-offset-2'

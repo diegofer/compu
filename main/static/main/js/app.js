@@ -25,6 +25,8 @@ $( document ).ready( function(){
 		var compu = {
 
 			initCompu: function() {
+
+				this.setSpinner();
 				
 				this.setActionsFormServicio();	
 				this.setActionsFormServicioTecnico();
@@ -49,8 +51,16 @@ $( document ).ready( function(){
 			},
 
 
+			setSpinner: function() {
+				$('.cargando').hide();
+				$(document).ajaxStart(function(){
+			        $('.cargando').show();
+			    }).ajaxStop(function(){
+			        $('.cargando').hide();
+			    });
+			},
 			
-			
+
 
 
 			setActionsFormServicio: function() {
@@ -61,6 +71,18 @@ $( document ).ready( function(){
 
 				$('#id_cliente,#id_tipo,#id_marca,#id_componentes').select2({
 					formatNoMatches: function(m){return 'Oops, no se encontraron resultados!';}
+				});
+
+				$('#id_plazo').datetimepicker({
+					language: 'es',
+					showMeridian: true, //muestra am y pm pero si se cambia el language no funciona, se arregla add ["AM", "PM"] en el archivo localizado
+					format: 'dd-M-yyyy HH P',
+					startDate: new Date(),
+					autoclose: true,
+					daysOfWeekDisabled: [0],
+					minView: 1,
+					//maxView: 3,
+					todayHighlight: true,
 				});
 			},
 
@@ -122,7 +144,6 @@ $( document ).ready( function(){
 			showModal: function(event) {	
 				event.preventDefault();
 				var selectedItems = $('#id_componentes').select2("val");
-				console.log(selectedItems);
 				event.data.modal.modal('show');		
 			},
 
@@ -175,31 +196,66 @@ $( document ).ready( function(){
 			},
 
 				guardarEstado: function(event) {
-					var data = {
-						estado: event.currentTarget.id,
-						servicio_id: $('#servicio-id').val(),
-						csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
-					};
-					$.post(urlGuardarServicioEstado, data)
-						.done(function(data){
-							$('.icon-servicio').removeClass('en-cola en-revision reparado entregado').addClass(data.estado);
-							$('#td-estado').text(data.estado);
+					
+					var estadoBtn = $('#conten-estado .estado-btn').addClass('disabled'),
+						btnActual = $(event.currentTarget),
+						$msgSucces = $('#msg-success'),
 
-							$('.estado-btn').removeClass().addClass('estado-btn btn btn-default');
+					    data = {
+							estado: event.currentTarget.id,
+							servicio_id: $('#servicio-id').val(),
+							csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+						};
+
+					$.post(urlGuardarServicioEstado, data)
+						.fail(function() {
+						    alert( "error" );
+					    })
+						.always(function(data){
+							
+							$('#logo-servicio .icon-servicio').removeClass('en-cola en-revision reparado entregado').addClass(data.estado);
+							$('#td-estado').text(data.estado);
+							var estado = $('#estado-label').removeClass('label-danger label-warning label-success label-info');
+							estado.text(data.estado);
+
+
+							estadoBtn.removeClass().addClass('estado-btn btn btn-default');
+
 							if (data.estado == 'en-cola') {
-								$(event.currentTarget).removeClass().addClass('estado-btn btn btn-danger active');
+								btnActual.removeClass().addClass('estado-btn btn btn-danger active');
+								estado.addClass('label-danger');
 							}
 							if (data.estado == 'en-revision') {
-								$(event.currentTarget).removeClass().addClass('estado-btn btn btn-warning active');
+								btnActual.removeClass().addClass('estado-btn btn btn-warning active');
+								estado.addClass('label-warning');
 							}
 							if (data.estado == 'reparado') {
-								$(event.currentTarget).removeClass().addClass('estado-btn btn btn-success active');
+								btnActual.removeClass().addClass('estado-btn btn btn-success active');
+								estado.addClass('label-success');
 							}
 							if (data.estado == 'entregado') {
-								$(event.currentTarget).removeClass().addClass('estado-btn btn btn-info active');
-							}							
+								btnActual.removeClass().addClass('estado-btn btn btn-info active');
+								estado.addClass('label-info');
+							}				
 						});
+						
 				},
+
+
+				fadeElement: function() {
+					$(document).bind('DOMNodeInserted', function(e) {
+					    var element = e.target;
+					    setTimeout(function() {
+					        $(element).fadeOut(1000, function() {
+					            $(this).remove();
+					        });
+					    }, 2000);
+					});	
+				},
+				
+
+				
+
 
 
 				guardarServicioTecnico: function() {

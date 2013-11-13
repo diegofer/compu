@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm #, UserCreationForm
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from datetime import datetime
 import json
 
 from crispy_forms.utils import render_crispy_form
@@ -76,7 +77,10 @@ def persona(request, id):
 
 @json_view
 def guardar_servicio(request):
-	form = ServicioForm(request.POST or None)
+	datos = request.POST.copy() # le saco una copia al POST para poderlo editar
+	datos['plazo'] = datetime.strptime(request.POST['plazo'], '%d-%b-%Y  %I %p') # convierto mi custom datetime a un formato que entienda el fieldmodel
+
+	form = ServicioForm(datos or None)
 
 	if form.is_valid():
 		new_servicio = form.save(commit=False)

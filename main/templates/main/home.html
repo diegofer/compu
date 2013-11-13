@@ -107,7 +107,7 @@
 				<div class="col-lg-10 right">
 					<span class="badge pull-right">No. {{servicio.id}}</span>
 					<h4>{{servicio.tipo.nombre}} {{servicio.marca}} de {{servicio.cliente.nombre}}</h4>
-					<h5>Ingresó hace {{servicio.created|timesince}}</h5>	
+					<h5>Ingresó hace {{servicio.created|timesince}} --- Quedan {{servicio.plazo|timeuntil}} para entregarlo</h5> 	
 					<span class="label {{servicio.estado|labelizar}}">{{servicio.estado}} </span>		
 				</div>
 			</div> 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.core.urlresolvers import reverse
+from datetime import datetime
 
 from .choices import ICON 
 
@@ -88,6 +89,7 @@ class Servicio(models.Model):
 	created     = models.DateTimeField(auto_now_add = True) 
 	updated     = models.DateTimeField(auto_now = True)
 	estado      = models.CharField(max_length=12, choices=ESTADO, default=EN_COLA, blank=True)
+	plazo       = models.DateTimeField('Fecha de entrega',default=datetime.now, blank=True)
 
 	def __unicode__(self):
 		return "%s de %s" %( self.tipo.nombre, self.cliente.nombre )

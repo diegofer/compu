@@ -8,6 +8,7 @@
 {% block header %}
 	<ul class="nav navbar-nav">
 		<li class="active"><a href="#">Servicio Detallado</a></li>
+		<li class="cargando"><a href="#"><i class="fa fa-spinner fa-spin"></i></a></li>
 	</ul>
 {% endblock header %}
 
@@ -16,15 +17,19 @@
 
 {% block content %}
 
+<div id="msg-success" class="alert alert-success hidden">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	El estado de este servicio se actualizó correctamente
+</div>
+
 <div id="servicio">
 
 	
 
 	<div class="row">
 		
-		<div class="col-md-2 logo">
-			
-				<i class="fa fa-{{servicio.tipo.icon}} icon icon-servicio {{servicio.estado}}"></i><br/>
+		<div id="logo-servicio" class="col-md-2 logo">			
+			<i class="fa fa-{{servicio.tipo.icon}} icon icon-servicio {{servicio.estado}}"></i><br/>
 		</div>
 		
 		<div class="col-md-10">
@@ -34,7 +39,7 @@
 				{{servicio.tipo.nombre}} {{servicio.marca.nombre}} 
 
 			</h1>
-			<!-- <span class="label estado {{servicio.estado|labelizar}} ">{{servicio.estado}} </span> -->
+			<span id="estado-label" class="label estado {{servicio.estado|labelizar}} ">{{servicio.estado}} </span> <br/><br/>
 
 			<div id="conten-estado"  class="btn-group">
 			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.EN_COLA}}" id="{{servicio.EN_COLA}}"> 
@@ -67,6 +72,7 @@
 	<div class="page-header">
 		<span class="fecha pull-right">{{servicio.created}}</span>
 		<h4>Ingresó hace {{servicio.created|timesince}}</h4>
+		<h4>Quedan {{servicio.plazo|timeuntil}} para entregarlo</h4>
 	</div>
 	
 	<div class="row">
