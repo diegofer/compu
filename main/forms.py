@@ -3,12 +3,17 @@ from django import forms
 from django.forms import ModelForm, DateTimeField, DateTimeInput
 from django.forms.models import inlineformset_factory
 from django.utils.translation import ugettext as _
+from datetime import datetime
+
+from termcolor import colored
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Hidden
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons
 
 from main.models import Servicio, Persona, TipoServicio, Marca, Componente
+
+
 
 class ServicioForm(ModelForm):
 
@@ -34,13 +39,13 @@ class ServicioForm(ModelForm):
             FieldWithButtons('componentes', StrictButton("<i class='fa fa-plus fa-fw'></i>", css_id="componentes-btn", css_class="btn-default")),      
             
         )
-    
+
     class Meta:
         model = Servicio
         exclude = ['estado', 'tecnico']
         localized_fields = ('plazo',)
         widgets = {
-            'plazo': DateTimeInput(format='%d-%b-%Y  %I %p'),
+            'plazo': DateTimeInput(format=Servicio.DATA_TIME_FORMAT),
         }
 
 

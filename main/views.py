@@ -12,6 +12,8 @@ import json
 from crispy_forms.utils import render_crispy_form
 from jsonview.decorators import json_view
 
+from termcolor import colored
+
 from main.models import Servicio, Persona
 from main.forms import ServicioForm, PersonaForm, TipoServicioForm, MarcaForm, ComponenteForm, ServicioTecnicoForm
 
@@ -78,7 +80,7 @@ def persona(request, id):
 @json_view
 def guardar_servicio(request):
 	datos = request.POST.copy() # le saco una copia al POST para poderlo editar
-	datos['plazo'] = datetime.strptime(request.POST['plazo'], '%d-%b-%Y  %I %p') # convierto mi custom datetime a un formato que entienda el fieldmodel
+	datos['plazo'] = datetime.strptime(request.POST['plazo'], Servicio.DATA_TIME_FORMAT) # convierto mi custom datetime a un formato que entienda el fieldmodel
 
 	form = ServicioForm(datos or None)
 
@@ -88,7 +90,7 @@ def guardar_servicio(request):
 		new_servicio.save()
 		form.save_m2m()
 		return {'success': True, 'url': new_servicio.get_absolute_url()}
-	print form.errors
+	print colored(form.errors, "red", attrs=['bold'])
 	form_html = render_crispy_form(form, context=RequestContext(request))
 	return {'success': False, 'form_html': form_html}
 

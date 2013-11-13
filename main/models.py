@@ -66,6 +66,8 @@ class Componente(models.Model):
 
 class Servicio(models.Model):
 
+	DATA_TIME_FORMAT = '%d-%b-%Y  %I %p'
+
 	EN_COLA        = 'en-cola'#'0'
 	EN_REVISION    = 'en-revision'#'1'
 	REPARADO       = 'reparado'#'1'
