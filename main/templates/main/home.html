@@ -105,10 +105,42 @@
 				</div>	
 
 				<div class="col-lg-10 right">
+
 					<span class="badge pull-right">No. {{servicio.id}}</span>
+
 					<h4>{{servicio.tipo.nombre}} {{servicio.marca}} de {{servicio.cliente.nombre}}</h4>
-					<h5>Ingresó hace {{servicio.created|timesince}} --- Quedan {{servicio.plazo|timeuntil}} para entregarlo</h5> 	
-					<span class="label {{servicio.estado|labelizar}}">{{servicio.estado}} </span>		
+
+					<span class="label  {{servicio.estado|labelizar}}">{{servicio.estado}} </span>
+	
+
+					<div class="progreess-widget">
+						{% if servicio.percent != servicio.PLAZO_VENCIDO %}  
+						<span class="percent" style="margin-left:{{servicio.percent}}%;">{{servicio.percent}}%</span>
+						{% else %}
+						<span class="percent" style="margin-left:100%;">100%</span>
+						{% endif %}
+						<div class="progress">
+						    <div class="progress-bar {% if servicio.percent != servicio.PLAZO_VENCIDO %} bar-gray {% else %} progress-bar-danger  {% endif %}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{servicio.percent}}%;">
+						    </div>		    
+						</div> 	
+						<span class="fechas  pull-left">| {{servicio.created|date:"D d M f a"}}</span> 	
+						<span class="fechas  pull-right">{{servicio.plazo|date:'D d M f a'}} |</span>
+					</div>
+					
+					<div class="clearfix"></div>
+					
+
+					<h5>
+						<i class="fa fa-check-square-o"></i> Ingreso hace <span class="label label-default">{{servicio.created|timesince}}</span> 
+						&nbsp;&nbsp;&nbsp; 
+						{% if servicio.percent != servicio.PLAZO_VENCIDO %}  
+						<i class="fa fa-square-o"></i>  quedan <span class="label label-default"> {{servicio.plazo|timeuntil}}</span> 
+						{% else %}
+						<i class="fa fa-check-square-o"></i>  terminó plazo <span class="label label-default"> {{servicio.plazo|timeuntil}}</span> 
+						{% endif %}
+					</h5>
+	 
+							
 				</div>
 			</div> 
 		</a>

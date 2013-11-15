@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.core.urlresolvers import reverse
-from datetime import datetime
+from datetime import datetime, timedelta
+
+from termcolor import colored
 
 from .choices import ICON 
 
@@ -67,6 +69,7 @@ class Componente(models.Model):
 class Servicio(models.Model):
 
 	DATA_TIME_FORMAT = '%d-%b-%Y  %I %p'
+	PLAZO_VENCIDO = 111
 
 	EN_COLA        = 'en-cola'#'0'
 	EN_REVISION    = 'en-revision'#'1'
@@ -99,3 +102,27 @@ class Servicio(models.Model):
 	def get_absolute_url(self):
 		return reverse('main.views.servicio', args=[str(self.id)])
 
+
+	def _plazo_porcentaje(self):
+		n = datetime.now()			
+		c = self.created
+		p = self.plazo
+
+		now    = datetime(n.year, n.month, n.day, n.hour, n.minute)
+		creado = datetime(c.year, c.month, c.day, c.hour, c.minute)
+		plazo  = datetime(p.year, p.month, p.day, p.hour, p.minute)
+
+		h = datetime.now() < plazo
+		print colored(self.tipo, 'blue')
+		print colored(h, 'blue')
+		if now < plazo:
+			delta_rango = (plazo-creado).total_seconds() # 100%
+			delta_van   = (now-creado).total_seconds()   # porcentaje completado
+
+			result = abs(delta_van/delta_rango) * 100   # abs() retorna valores absolutos...
+			return int(result)
+
+		return self.PLAZO_VENCIDO
+
+		
+	percent = property(_plazo_porcentaje)

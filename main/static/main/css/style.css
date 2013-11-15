@@ -73,6 +73,31 @@ select {
 .item-servicio .left {
   text-align: center;
 }
+.item-servicio .progreess-widget {
+  position: relative;
+  width: 70%;
+}
+.item-servicio .progress {
+  height: 8px;
+  margin-bottom: 2px;
+  background-color: #fff;
+  border: solid 1px #999;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  -ms-box-shadow: none;
+  -o-box-shadow: none;
+  box-shadow: none;
+}
+.item-servicio .progress .bar-gray {
+  background-color: #999;
+}
+.item-servicio .percent {
+  width: 20px;
+  font-size: 10px;
+}
+.item-servicio .fechas {
+  font-size: 10px;
+}
 #servicio .logo {
   text-align: center;
 }
