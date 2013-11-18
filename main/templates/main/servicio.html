@@ -42,16 +42,17 @@
 			<span id="estado-label" class="label estado {{servicio.estado|labelizar}} ">{{servicio.estado}} </span> <br/><br/>
 
 			<div id="conten-estado"  class="btn-group">
-			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.EN_COLA}}" id="{{servicio.EN_COLA}}"> 
+			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.EN_COLA}}" id="{{servicio.EN_COLA}}"
+			    		title="en cola"> 
 			    	<i class="fa fa-clock-o fw"></i> 
 			    </button>
-			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.EN_REVISION}}" id="{{servicio.EN_REVISION}}">
+			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.EN_REVISION}}" id="{{servicio.EN_REVISION}}" title="en revisión">
 			    	<i class="fa fa-wrench"></i>
 			    </button>
-			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.REPARADO}}" id="{{servicio.REPARADO}}">
+			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.REPARADO}}" id="{{servicio.REPARADO}}" title="reparado" >
 			    	<i class="fa fa-check"></i>
 			    </button>
-			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.ENTREGADO}}" id="{{servicio.ENTREGADO}}">
+			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.ENTREGADO}}" id="{{servicio.ENTREGADO}}" title="entregado">
 			    	<i class="fa fa-smile-o"></i>
 			    </button>			    
 			</div>
@@ -66,25 +67,14 @@
 	</div> <!-- end row -->
 
 
+	{% include "main/widgets/progressServicio.html" %}
 
-
-
-	<div class="page-header">
-		<span class="fecha pull-right">{{servicio.created}}</span>
-		<h4>Ingresó hace {{servicio.created|timesince}}</h4>
-		<h4>Quedan {{servicio.plazo|timeuntil}} para entregarlo</h4>
-	</div>
-	
 	<div class="row">
 		
 		<div class="col-md-8">
 
 			<table class="table table-striped">
 				<tbody>	
-					<tr>
-						<td>Estado:</td>
-						<td id="td-estado">{{servicio.estado}}</td>
-					</tr>
 					<tr>
 						<td>Marca: </td>
 						<td>{{servicio.marca.nombre}}</td>
@@ -109,11 +99,13 @@
 
 
 			<h3>
-				<i class="fa fa-dot-circle-o"></i>
+				<i class="fa fa-file-text-o"></i>
 				&nbsp; Motivo de Mantenimiento
 			</h3>
 
-			<div class="alert alert-info">{{servicio.motivo}}</div>
+			<div class="panel panel-default">
+				<div class="panel-body">{{servicio.motivo}}</div>
+			</div> 
 			
 			<br/>
 			<h3>
@@ -143,14 +135,14 @@
 
 		<div class="col-md-4">
 
-			<div class="panel panel-success servicio-person">
+			<div class="panel panel-default servicio-person">
 
 				<div class="panel-heading">CLIENTE</div>
 				<div class="panel-body">
 					
 					<i class="fa fa-user icon-person"></i>
 	
-					<a href="{% url 'persona' servicio.cliente.id %}" class="btn btn-success btn-block btn-lg" role="button">				 		 
+					<a href="{% url 'persona' servicio.cliente.id %}" class="btn btn-info btn-block btn-lg" role="button">				 		 
 						{{servicio.cliente.full_name}}
 					</a>		
 				</div>
@@ -159,7 +151,7 @@
 			
 				
 				{% if servicio.tecnico %}
-				<div class="panel panel-info servicio-person">
+				<div class="panel panel-default servicio-person">
 					<div class="panel-heading">TÉCNICO</div>
 					<div class="panel-body">
 						

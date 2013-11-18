@@ -68,26 +68,7 @@
 			<h3><i class="fa fa-wrench fw"></i> Servicios</h3>
 
 			{% for servicio in servicios %}
-
-
-			<div class="list-group item-servicio {{servicio.estado}}"> 
-				
-				<a href="{% url 'servicio' servicio.id %}" class="list-group-item">
-					<div class="row">
-						<div class="col-lg-2 left">		
-							<i class="fa fa-{{servicio.tipo.icon}} fa-5x icon {{servicio.estado}}"></i><br/>
-							<span>{{servicio.tipo.nombre}}<span/>				
-						</div>	
-
-						<div class="col-lg-10 right">
-							<span class="badge pull-right">No. {{servicio.id}}</span>
-							<h4>{{servicio.tipo.nombre}} {{servicio.marca}} de {{servicio.cliente.nombre}}</h4>
-							<h5>Ingresó hace {{servicio.created|timesince}}</h5>	
-							<span class="label {{servicio.estado|labelizar}}">{{servicio.estado}} </span>		
-						</div>
-					</div> 
-				</a>
-			</div>  <!-- end list -->
+				{% include "main/widgets/itemServicio.html" %}
 
 			{% empty %}
 			<h3>No hay servicios aun</h3>

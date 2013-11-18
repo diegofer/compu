@@ -117,7 +117,7 @@ def guardar_servicio_estado(request):
 
 	servicio = Servicio.objects.get(pk=servicio_id)
 	servicio.estado = estado
-	servicio.save(update_fields=['estado'])
+	servicio.save(update_fields=['estado', 'updated'])
 
 	return {'success': True, 'estado':servicio.estado}
 

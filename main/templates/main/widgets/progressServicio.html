@@ -1,0 +1,63 @@
+<div class="progress-servicio "> 
+
+					  
+	{% if servicio.percent != servicio.PLAZO_VENCIDO %}   <!-- si hay plazo  -->
+
+	<span class="percent" style="margin-left:{{servicio.percent}}%;">{{servicio.percent}}%</span>
+	<div class="progress">
+	    <div class="progress-bar bar-gray"  style="width: {{servicio.percent}}%;">  </div>			   	    
+	</div>
+
+
+	{% elif servicio.estado == servicio.ENTREGADO %}   <!-- si se vencio el plazo y se entrego -->
+		
+		<div class="msg-estado" style="text-align: right;">Cliente satisfecho &nbsp;&nbsp;&nbsp; <span class="percent">100%</span> </div> 
+		<div class="progress">
+		    <div class="progress-bar bar-gray"  style="width: {{servicio.percent}}%;">  </div>			   	    
+		</div>
+
+
+	{% elif servicio.estado == servicio.REPARADO %}   <!-- si se vencio el plazo y se reparo -->
+
+		<div class="msg-estado" style="text-align: right;"> 		 
+			Buen trabajo &nbsp;&nbsp;&nbsp; <span class="percent">100%</span> 
+		</div> 
+
+		<div class="progress">
+		    <div class="progress-bar bar-gray"  style="width: {{servicio.percent}}%;">  </div>			   	    
+		</div>
+
+
+	{% elif servicio.estado != servicio.ENTREGADO %}   <!-- si se vencio el plazo y no se ha reparado -->
+
+		<div class="msg-estado" style="text-align: right;"> 
+			<span class="icon en-cola">
+				<i class="fa fa-exclamation-triangle"></i> Alerta! plazo vencido y no se ha reparado 
+				</span> &nbsp;&nbsp;&nbsp; <span class="percent">100%</span> 
+			</div> 
+		<div class="progress">
+		    <div class="progress-bar bar-gray"  style="width: {{servicio.percent}}%;">  </div>			   	    
+		</div>
+
+	{% endif %}
+	
+
+	<span class="fechas  pull-left">{{servicio.created|date:"D d M Y - f a"}}</span> 	
+	<span class="fechas  pull-right">{{servicio.plazo|date:'D d M Y - f a'}}</span>
+
+
+
+	<div class="clearfix"></div>
+
+	<h6>
+		<i class="fa fa-check-square-o icon "></i> Ingreso hace <span class="label label-default">{{servicio.created|timesince}}</span> 
+		&nbsp;&nbsp;&nbsp; 
+		{% if servicio.percent != servicio.PLAZO_VENCIDO %}  
+		<i class="fa fa-square-o icon "></i>  quedan <span class="label label-default"> {{servicio.plazo|timeuntil}}</span> 
+		{% else %}
+		<i class="fa fa-check-square-o icon "></i>  terminó plazo <span class="label label-default"> {{servicio.plazo|timeuntil}}</span> 
+		{% endif %}
+	</h6>
+	
+							
+</div>  <!-- end progress-servicio    -->

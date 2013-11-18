@@ -82,24 +82,6 @@ TEMPLATE_DIRS = (
 
 
 
-INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
-    'main',
-
-    'crispy_forms',
-    'south',
-    'devserver',
-    'debug_toolbar',
-    'django_admin_bootstrapped',
-    'django.contrib.admin',
-    'raven.contrib.django.raven_compat',
-)
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 

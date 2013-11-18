@@ -120,6 +120,32 @@ select {
 #servicio .servicio-person .icon-person {
   font-size: 60px;
 }
+.progress-servicio {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+.progress-servicio .percent {
+  width: 20px;
+  font-size: 10px;
+}
+.progress-servicio .progress {
+  height: 10px;
+  margin-bottom: 2px;
+  background-color: #fff;
+  border: solid 1px #999;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  -ms-box-shadow: none;
+  -o-box-shadow: none;
+  box-shadow: none;
+}
+.progress-servicio .progress .bar-gray {
+  background-color: #999;
+}
+.progress-servicio .fechas {
+  font-size: 12px;
+  font-weight: bold;
+}
 #persona .foto {
   text-align: center;
 }
