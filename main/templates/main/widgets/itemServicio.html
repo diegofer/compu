@@ -3,13 +3,17 @@
 <div class="list-group item-servicio {{servicio.estado}}"> 
 		
 	<a href="{% url 'servicio' servicio.id %}" class="list-group-item">
+
 		<div class="row">
-			<div class="col-lg-2 left">		
+
+			<div class="col-sm-2 col-md-2 left">		
 				<i class="fa fa-{{servicio.tipo.icon}} fa-5x icon {{servicio.estado}}"></i><br/>
 				<span>{{servicio.tipo.nombre}}<span/>				
 			</div>	
 
-			<div class="col-lg-10 right">
+
+
+			<div class="col-sm-10 col-md-10 right">
 
 				<span class="badge pull-right">No. {{servicio.id}}</span>
 

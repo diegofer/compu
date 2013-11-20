@@ -77,6 +77,9 @@ select {
   position: relative;
   width: 70%;
 }
+.item-servicio .msg-estado {
+  font-size: 12px;
+}
 .item-servicio .progress {
   height: 8px;
   margin-bottom: 2px;
@@ -97,6 +100,7 @@ select {
 }
 .item-servicio .fechas {
   font-size: 10px;
+  font-weight: bold;
 }
 #servicio .logo {
   text-align: center;
