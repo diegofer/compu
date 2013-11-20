@@ -13,6 +13,7 @@ from crispy_forms.utils import render_crispy_form
 from jsonview.decorators import json_view
 
 from termcolor import colored
+import fabfile as f
 
 from main.models import Servicio, Persona
 from main.forms import ServicioForm, PersonaForm, TipoServicioForm, MarcaForm, ComponenteForm, ServicioTecnicoForm
@@ -72,6 +73,12 @@ def persona(request, id):
 	persona = Persona.objects.get(id=id)
 	servicios = Servicio.objects.filter(cliente__pk=persona.id).order_by('-created')
 	return render_to_response('main/persona.html', locals(), context_instance=RequestContext(request))
+
+
+
+def actualizar(request):
+	f.actualizar()  # corrocomando actualizar en fabfile
+
 
 
 

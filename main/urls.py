@@ -6,7 +6,12 @@ urlpatterns = patterns('',
   
   	url(r'^guardar_servicio/$', 'main.views.guardar_servicio', name='guardar_servicio' ),
   	url(r'^guardar_servicio_tecnico/$', 'main.views.guardar_servicio_tecnico', name='guardar_servicio_tecnico' ),
-  	url(r'^guardar_servicio_estado/$', 'main.views.guardar_servicio_estado', name='guardar_servicio_estado' ),
+    url(r'^guardar_servicio_estado/$', 'main.views.guardar_servicio_estado', name='guardar_servicio_estado' ),
+  	
+
+    url(r'^actualizar/$', 'main.views.actualizar', name='actualizar' ),
+
+
 
   	url(r'^guardar_persona/$', 'main.views.guardar_persona', name='guardar_persona' ),
   	url(r'^guardar_tipo_servicio/$', 'main.views.guardar_tipo_servicio', name='guardar_tipo_servicio' ),

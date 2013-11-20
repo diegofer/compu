@@ -1,6 +1,6 @@
 {% extends 'main/shell.html' %}
 {% load main_tags %}
-{% load crispy_forms_tags %}
+
 
 {% block title %} Home {% endblock %}
 
@@ -106,118 +106,16 @@
 
 <!--################# FORMULARIOS ##################-->
 <!-- form servicio -->
-<div id="modal-form-servicio"  class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">Ingresar Servicio</h4>
-			</div>
-
-			<div class="modal-body">				
-				{% crispy servicioForm %}   			  
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-				<button type="button" id="guardar-servicio-btn" class="btn btn-primary" data-loading-text="Guardando...">Guardar</button>
-			</div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-
+{% include 'main/forms/formServicio.html' %}
 <!-- form persona -->
-<div id="modal-form-persona"  class="modal fade" tabindex="1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">Ingresar Persona</h4>
-			</div>
-
-			<div class="modal-body">				
-				{% crispy personaForm %}   			  
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-				<button type="button" id="guardar-persona-btn" class="btn btn-primary" data-loading-text="Guardando...">Guardar</button>
-			</div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
+{% include 'main/forms/formPersona.html' %}
 <!-- form tipo-servicio -->
-<div id="modal-form-tipo-servicio"  class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">Ingresar Tipo de Servicio</h4>
-			</div>
-
-			<div class="modal-body">	
-						
-				{% crispy tipoServicioForm %}			  
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-				<button type="button" id="guardar-tipo-servicio-btn" class="btn btn-primary" data-loading-text="Guardando...">Guardar</button>
-			</div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-
+{% include 'main/forms/formTipoServicio.html' %}
 <!-- form marca -->
-<div id="modal-form-marca"  class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">Ingresar una Marca</h4>
-			</div>
-
-			<div class="modal-body">				
-				{% crispy marcaForm %}	  
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-				<button type="button" id="guardar-marca-btn" class="btn btn-primary" data-loading-text="Guardando...">Guardar</button>
-			</div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-
+{% include 'main/forms/formMarca.html' %}
 <!-- form componente -->
-<div id="modal-form-componente"  class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
+{% include 'main/forms/formComponente.html' %}
 
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">Ingresar componente</h4>
-			</div>
-
-			<div class="modal-body">				
-				{% crispy componenteForm %}	  
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-				<button type="button" id="guardar-componente-btn" class="btn btn-primary" data-loading-text="Guardando...">Guardar</button>
-			</div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
 
 {% endblock content %}
