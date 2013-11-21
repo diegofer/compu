@@ -20,7 +20,7 @@ class ServicioForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ServicioForm, self).__init__(*args, **kwargs)
 
-        self.fields['cliente'].queryset = Persona.objects.filter(tipo__exact=Persona.CLIENTE)
+        #self.fields['cliente'].queryset = Persona.objects.filter(tipo__exact=Persona.CLIENTE)
         self.helper = FormHelper(self)
 
         self.helper.form_id     = 'form-servicio'
@@ -58,7 +58,7 @@ class ServicioTecnicoForm(ModelForm):
 
         self.fields['tecnico'].label = ""
 
-        self.fields['tecnico'].queryset = Persona.objects.filter(tipo__exact=Persona.TECNICO)
+        #self.fields['tecnico'].queryset = Persona.objects.filter(tipo__exact=Persona.TECNICO)
 
         self.helper.form_id     = 'form-servicio-tecnico'
 
@@ -94,7 +94,6 @@ class PersonaForm(ModelForm):
         	PrependedText('direccion', "<i class='fa fa-map-marker fa-fw'></i>", placeholder="direccion"),
         	PrependedText('telefono', "<i class='fa fa-phone fa-fw'></i>", placeholder="telefono"),
             PrependedText('email', "<i class='fa fa-envelope-o fa-fw'></i>", placeholder="email"),
-        	PrependedText('tipo', "<i class='fa fa-group fa-fw'></i>", placeholder="tipo", data_placeholder="Elija tipo de persona..."),
         )
 	
 

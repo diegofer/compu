@@ -1,37 +1,73 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from datetime import datetime, timedelta
 
 from termcolor import colored
 
+from .managers import UsuarioManager
 from .choices import ICON 
 
 
-class Persona(models.Model):
 
-	CLIENTE   = 'cliente'#'0'
+
+
+class Usuario(AbstractBaseUser, PermissionsMixin):
+
+	ADMIN     = 'administrador'#'0'
 	TECNICO   = 'tecnico'#'1'
 	
-	TIPO_PERSONA = (
-		(CLIENTE, 'Cliente'),
+	TIPO_USUARIO = (
+		(ADMIN, 'Administrador'),
 	    (TECNICO, 'Técnico'),
 	)
+
+	email     = models.EmailField(unique=True)
+	dni       = models.IntegerField(unique=True)
+	tipo      = models.CharField(max_length=50, choices=TIPO_USUARIO) 
+	nombre    = models.CharField(max_length=50)
+	apellidos = models.CharField(max_length=50)
+	telefono  = models.CharField(max_length=15)
+
+	is_active = models.BooleanField(default=True)
+	is_staff  = models.BooleanField(default=False)
+
+	objects   = UsuarioManager()
+	
+	USERNAME_FIELD = 'email'
+	REQUIRED_FIELDS = ['dni']
+
+	def get_full_name(self):
+		return '%s %s' %(self.nombre, self.apellidos)
+
+	full_name = property(get_full_name)
+
+	def get_short_name(self):
+	    return self.email
+
+	def get_absolute_url(self):
+		return '/usuario/' #reverse('main.views.persona', args=[str(self.id)])
+
+	def __unicode__(self):
+		return self.email
+
+
+
+class Persona(models.Model):
 	
 	nombre    = models.CharField(max_length=40)
 	apellido  = models.CharField(max_length=40)
 	cedula    = models.CharField(max_length=20, unique=True)
 	direccion = models.CharField(max_length=255)
 	telefono  = models.CharField(max_length=15)
-	email     = models.EmailField(max_length=255, unique=True, blank=True)
-	tipo      = models.CharField(max_length=50, choices=TIPO_PERSONA)
-	
+	email     = models.EmailField(max_length=255, unique=True, blank=True)	
 
 	def __unicode__(self):
 		return "%s %s" %(self.nombre, self.apellido)
 
 	def _get_full_name(self):
-		"Returns the person's full name."
 		return '%s %s' % (self.nombre, self.apellido)
 	full_name = property(_get_full_name)
 
@@ -90,7 +126,7 @@ class Servicio(models.Model):
 	serial      = models.CharField(max_length=50, blank=True)
 	motivo      = models.TextField()
 	componentes = models.ManyToManyField(Componente, blank=True, null=True, verbose_name=u'viene con')
-	tecnico     = models.ForeignKey(Persona, related_name='tecnico_de', blank=True, null=True)
+	tecnico     = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
 	created     = models.DateTimeField(auto_now_add = True) 
 	updated     = models.DateTimeField(auto_now = True)
 	estado      = models.CharField(max_length=12, choices=ESTADO, default=EN_COLA, blank=True)

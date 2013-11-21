@@ -7,9 +7,10 @@ urlpatterns = patterns('',
   	url(r'^guardar_servicio/$', 'main.views.guardar_servicio', name='guardar_servicio' ),
   	url(r'^guardar_servicio_tecnico/$', 'main.views.guardar_servicio_tecnico', name='guardar_servicio_tecnico' ),
     url(r'^guardar_servicio_estado/$', 'main.views.guardar_servicio_estado', name='guardar_servicio_estado' ),
-  	
-
+    	
     url(r'^actualizar/$', 'main.views.actualizar', name='actualizar' ),
+    url(r'^imprimir/$', 'main.views.imprimir', name='imprimir' ),
+    url(r'^hacer_logout/$', 'main.views.hacer_logout', name='hacer_logout' ),
 
 
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm #, UserCreationForm
 from django.conf import settings
@@ -9,8 +9,11 @@ from django.core.urlresolvers import reverse
 from datetime import datetime
 import json
 
+
+
 from crispy_forms.utils import render_crispy_form
 from jsonview.decorators import json_view
+from reportlab.pdfgen import canvas
 
 from termcolor import colored
 import fabfile as f
@@ -19,30 +22,61 @@ from main.models import Servicio, Persona
 from main.forms import ServicioForm, PersonaForm, TipoServicioForm, MarcaForm, ComponenteForm, ServicioTecnicoForm
 
 
+
+
 def home(request, estado='reciente'):
+
+	loginForm = AuthenticationForm()
+
+	if request.method == 'POST':
+
+		loginForm = AuthenticationForm(data=request.POST)
+		if loginForm.is_valid():
+			username  = loginForm.cleaned_data['username']
+			password  = loginForm.cleaned_data['password']
+			user = authenticate(username=username, password=password)
+			if user is not None and user.is_active:
+				login(request, user)
+				return redirect('/')
+
+
+
 	if estado == 'reciente':
 		servicios = Servicio.objects.all().order_by('-updated')[:20]
 	else:
 		servicios = Servicio.objects.filter(estado__exact=estado)
 
-	num_total     = Servicio.objects.all().count()	
-	num_cola      = Servicio.objects.filter(estado__exact=Servicio.EN_COLA).count()
-	num_revision  = Servicio.objects.filter(estado__exact=Servicio.EN_REVISION).count()
-	num_reparado  = Servicio.objects.filter(estado__exact=Servicio.REPARADO).count()
-	num_entregado = Servicio.objects.filter(estado__exact=Servicio.ENTREGADO).count()
+	ctx = {'servicios': servicios}
 
-	SERVICIO = Servicio # estado es el model0 vacio para tener en la plantilla las variables estaticas..
-	estado   = estado
+	ctx['num_total']     = Servicio.objects.all().count()	
+	ctx['num_cola']      = Servicio.objects.filter(estado__exact=Servicio.EN_COLA).count()
+	ctx['num_revision']  = Servicio.objects.filter(estado__exact=Servicio.EN_REVISION).count()
+	ctx['num_reparado']  = Servicio.objects.filter(estado__exact=Servicio.REPARADO).count()
+	ctx['num_entregado'] = Servicio.objects.filter(estado__exact=Servicio.ENTREGADO).count()
 
-	servicioForm      = ServicioForm()
-	personaForm       = PersonaForm()
-	tipoServicioForm  = TipoServicioForm()
-	marcaForm         = MarcaForm()
-	componenteForm    = ComponenteForm()
+	ctx['SERVICIO'] = Servicio
+	ctx['estado']   = estado
 
 	
-	return render_to_response('main/home.html', locals(), context_instance=RequestContext(request))
+	loginForm.fields['username'].widget.attrs['class'] = "form-control"
+	loginForm.fields['username'].widget.attrs['placeholder']  = "ingrese email"
+	loginForm.fields['password'].widget.attrs['class'] = "form-control"
+	loginForm.fields['password'].widget.attrs['placeholder'] = "ingrese password"
 
+	ctx['loginForm']         = loginForm
+	ctx['servicioForm']      = ServicioForm()
+	ctx['personaForm']       = PersonaForm()
+	ctx['tipoServicioForm']  = TipoServicioForm()
+	ctx['marcaForm']         = MarcaForm()
+	ctx['componenteForm']    = ComponenteForm()
+
+	#if not request.user.is_authenticated():
+
+	return render(request,'main/home.html', ctx)
+
+def hacer_logout(request):
+	logout(request)
+	return redirect('/')		
 
 
 def servicio(request, id):
@@ -57,6 +91,8 @@ def servicio(request, id):
 
 	SERVICIO = Servicio # estado es el model0 vacio para tener en la plantilla las variables estaticas..
 	
+	
+
 	servicioForm      = ServicioForm()
 	personaForm       = PersonaForm()
 	tipoServicioForm  = TipoServicioForm()
@@ -78,6 +114,24 @@ def persona(request, id):
 
 def actualizar(request):
 	f.actualizar()  # corrocomando actualizar en fabfile
+	
+
+def imprimir(request):
+	# Create the HttpResponse object with the appropriate PDF headers.
+	response = HttpResponse(content_type='application/pdf')
+	response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+
+	# Create the PDF object, using the response object as its "file."
+	p = canvas.Canvas(response)
+
+	# Draw things on the PDF. Here's where the PDF generation happens.
+	# See the ReportLab documentation for the full list of functionality.
+	p.drawString(100, 100, "Hello world.")
+
+	# Close the PDF object cleanly, and we're done.
+	p.showPage()
+	p.save()
+	return response
 
 
 

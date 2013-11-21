@@ -70,6 +70,9 @@ select {
 .icon.entregado {
   color: #5bc0de;
 }
+.form-login .form-control {
+  width: 250px;
+}
 .item-servicio .left {
   text-align: center;
 }

@@ -1,5 +1,7 @@
 {% extends 'main/base.html' %}
 
+{% load main_tags %}
+
 {% block body %}
 
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -19,13 +21,45 @@
 		
 		<div class="collapse navbar-collapse navbar-conten-collapse">
             <ul class="nav navbar-nav">
-                <li class="item-home"><a href="/">Servicios</a></li>
+                <li class="item-home {% active request "^/$" %}"><a href="/">Servicios</a></li>
                 <li class="item-ayuda"><a href="#">Clientes</a></li>
                 <li class="item-ayuda"><a href="#">Personal</a></li>
             </ul>
 
-
             <ul class="nav navbar-nav navbar-right">
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        {% if user.is_authenticated %}
+                        <span class="glyphicon glyphicon-user"></span> {{user}}
+                        {% else %}
+                        <i class="fa fa-sign-in"></i> Ingresar
+                        {% endif %}
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        
+                        {% if user.is_authenticated %}
+                        <li> <a href="#"><span class="glyphicon glyphicon-user"></span> Ver Perfil </a> </li>
+                        <li> <a href="{% url 'hacer_logout' %}"><i class="fa fa-sign-out"></i> Salir </a> </li>
+                        {% else %}
+                            <form class="form-login navbar-form" method="post"> {% csrf_token %}
+                                <div class="form-group">
+                                    {{ loginForm.username }}
+                                </div>
+
+                                <div class="form-group">
+                                    {{ loginForm.password }}
+                                </div>
+
+                                <input type="submit" value="Loguin" class="btn btn-block btn-success" >
+                            </form>
+
+                        {% endif %}
+
+                        
+                    </ul>
+                </li>
 
                 <li class="dropdown item-config">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -39,15 +73,20 @@
                         
                         
                         <li role="presentation" class="divider"></li>
-                        <li><a href="{% url 'actualizar' %}" target="_blank">Actualizar</a></li>
+                        <li><a href="{% url 'actualizar' %}" >Actualizar</a></li>
 
                         <li role="presentation" class="divider"></li>
-                        <li> <a href="#"><span class="glyphicon glyphicon-remove"></span> Salir </a> </li>
+                        <li><a href="{% url 'imprimir' %}" >Imprimir</a></li>
+
+                        <li role="presentation" class="divider"></li>
+                        
                     </ul>
 
                 </li>                    
 
             </ul>
+
+             
 
 
 
