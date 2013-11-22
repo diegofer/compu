@@ -70,7 +70,7 @@ select {
 .icon.entregado {
   color: #5bc0de;
 }
-.form-login .form-control {
+.form-login .form-group {
   width: 250px;
 }
 .item-servicio .left {
