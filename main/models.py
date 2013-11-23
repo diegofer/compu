@@ -1,58 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from datetime import datetime, timedelta
 
 from termcolor import colored
 
-from .managers import UsuarioManager
 from .choices import ICON 
-
-
-
-
-
-class Usuario(AbstractBaseUser, PermissionsMixin):
-
-	ADMIN     = 'administrador'#'0'
-	TECNICO   = 'tecnico'#'1'
-	
-	TIPO_USUARIO = (
-		(ADMIN, 'Administrador'),
-	    (TECNICO, 'Técnico'),
-	)
-
-	email     = models.EmailField(unique=True)
-	dni       = models.IntegerField(unique=True)
-	tipo      = models.CharField(max_length=50, choices=TIPO_USUARIO) 
-	nombre    = models.CharField(max_length=50)
-	apellidos = models.CharField(max_length=50)
-	telefono  = models.CharField(max_length=15)
-
-	is_active = models.BooleanField(default=True)
-	is_staff  = models.BooleanField(default=False)
-
-	objects   = UsuarioManager()
-	
-	USERNAME_FIELD = 'email'
-	REQUIRED_FIELDS = ['dni']
-
-	def get_full_name(self):
-		return '%s %s' %(self.nombre, self.apellidos)
-
-	full_name = property(get_full_name)
-
-	def get_short_name(self):
-	    return self.email
-
-	def get_absolute_url(self):
-		return '/usuario/' #reverse('main.views.persona', args=[str(self.id)])
-
-	def __unicode__(self):
-		return self.email
-
 
 
 class Persona(models.Model):

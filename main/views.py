@@ -43,32 +43,35 @@ def home(request, estado='reciente'):
 
 	if estado == 'reciente':
 		servicios = Servicio.objects.all().order_by('-updated')[:20]
+		num_total     = servicios.count()
 	else:
 		servicios = Servicio.objects.filter(estado__exact=estado)
+		num_total     = Servicio.objects.all().count()
 
-	ctx = {'servicios': servicios}
+		
+	num_cola      = Servicio.objects.filter(estado__exact=Servicio.EN_COLA).count()
+	num_revision  = Servicio.objects.filter(estado__exact=Servicio.EN_REVISION).count()
+	num_reparado  = Servicio.objects.filter(estado__exact=Servicio.REPARADO).count()
+	num_entregado = Servicio.objects.filter(estado__exact=Servicio.ENTREGADO).count()
 
-	ctx['num_total']     = Servicio.objects.all().count()	
-	ctx['num_cola']      = Servicio.objects.filter(estado__exact=Servicio.EN_COLA).count()
-	ctx['num_revision']  = Servicio.objects.filter(estado__exact=Servicio.EN_REVISION).count()
-	ctx['num_reparado']  = Servicio.objects.filter(estado__exact=Servicio.REPARADO).count()
-	ctx['num_entregado'] = Servicio.objects.filter(estado__exact=Servicio.ENTREGADO).count()
-
-	ctx['SERVICIO'] = Servicio
-	ctx['estado']   = estado
-
-	
 	loginForm.fields['username'].widget.attrs['class'] = "form-control"
 	loginForm.fields['username'].widget.attrs['placeholder']  = "ingrese email"
 	loginForm.fields['password'].widget.attrs['class'] = "form-control"
 	loginForm.fields['password'].widget.attrs['placeholder'] = "ingrese password"
 
-	ctx['loginForm']         = loginForm
-	ctx['servicioForm']      = ServicioForm()
-	ctx['personaForm']       = PersonaForm()
-	ctx['tipoServicioForm']  = TipoServicioForm()
-	ctx['marcaForm']         = MarcaForm()
-	ctx['componenteForm']    = ComponenteForm()
+	loginForm         = loginForm
+	servicioForm      = ServicioForm()
+	personaForm       = PersonaForm()
+	tipoServicioForm  = TipoServicioForm()
+	marcaForm         = MarcaForm()
+	componenteForm    = ComponenteForm()
+
+	ctx = {
+		'loginForm': loginForm, 'SERVICIO': Servicio, 'estado': estado,
+		'servicios': servicios, 
+		'num_total':num_total, 'num_cola': num_cola, 'num_revision': num_revision, 'num_reparado': num_reparado, 'num_entregado': num_entregado,
+		'servicioForm': servicioForm, 'personaForm': personaForm, 'tipoServicioForm': tipoServicioForm, 'marcaForm': marcaForm, 'componenteForm': componenteForm,
+	}
 
 	#if not request.user.is_authenticated():
 
