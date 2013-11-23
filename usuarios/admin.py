@@ -64,12 +64,12 @@ class UsuarioAdmin(UserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('email', 'tipo', 'dni', 'is_admin', 'is_active', 'is_superuser',)
+    list_display = ('email', 'tipo', 'dni', 'is_admin', 'is_active',)
     list_filter = ('is_admin', 'is_active',)
 
     fieldsets = (
         ('Datos del Usuario', {'fields': ( ('nombre', 'dni',), ('apellidos', 'email',), 'telefono',)}),
-        ('Ambito del Usuario', {'fields': ('tipo',  ('is_active', 'is_admin'), 'is_superuser', 'groups', )}), #'user_permissions')}),                                     
+        ('Ambito del Usuario', {'fields': ('tipo',  ('is_active', 'is_admin'), 'groups', )}), #'user_permissions')}),                                     
         ('Datos de Login y cambio de contraseña', {'fields': ('last_login', 'password')}),
     )
     readonly_fields = ('last_login', 'is_superuser', 'groups')
@@ -91,17 +91,12 @@ class UsuarioAdmin(UserAdmin):
         return qs.exclude(is_superuser=True) #qs.filter(Q(user_padre=request.user.id) | Q(id=request.user.id))
 
     def save_model(self, request, obj, form, change):
-        from termcolor import colored
         tipo = obj.tipo
         g = Group.objects.get(name=tipo)
 
         obj.save()
         obj.groups.clear()
         obj.groups.add(g)
-        lista = Group.objects.only("name")
-        TIPO = {}
-        for name in lista:
-            TIPO[str(name.name)] = name.name
-        print colored(TIPO, 'yellow')
+
 
 admin.site.register(Usuario, UsuarioAdmin)

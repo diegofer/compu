@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from django import forms
+
 from django.forms import ModelForm, DateTimeField, DateTimeInput
+from django.forms.widgets import PasswordInput, TextInput
 from django.forms.models import inlineformset_factory
+from django.contrib.auth.forms import AuthenticationForm #, UserCreationForm
 from django.utils.translation import ugettext as _
 from datetime import datetime
 
@@ -14,6 +17,10 @@ from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, Str
 from main.models import Servicio, Persona, TipoServicio, Marca, Componente
 
 
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(widget=TextInput(attrs={'class': 'form-control','placeholder': 'ingrese email'}))
+    password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control','placeholder':'ingrese password'}))
+        
 
 class ServicioForm(ModelForm):
 

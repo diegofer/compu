@@ -3,7 +3,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response, render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import AuthenticationForm #, UserCreationForm
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from datetime import datetime
@@ -19,18 +18,18 @@ from termcolor import colored
 import fabfile as f
 
 from main.models import Servicio, Persona
-from main.forms import ServicioForm, PersonaForm, TipoServicioForm, MarcaForm, ComponenteForm, ServicioTecnicoForm
+from main.forms import LoginForm, ServicioForm, PersonaForm, TipoServicioForm, MarcaForm, ComponenteForm, ServicioTecnicoForm
 
 
 
 
 def home(request, estado='reciente'):
 
-	loginForm = AuthenticationForm()
+	loginForm = LoginForm()
 
 	if request.method == 'POST':
 
-		loginForm = AuthenticationForm(data=request.POST)
+		loginForm = LoginForm(data=request.POST)
 		if loginForm.is_valid():
 			username  = loginForm.cleaned_data['username']
 			password  = loginForm.cleaned_data['password']
@@ -43,21 +42,15 @@ def home(request, estado='reciente'):
 
 	if estado == 'reciente':
 		servicios = Servicio.objects.all().order_by('-updated')[:20]
-		num_total     = servicios.count()
 	else:
 		servicios = Servicio.objects.filter(estado__exact=estado)
-		num_total     = Servicio.objects.all().count()
-
 		
+
+	num_total     = Servicio.objects.all().count()	
 	num_cola      = Servicio.objects.filter(estado__exact=Servicio.EN_COLA).count()
 	num_revision  = Servicio.objects.filter(estado__exact=Servicio.EN_REVISION).count()
 	num_reparado  = Servicio.objects.filter(estado__exact=Servicio.REPARADO).count()
 	num_entregado = Servicio.objects.filter(estado__exact=Servicio.ENTREGADO).count()
-
-	loginForm.fields['username'].widget.attrs['class'] = "form-control"
-	loginForm.fields['username'].widget.attrs['placeholder']  = "ingrese email"
-	loginForm.fields['password'].widget.attrs['class'] = "form-control"
-	loginForm.fields['password'].widget.attrs['placeholder'] = "ingrese password"
 
 	loginForm         = loginForm
 	servicioForm      = ServicioForm()
