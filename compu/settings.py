@@ -140,7 +140,7 @@ DEBUG_TOOLBAR_CONFIG = {  # 2/3 para django-debug-toolbar
 #     'debug_toolbar.panels.cache.CacheDebugPanel',
 #     'debug_toolbar.panels.signals.SignalDebugPanel',
 #     'debug_toolbar.panels.logger.LoggingPanel',
-#     'debug_toolbar.panels.redirects.InterceptRedirectsPanel',
+#     #'debug_toolbar.panels.redirects.InterceptRedirectsPanel',
 # )
 
 

@@ -24,110 +24,104 @@ from main.forms import LoginForm, ServicioForm, PersonaForm, TipoServicioForm, M
 
 
 def home(request, estado='reciente'):
+    loginForm = LoginForm()
 
-	loginForm = LoginForm()
+    if request.method == 'POST':
+        loginForm = LoginForm(data=request.POST)
+        if loginForm.is_valid():
+            username  = loginForm.cleaned_data['username']
+            password  = loginForm.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user is not None and user.is_active:
+                login(request, user)
+                
+                return redirect('/')
 
-	if request.method == 'POST':
+    ctx = {'loginForm':loginForm, 'SERVICIO':Servicio, 'estado': estado}
 
-		loginForm = LoginForm(data=request.POST)
-		if loginForm.is_valid():
-			username  = loginForm.cleaned_data['username']
-			password  = loginForm.cleaned_data['password']
-			user = authenticate(username=username, password=password)
-			if user is not None and user.is_active:
-				login(request, user)
-				return redirect('/')
+    if estado == 'reciente':
+        ctx['servicios'] = Servicio.objects.all().order_by('-updated')[:20]
+    else:
+        ctx['servicios'] = Servicio.objects.filter(estado__exact=estado)
+        
+    ctx['num_total']     = Servicio.objects.all().count()   
+    ctx['num_cola']      = Servicio.objects.filter(estado__exact=Servicio.EN_COLA).count()
+    ctx['num_revision']  = Servicio.objects.filter(estado__exact=Servicio.EN_REVISION).count()
+    ctx['num_reparado']  = Servicio.objects.filter(estado__exact=Servicio.REPARADO).count()
+    ctx['num_entregado'] = Servicio.objects.filter(estado__exact=Servicio.ENTREGADO).count()
+
+    if request.user.is_authenticated():
+        ctx['servicioForm']      = ServicioForm()
+        ctx['personaForm']       = PersonaForm()
+        ctx['tipoServicioForm']  = TipoServicioForm()
+        ctx['marcaForm']         = MarcaForm()
+        ctx['componenteForm']    = ComponenteForm()
+
+    return render(request,'main/home.html', ctx)
 
 
-
-	if estado == 'reciente':
-		servicios = Servicio.objects.all().order_by('-updated')[:20]
-	else:
-		servicios = Servicio.objects.filter(estado__exact=estado)
-		
-
-	num_total     = Servicio.objects.all().count()	
-	num_cola      = Servicio.objects.filter(estado__exact=Servicio.EN_COLA).count()
-	num_revision  = Servicio.objects.filter(estado__exact=Servicio.EN_REVISION).count()
-	num_reparado  = Servicio.objects.filter(estado__exact=Servicio.REPARADO).count()
-	num_entregado = Servicio.objects.filter(estado__exact=Servicio.ENTREGADO).count()
-
-	loginForm         = loginForm
-	servicioForm      = ServicioForm()
-	personaForm       = PersonaForm()
-	tipoServicioForm  = TipoServicioForm()
-	marcaForm         = MarcaForm()
-	componenteForm    = ComponenteForm()
-
-	ctx = {
-		'loginForm': loginForm, 'SERVICIO': Servicio, 'estado': estado,
-		'servicios': servicios, 
-		'num_total':num_total, 'num_cola': num_cola, 'num_revision': num_revision, 'num_reparado': num_reparado, 'num_entregado': num_entregado,
-		'servicioForm': servicioForm, 'personaForm': personaForm, 'tipoServicioForm': tipoServicioForm, 'marcaForm': marcaForm, 'componenteForm': componenteForm,
-	}
-
-	#if not request.user.is_authenticated():
-
-	return render(request,'main/home.html', ctx)
 
 def hacer_logout(request):
-	logout(request)
-	return redirect('/')		
+    logout(request)
+    return redirect('/')        
 
 
 def servicio(request, id):
-	servicio = Servicio.objects.get(id=id)
-	componentes = servicio.componentes.all()
+    loginForm = LoginForm()
 
-	num_total     = Servicio.objects.all().count()	
-	num_cola = Servicio.objects.filter(estado__exact=Servicio.EN_COLA).count()
-	num_revision = Servicio.objects.filter(estado__exact=Servicio.EN_REVISION).count()
-	num_reparado = Servicio.objects.filter(estado__exact=Servicio.REPARADO).count()
-	num_entregado = Servicio.objects.filter(estado__exact=Servicio.ENTREGADO).count()
+    ctx = {'loginForm':loginForm, 'SERVICIO':Servicio}
 
-	SERVICIO = Servicio # estado es el model0 vacio para tener en la plantilla las variables estaticas..
-	
-	
+    ctx['servicio']    = Servicio.objects.get(id=id)
+    ctx['componentes'] = ctx['servicio'].componentes.all()
 
-	servicioForm      = ServicioForm()
-	personaForm       = PersonaForm()
-	tipoServicioForm  = TipoServicioForm()
-	marcaForm         = MarcaForm()
-	componenteForm    = ComponenteForm()
-	servicioTecnicoForm = ServicioTecnicoForm()
+    ctx['num_total']     = Servicio.objects.all().count()   
+    ctx['num_cola']      = Servicio.objects.filter(estado__exact=Servicio.EN_COLA).count()
+    ctx['num_revision']  = Servicio.objects.filter(estado__exact=Servicio.EN_REVISION).count()
+    ctx['num_reparado']  = Servicio.objects.filter(estado__exact=Servicio.REPARADO).count()
+    ctx['num_entregado'] = Servicio.objects.filter(estado__exact=Servicio.ENTREGADO).count()
 
-	return render_to_response('main/servicio.html', locals(), context_instance=RequestContext(request))
+    if request.user.is_authenticated():
+        ctx['servicioForm']        = ServicioForm()
+        ctx['servicioTecnicoForm'] = ServicioTecnicoForm()
+        ctx['personaForm']         = PersonaForm()
+        ctx['tipoServicioForm']    = TipoServicioForm()
+        ctx['marcaForm']           = MarcaForm()
+        ctx['componenteForm']      = ComponenteForm()
+
+
+    return render(request, 'main/servicio.html', ctx)
 
 
 
 
 def persona(request, id):
-	persona = Persona.objects.get(id=id)
-	servicios = Servicio.objects.filter(cliente__pk=persona.id).order_by('-created')
-	return render_to_response('main/persona.html', locals(), context_instance=RequestContext(request))
+    loginForm = LoginForm()
+    persona = Persona.objects.get(id=id)
+    servicios = Servicio.objects.filter(cliente__pk=persona.id).order_by('-created')
+    return render_to_response('main/persona.html', locals(), context_instance=RequestContext(request))
 
 
 
 def actualizar(request):
-	f.actualizar()  # corrocomando actualizar en fabfile
-	
+    f.actualizar()  # corrocomando actualizar en fabfile
+    
 
 def imprimir(request):
-	# Create the HttpResponse object with the appropriate PDF headers.
-	response = HttpResponse(content_type='application/pdf')
-	response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+    # Create the HttpResponse object with the appropriate PDF headers.
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
 
-	# Create the PDF object, using the response object as its "file."
-	p = canvas.Canvas(response)
+    # Create the PDF object, using the response object as its "file."
+    p = canvas.Canvas(response)
 
-	# Draw things on the PDF. Here's where the PDF generation happens.
-	# See the ReportLab documentation for the full list of functionality.
-	p.drawString(100, 100, "Hello world.")
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.
+    p.drawString(100, 100, "Hello world.")
 
-	# Close the PDF object cleanly, and we're done.
-	p.showPage()
-	p.save()
-	return response
+    # Close the PDF object cleanly, and we're done.
+    p.showPage()
+    p.save()
+    return response
 
 
 
@@ -136,47 +130,47 @@ def imprimir(request):
 
 @json_view
 def guardar_servicio(request):
-	datos = request.POST.copy() # le saco una copia al POST para poderlo editar
-	datos['plazo'] = datetime.strptime(request.POST['plazo'], Servicio.DATA_TIME_FORMAT) # convierto mi custom datetime a un formato que entienda el fieldmodel
+    datos = request.POST.copy() # le saco una copia al POST para poderlo editar
+    datos['plazo'] = datetime.strptime(request.POST['plazo'], Servicio.DATA_TIME_FORMAT) # convierto mi custom datetime a un formato que entienda el fieldmodel
 
-	form = ServicioForm(datos or None)
+    form = ServicioForm(datos or None)
 
-	if form.is_valid():
-		new_servicio = form.save(commit=False)
-		new_servicio.estado = Servicio.EN_COLA
-		new_servicio.save()
-		form.save_m2m()
-		return {'success': True, 'url': new_servicio.get_absolute_url()}
-	print colored(form.errors, "red", attrs=['bold'])
-	form_html = render_crispy_form(form, context=RequestContext(request))
-	return {'success': False, 'form_html': form_html}
+    if form.is_valid():
+        new_servicio = form.save(commit=False)
+        new_servicio.estado = Servicio.EN_COLA
+        new_servicio.save()
+        form.save_m2m()
+        return {'success': True, 'url': new_servicio.get_absolute_url()}
+    print colored(form.errors, "red", attrs=['bold'])
+    form_html = render_crispy_form(form, context=RequestContext(request))
+    return {'success': False, 'form_html': form_html}
 
 
 @json_view
 def guardar_servicio_tecnico(request):
-	servicio = Servicio.objects.get(pk=request.POST['id_servicio'])
-	form = ServicioTecnicoForm(request.POST or None, instance=servicio)
+    servicio = Servicio.objects.get(pk=request.POST['id_servicio'])
+    form = ServicioTecnicoForm(request.POST or None, instance=servicio)
 
-	if request.POST['tecnico']:
-		
-		if form.is_valid():
-			servicio = form.save()
-			return {'success': True, 'tecnico': servicio.tecnico.full_name, 'url_tecnico': servicio.tecnico.get_absolute_url() }
-		print form.errors 
-	form_html = render_crispy_form(form, context=RequestContext(request))
-	return {'success': False, 'form_html': form_html, 'id_servicio': servicio.id}
+    if request.POST['tecnico']:
+        
+        if form.is_valid():
+            servicio = form.save()
+            return {'success': True, 'tecnico': servicio.tecnico.full_name, 'url_tecnico': servicio.tecnico.get_absolute_url() }
+        print form.errors 
+    form_html = render_crispy_form(form, context=RequestContext(request))
+    return {'success': False, 'form_html': form_html, 'id_servicio': servicio.id}
 
 
 @json_view
 def guardar_servicio_estado(request):
-	estado       = request.POST['estado']
-	servicio_id  = request.POST['servicio_id']
+    estado       = request.POST['estado']
+    servicio_id  = request.POST['servicio_id']
 
-	servicio = Servicio.objects.get(pk=servicio_id)
-	servicio.estado = estado
-	servicio.save(update_fields=['estado', 'updated'])
+    servicio = Servicio.objects.get(pk=servicio_id)
+    servicio.estado = estado
+    servicio.save(update_fields=['estado', 'updated'])
 
-	return {'success': True, 'estado':servicio.estado}
+    return {'success': True, 'estado':servicio.estado}
 
 
 

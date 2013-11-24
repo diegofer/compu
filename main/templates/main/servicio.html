@@ -166,7 +166,9 @@
 				<div id="panel-tecnico" class="panel panel-danger servicio-person">
 					<div class="panel-heading">TÉCNICO NO ASIGNADO</div>
 					<div class="panel-body">
+						{% if user.is_authenticated %}
 						{% crispy servicioTecnicoForm %}
+						{% endif %}
 					</div>		
 				</div>
 				

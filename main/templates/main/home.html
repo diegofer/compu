@@ -5,15 +5,19 @@
 {% block title %} Home {% endblock %}
 
 {% block js_head %}
-<script>
-	var urlGuardarServicio          = '{% url "guardar_servicio" %}';
-	var urlGuardarServicioTecnico   = '{% url "guardar_servicio_tecnico" %}';
-	var urlGuardarServicioEstado    = '{% url "guardar_servicio_estado" %}';
-	var urlGuardarPersona           = '{% url "guardar_persona" %}';
-	var urlGuardarTipoServicio      = '{% url "guardar_tipo_servicio" %}';
-	var urlGuardarMarca             = '{% url "guardar_marca" %}';
-	var urlGuardarComponente        = '{% url "guardar_componente" %}';
-</script>
+
+	{% if user.is_authenticated %}
+	<script>
+		var urlGuardarServicio          = '{% url "guardar_servicio" %}';
+		var urlGuardarServicioTecnico   = '{% url "guardar_servicio_tecnico" %}';
+		var urlGuardarServicioEstado    = '{% url "guardar_servicio_estado" %}';
+		var urlGuardarPersona           = '{% url "guardar_persona" %}';
+		var urlGuardarTipoServicio      = '{% url "guardar_tipo_servicio" %}';
+		var urlGuardarMarca             = '{% url "guardar_marca" %}';
+		var urlGuardarComponente        = '{% url "guardar_componente" %}';
+	</script>
+	{% endif %}
+
 {% endblock js_head %}
 
 
