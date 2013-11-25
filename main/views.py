@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
-from django.shortcuts import render_to_response, render, redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -81,7 +81,7 @@ def servicio(request, id):
     ctx['num_entregado'] = Servicio.objects.filter(estado__exact=Servicio.ENTREGADO).count()
 
     if request.user.is_authenticated():
-        ctx['servicioForm']        = ServicioForm()
+        ctx['servicioForm']        = ServicioForm(instance=ctx['servicio'])
         ctx['servicioTecnicoForm'] = ServicioTecnicoForm()
         ctx['personaForm']         = PersonaForm()
         ctx['tipoServicioForm']    = TipoServicioForm()
@@ -98,7 +98,7 @@ def persona(request, id):
     loginForm = LoginForm()
     persona = Persona.objects.get(id=id)
     servicios = Servicio.objects.filter(cliente__pk=persona.id).order_by('-created')
-    return render_to_response('main/persona.html', locals(), context_instance=RequestContext(request))
+    return render(request, 'main/persona.html', locals())
 
 
 

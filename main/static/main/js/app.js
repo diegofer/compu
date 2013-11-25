@@ -37,6 +37,7 @@ $( document ).ready( function(){
 					$('.estado-btn').on('click', this.guardarEstado);
 
 				$('#guardar-servicio-btn').on('click', this.guardarServicio);
+				$('#edit-servicio-btn').on('click', {modal:modalServicio}, this.showModal);
 				
 				$('#guardar-persona-btn').on('click', this.guardarPersona);
 				$('#guardar-tipo-servicio-btn').on('click', this.guardarTipoServicio);

@@ -10,6 +10,25 @@
 		<li class="active"><a href="#">Servicio Detallado</a></li>
 		<li class="cargando"><a href="#"><i class="fa fa-spinner fa-spin"></i></a></li>
 	</ul>
+
+
+
+	{% if user.is_authenticated %}
+
+	<form role="form" class="navbar-form navbar-right" >
+		<button id="print-servicio-btn" class="btn" disabled="disabled">
+			<i class="fa fa-print fa-fw"></i>
+		</button>
+		<button id="delete-servicio-btn" class="btn btn-danger" disabled="disabled">
+		 	<i class="fa fa-trash-o"></i> <!-- <span class="glyphicon glyphicon-edit"></span> -->
+		</button>
+		<button id="edit-servicio-btn" class="btn btn-primary" >
+		 	<i class="fa fa-pencil-square-o"></i> <!-- <span class="glyphicon glyphicon-edit"></span> -->
+		</button>
+	</form> 
+
+	{% endif %}
+
 {% endblock header %}
 
 
@@ -182,6 +201,23 @@
 	</div> <!-- end row -->
 
 </div> <!-- end #servicio -->
+
+
+<!--################# FORMULARIOS ##################-->
+{% if user.is_authenticated %}
+
+<!-- form servicio -->
+{% include 'main/forms/formServicio.html' %}
+<!-- form persona -->
+{% include 'main/forms/formPersona.html' %}
+<!-- form tipo-servicio -->
+{% include 'main/forms/formTipoServicio.html' %}
+<!-- form marca -->
+{% include 'main/forms/formMarca.html' %}
+<!-- form componente -->
+{% include 'main/forms/formComponente.html' %}
+
+{% endif %}
 
 
 {% endblock content %}
