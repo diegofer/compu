@@ -132,11 +132,17 @@ def imprimir(request):
 def guardar_servicio(request):
     datos = request.POST.copy() # le saco una copia al POST para poderlo editar
     datos['plazo'] = datetime.strptime(request.POST['plazo'], Servicio.DATA_TIME_FORMAT) # convierto mi custom datetime a un formato que entienda el fieldmodel
+    print colored(request.POST, 'yellow')
 
-    form = ServicioForm(datos or None)
+    if request.POST['id_servicio']:  # Verifico que haya un Id y si lo hay es porque hay que editar y no agregar un nuevo modelo
+        servicio = Servicio.objects.get(pk=request.POST['id_servicio'])
+        form = ServicioForm(datos or None, instance=servicio)
+    else:
+        form = ServicioForm(datos or None)
 
     if form.is_valid():
         new_servicio = form.save(commit=False)
+        new_servicio.empleado = request.user
         new_servicio.estado = Servicio.EN_COLA
         new_servicio.save()
         form.save_m2m()
@@ -155,7 +161,7 @@ def guardar_servicio_tecnico(request):
         
         if form.is_valid():
             servicio = form.save()
-            return {'success': True, 'tecnico': servicio.tecnico.full_name, 'url_tecnico': servicio.tecnico.get_absolute_url() }
+            return {'success': True, 'tecnico': servicio.tecnico.get_full_name(), 'url_tecnico': servicio.tecnico.get_absolute_url() }
         print form.errors 
     form_html = render_crispy_form(form, context=RequestContext(request))
     return {'success': False, 'form_html': form_html, 'id_servicio': servicio.id}

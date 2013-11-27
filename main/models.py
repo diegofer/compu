@@ -81,6 +81,7 @@ class Servicio(models.Model):
 	motivo      = models.TextField()
 	componentes = models.ManyToManyField(Componente, blank=True, null=True, verbose_name=u'viene con')
 	tecnico     = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
+	empleado    = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='empleado_de', blank=True, null=True)
 	created     = models.DateTimeField(auto_now_add = True) 
 	updated     = models.DateTimeField(auto_now = True)
 	estado      = models.CharField(max_length=12, choices=ESTADO, default=EN_COLA, blank=True)

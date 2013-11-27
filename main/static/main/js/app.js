@@ -38,6 +38,7 @@ $( document ).ready( function(){
 
 				$('#guardar-servicio-btn').on('click', this.guardarServicio);
 				$('#edit-servicio-btn').on('click', {modal:modalServicio}, this.showModal);
+				$('#print-servicio-btn').on('click', {factura:'factura'}, this.printServicio);
 				
 				$('#guardar-persona-btn').on('click', this.guardarPersona);
 				$('#guardar-tipo-servicio-btn').on('click', this.guardarTipoServicio);
@@ -144,6 +145,11 @@ $( document ).ready( function(){
 			
 			showModal: function(event) {	
 				event.preventDefault();
+				if (event.data.reset) {   // si reset es true entonces reseteo el form y su id, por ahora no estoy usando esto
+					var form = event.data.modal.find('form');
+					compu.clearForm(form);
+				};
+				
 				var selectedItems = $('#id_componentes').select2("val");
 				event.data.modal.modal('show');		
 			},
@@ -178,6 +184,32 @@ $( document ).ready( function(){
 				compu.setActionsFormComponente();
 			},
 			
+
+			/////////	PRINT METODOS  /////////
+
+
+			printServicio: function (event) {
+
+				event.preventDefault();
+				console.log('empece a imprimit');
+				var factura = $('#factura-servicio').html();
+				console.log(factura);
+
+	
+	            var printWindow = window.open("", '_blank', 'resizable=1,scrollbars=1,left=500,top=000,width=868'); 
+	            printWindow.document.write(factura); 
+
+	            printWindow.document.close(); 
+	        
+	            // Establecemos el foco.
+	            printWindow.focus(); 
+	        
+	            // Lanzamos la impresión.
+	            printWindow.print();   
+
+	            printWindow.close();
+			},
+
 			
 			
 
@@ -378,6 +410,76 @@ $( document ).ready( function(){
 								
         		modal.modal('hide');
 			},
+
+
+
+			///////////////  UTILES  ////////////////
+
+			clearForm: function(form) {
+				console.log(form);
+				form.find('*').each(function(index,element){
+					//console.log(Element.tagName.toLowerCase());
+					switch(element.tagName.toLowerCase()) {
+						case 'input':
+							if (element.name == 'csrfmiddlewaretoken') break;
+							else if ( $(element).hasClass('datetimeinput') ) {
+								element.value = "";
+								//$(element).datetimepicker('update');
+							}
+							else {
+								element.value = "";
+							}
+							break;
+						case 'textarea':
+							element.value = "";
+							//console.log(element.value);
+							break;
+						case 'select':
+							//console.log(element.options[element.selectedIndex].text);
+							//element.selectedIndex = 1;
+							$(element).select2("val", "");
+							break;
+
+
+					}
+
+				});
+			    
+			  /*var elements = form.elements; 
+			    
+			  form.reset();
+
+			  for(i=0; i<elements.length; i++) {
+			      
+				field_type = elements[i].type.toLowerCase();
+				
+				switch(field_type) {
+				
+					case "text": 
+					case "password": 
+					case "textarea":
+				        case "hidden":	
+						
+						elements[i].value = ""; 
+						break;
+			        
+					case "radio":
+					case "checkbox":
+			  			if (elements[i].checked) {
+			   				elements[i].checked = false; 
+						}
+						break;
+
+					case "select-one":
+					case "select-multi":
+			            		elements[i].selectedIndex = -1;
+						break;
+
+					default: 
+						break;
+				}
+			    }*/
+			}
 			
 
 

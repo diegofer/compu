@@ -36,6 +36,7 @@ class ServicioForm(ModelForm):
         self.helper.field_class = 'col-sm-8 '
 
         self.helper.layout = Layout(
+            Hidden('id_servicio', '{{servicio.id}}'),
             PrependedText('plazo', "<i class='fa fa-calendar'></i>", css_class="input-sm"),
             FieldWithButtons('cliente', StrictButton("<i class='fa fa-plus fa-fw'></i>",  css_id="cliente-btn", css_class="btn-default btn-sm")),
             FieldWithButtons('tipo',    StrictButton("<i class='fa fa-plus fa-fw'></i>",  css_id="tipo-btn",    css_class="btn-default btn-sm")),
