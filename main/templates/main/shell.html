@@ -81,7 +81,9 @@
                         
                         
                         <li role="presentation" class="divider"></li>
-                        <li><a href="{% url 'actualizar' %}" ><i class="fa fa-download fa-fw"></i> Actualizar</a></li>
+                        <li>
+                            <a href="#" id="update-btn" data-url="{% url 'actualizar' %}" ><i class="fa fa-download fa-fw"></i> Actualizar</a>
+                        </li>
                         
                     </ul>
 
@@ -129,6 +131,6 @@
 
 
 
-
+{% include 'main/widgets/update.html' %}
 
 {% endblock body %}

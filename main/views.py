@@ -15,7 +15,7 @@ from jsonview.decorators import json_view
 #from reportlab.pdfgen import canvas para generar pdf
 
 from termcolor import colored
-import fabfile as f
+#import fabfile as f
 
 from main.models import Servicio, Persona
 from main.forms import LoginForm, ServicioForm, PersonaForm, TipoServicioForm, MarcaForm, ComponenteForm, ServicioTecnicoForm
@@ -101,14 +101,29 @@ def persona(request, id):
     return render(request, 'main/persona.html', locals())
 
 
-
+@json_view
 def actualizar(request):
-    import subprocess
-    #f.actualizar()  # si lo hago con fabric aqui llamo el comando..
-    output = subprocess.check_output(["git", "pull"])
+    import os
+    os_name = os.name
+    os.chdir(os.path.dirname(os.path.dirname(__file__)))
+
+    if os_name == 'nt':
+        gitpull = getstatusoutput('git pull')
+        collecstatic = getstatusoutput('python manage.py collectstatic --noinput')
+        return {'msg': 'aplicacion actualizada'}
+    return {'msg': 'sistema operativo no es windows'}
     
 
-    
+
+def getstatusoutput(cmd): 
+    """Return (status, output) of executing cmd in a shell."""
+    """This new implementation should work on all platforms."""
+    import subprocess
+    pipe = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True, universal_newlines=True)  
+    output = "".join(pipe.stdout.readlines()) 
+    sts = pipe.returncode
+    if sts is None: sts = 0
+    return sts, output 
 
 
 

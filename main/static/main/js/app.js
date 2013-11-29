@@ -45,6 +45,8 @@ $( document ).ready( function(){
 				$('#guardar-marca-btn').on('click', this.guardarMarca);
 				$('#guardar-componente-btn').on('click', this.guardarComponente);
 
+				$('#update-btn').on('click', this.update);
+
 				modalServicio.on('hidden.bs.modal', this.alHideServicio);
 				modalPersona.on('hidden.bs.modal', this.alHidePersona);			
 				modalTipoServicio.on('hidden.bs.modal', this.alHideTipoServicio);			
@@ -209,6 +211,35 @@ $( document ).ready( function(){
 
 	            printWindow.close();
 			},
+
+
+			update: function(event) {
+
+				modalUpdate = $('#modal-update').modal({backdrop: 'static'});
+
+				okBtn = modalUpdate.find('.ok-btn').one('click', function(){
+					wd = window || document;
+					return wd.location.reload(true);
+				});
+
+				okBtn.button('loading');
+
+				url = $(event.currentTarget).data('url')
+				
+				$.get(url)
+
+					.fail(function() {
+					    alert( "error" );
+				    })
+
+					.always(function(data){
+						okBtn.button('reset');
+						modalUpdate.find('.logo i').removeClass().addClass('fa fa-smile-o');
+						modalUpdate.find('.logo h5').text('actualizado');
+						modalUpdate.find('.content').html('<h4>'+data.msg+'</h4>');
+					});
+			},
+			
 
 			
 			
