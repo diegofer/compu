@@ -12,7 +12,7 @@ import json
 
 from crispy_forms.utils import render_crispy_form
 from jsonview.decorators import json_view
-from reportlab.pdfgen import canvas
+#from reportlab.pdfgen import canvas para generar pdf
 
 from termcolor import colored
 import fabfile as f
@@ -101,8 +101,9 @@ def persona(request, id):
     return render(request, 'main/persona.html', locals())
 
 
-import subprocess
+
 def actualizar(request):
+    import subprocess
     #f.actualizar()  # si lo hago con fabric aqui llamo el comando..
     output = subprocess.check_output(["git", "pull"])
     

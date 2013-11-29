@@ -11,6 +11,12 @@ STYLUS_PATH = 'main/static/main/css/stylus/'
 STYLUS_FILE = 'main/static/main/css/stylus/style.styl' 
 
 
+
+
+def initial_data():
+	local('./manage.py dumpdata --indent=4 --exclude=main --exclude=south --exclude=auth.permission --exclude=contenttypes --exclude=admin.logentry --exclude=sessions  > usuarios/fixtures/initial_data.json')
+
+
 ################ COMANDOS STYLUS  ################
 
 def watch_stylus(): 

@@ -91,12 +91,14 @@ class UsuarioAdmin(UserAdmin):
         return qs.exclude(is_superuser=True) #qs.filter(Q(user_padre=request.user.id) | Q(id=request.user.id))
 
     def save_model(self, request, obj, form, change):
-        tipo = obj.tipo
-        g = Group.objects.get(name=tipo)
-
+        
         obj.save()
-        obj.groups.clear()
-        obj.groups.add(g)
+        
+        if change:
+            tipo = obj.tipo
+            g = Group.objects.get(name=tipo)
+            obj.groups.clear()
+            obj.groups.add(g)
 
 
 admin.site.register(Usuario, UsuarioAdmin)
