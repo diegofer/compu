@@ -104,14 +104,14 @@ def persona(request, id):
 @json_view
 def actualizar(request):
     import os
-    os_name = os.name
     os.chdir(os.path.dirname(os.path.dirname(__file__)))
 
-    if os_name == 'nt':
-        gitpull = getstatusoutput('git pull')
-        collecstatic = getstatusoutput('python manage.py collectstatic --noinput')
-        return {'msg': 'aplicacion actualizada'}
-    return {'msg': 'sistema operativo no es windows'}
+    if request.get_host() == '127.0.0.1:8000':
+        return {'msg': 'No puedes actualizar desde el servidor de desarrollo: %s' % request.get_host()}
+
+    gitpull = getstatusoutput('git pull')
+    collectstatic = getstatusoutput('python manage.py collectstatic --noinput')
+    return {'msg': 'aplicacion actualizada', 'output_git':gitpull, 'output_collectstatic':collectstatic}
     
 
 
