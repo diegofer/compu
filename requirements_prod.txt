@@ -1,0 +1,6 @@
+Django==1.6
+South==0.8.4
+django-admin-bootstrapped==1.6.1
+django-crispy-forms==1.4.0
+django-jsonview==0.3.0
+termcolor==1.1.0

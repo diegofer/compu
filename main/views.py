@@ -107,11 +107,17 @@ def actualizar(request):
     os.chdir(os.path.dirname(os.path.dirname(__file__)))
 
     if request.get_host() == '127.0.0.1:8000':
-        return {'msg': 'No puedes actualizar desde el servidor de desarrollo: %s' % request.get_host()}
+        return {'success':False, 'msg': 'No puedes actualizar desde el servidor de desarrollo: %s' % request.get_host()}
 
-    gitpull = getstatusoutput('git pull')
-    collectstatic = getstatusoutput('python manage.py collectstatic --noinput')
-    return {'msg': 'aplicacion actualizada', 'output_git':gitpull, 'output_collectstatic':collectstatic}
+    gitpull        = getstatusoutput('git pull')
+    requirements   = getstatusoutput('pip install -r requirements_prod.txt')
+    collectstatic  = getstatusoutput('python manage.py collectstatic --noinput')
+    syncdb         = getstatusoutput('python manage.py syncdb')
+    migrate        = getstatusoutput('python manage.py migrate')
+
+    if os.name == 'nt':
+        restart_apache = getstatusoutput('net stop Apache && net star Apache')
+    return {'success':True, 'msg': 'aplicacion actualizada', 'output_git':gitpull, 'output_collectstatic':collectstatic}
     
 
 

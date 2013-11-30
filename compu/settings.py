@@ -88,6 +88,24 @@ ROOT_URLCONF = 'compu.urls'
 WSGI_APPLICATION = 'compu.wsgi.application'
 
 
+INSTALLED_APPS += (
+    # app nativas
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django_admin_bootstrapped',
+    'django.contrib.admin',
+    
+    # app contribuidas
+    'crispy_forms',
+    'south',
+
+    # app propias
+    'main',
+    'usuarios',
+)
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
