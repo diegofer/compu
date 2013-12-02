@@ -101,13 +101,17 @@ def persona(request, id):
     return render(request, 'main/persona.html', locals())
 
 
+######## ACTUALIZAR APP #############
+
 @json_view
 def actualizar(request):
     import os
-    os.chdir(os.path.dirname(os.path.dirname(__file__)))
+    from threading import Timer
 
     if request.get_host() == '127.0.0.1:8000':
         return {'success':False, 'msg': 'No puedes actualizar desde el servidor de desarrollo: %s' % request.get_host()}
+
+    os.chdir(os.path.dirname(os.path.dirname(__file__)))
 
     gitpull        = getstatusoutput('git pull')
     requirements   = getstatusoutput('pip install -r requirements_prod.txt')
@@ -116,10 +120,13 @@ def actualizar(request):
     migrate        = getstatusoutput('python manage.py migrate')
 
     if os.name == 'nt':
-        restart_apache = getstatusoutput('net stop Apache && net star Apache')
-    return {'success':True, 'msg': 'aplicacion actualizada', 'output_git':gitpull, 'output_collectstatic':collectstatic}
-    
+        t = Timer(1.0, reloadApache)
+        t.start()
+    return {'success':True, 'msg': 'aplicacion actualizada, reiniciando el servidor...', 'output_git':gitpull, 'output_collectstatic':collectstatic}
+  
 
+def reloadApache():
+    getstatusoutput('net stop Apache && net start Apache')
 
 def getstatusoutput(cmd): 
     """Return (status, output) of executing cmd in a shell."""

@@ -227,16 +227,26 @@ $( document ).ready( function(){
 				url = $(event.currentTarget).data('url')
 				
 				$.get(url)
-
 					.fail(function() {
 					    alert( "error" );
 				    })
-
 					.always(function(data){
-						okBtn.button('reset');
-						modalUpdate.find('.logo i').removeClass().addClass('fa fa-smile-o');
-						modalUpdate.find('.logo h5').text('actualizado');
-						modalUpdate.find('.content').html('<h4>'+data.msg+'</h4>');
+						var $content = modalUpdate.find('.content')
+
+						if (!(data['success'])) { 
+							$content.html('<h4>'+data.msg+'</h4>');
+							okBtn.button('reset'); 
+						} else {
+							modalUpdate.find('.logo i').removeClass().addClass('fa fa-smile-o');
+							modalUpdate.find('.logo h5').text('actualizado');
+							
+							$content.html('<h4>'+data.msg+'</h4>');
+
+							setTimeout(function(){
+								okBtn.button('reset');
+								$content.html('<h4>El servidor esta listo, Dale OK</h4>');
+							}, 30000);
+						}
 					});
 			},
 			
