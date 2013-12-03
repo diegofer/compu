@@ -232,20 +232,39 @@ $( document ).ready( function(){
 				    })
 					.always(function(data){
 						var $content = modalUpdate.find('.content')
+						var $msg = $content.find('.msg');
 
 						if (!(data['success'])) { 
-							$content.html('<h4>'+data.msg+'</h4>');
+							modalUpdate.find('.logo i').removeClass().addClass('fa fa-frown-o');
+							modalUpdate.find('.logo h5').text('imposible');
+							$msg.html(data.msg);
 							okBtn.button('reset'); 
+							
 						} else {
 							modalUpdate.find('.logo i').removeClass().addClass('fa fa-smile-o');
-							modalUpdate.find('.logo h5').text('actualizado');
-							
-							$content.html('<h4>'+data.msg+'</h4>');
+							modalUpdate.find('.logo h5').text('actualizado');	
+							$msg.html(data.msg);
 
 							setTimeout(function(){
 								okBtn.button('reset');
-								$content.html('<h4>El servidor esta listo, Dale OK</h4>');
+								$msg.html('Servidor listo, Dale OK');
 							}, 30000);
+
+							var $progress = $content.find('.progress').removeClass('hidden').addClass('show');
+							var $bar = $content.find('.progress-bar');
+							var unidad = $bar.width();
+
+							var intervalo = setInterval(function(){
+								var width = $bar.width() + 3;
+								
+								$bar.width($bar.width() + unidad);
+								
+								if (okBtn.text() == "OK") {
+									$progress.removeClass('active'); 
+									$bar.width('100%');
+									clearInterval(intervalo);	
+								}
+							},1000);
 						}
 					});
 			},
