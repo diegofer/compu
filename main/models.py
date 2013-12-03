@@ -58,7 +58,7 @@ class Componente(models.Model):
 
 class Servicio(models.Model):
 
-	DATA_TIME_FORMAT = '%d-%b-%Y  %I %p'
+	DATA_TIME_FORMAT = '%d-%m-%Y  %I %p'
 	PLAZO_VENCIDO = 111
 
 	EN_COLA        = 'en-cola'#'0'
