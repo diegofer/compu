@@ -61,9 +61,9 @@ class Servicio(models.Model):
 	DATA_TIME_FORMAT = '%d-%m-%Y  %I %p'
 	PLAZO_VENCIDO = 111
 
-	EN_COLA        = 'en-cola'#'0'
-	EN_REVISION    = 'en-revision'#'1'
-	REPARADO       = 'reparado'#'1'
+	EN_COLA        = 'en-cola'
+	EN_REVISION    = 'en-revision'
+	REPARADO       = 'reparado'
 	ENTREGADO      = 'entregado'
 	
 	ESTADO = (
@@ -84,6 +84,7 @@ class Servicio(models.Model):
 	empleado    = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='empleado_de', blank=True, null=True)
 	created     = models.DateTimeField(auto_now_add = True) 
 	updated     = models.DateTimeField(auto_now = True)
+	entregado   = models.DateTimeField(blank=True, null=True)
 	estado      = models.CharField(max_length=12, choices=ESTADO, default=EN_COLA, blank=True)
 	plazo       = models.DateTimeField(default=datetime.now, blank=True)
 
@@ -114,3 +115,20 @@ class Servicio(models.Model):
 
 		
 	percent = property(_plazo_porcentaje)
+
+
+class Estadistica(models.Model):
+
+	total       = models.IntegerField()
+	en_cola     = models.IntegerField()
+	en_revision = models.IntegerField()
+	reparados   = models.IntegerField()
+	entregados  = models.IntegerField()
+
+	created     = models.DateTimeField(auto_now_add = True)
+	
+	def __unicode__(self):
+		return '%s' % self.id
+	
+	class Meta:
+		get_latest_by = "created"

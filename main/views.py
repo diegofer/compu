@@ -17,7 +17,7 @@ from jsonview.decorators import json_view
 from termcolor import colored
 #import fabfile as f
 
-from main.models import Servicio, Persona
+from main.models import *
 from main.forms import LoginForm, ServicioForm, PersonaForm, TipoServicioForm, MarcaForm, ComponenteForm, ServicioTecnicoForm
 
 
@@ -43,13 +43,12 @@ def home(request, estado='reciente'):
         ctx['servicios'] = Servicio.objects.all().order_by('-updated')[:20]
     else:
         ctx['servicios'] = Servicio.objects.filter(estado__exact=estado)
-        
-    ctx['num_total']     = Servicio.objects.all().count()   
-    ctx['num_cola']      = Servicio.objects.filter(estado__exact=Servicio.EN_COLA).count()
-    ctx['num_revision']  = Servicio.objects.filter(estado__exact=Servicio.EN_REVISION).count()
-    ctx['num_reparado']  = Servicio.objects.filter(estado__exact=Servicio.REPARADO).count()
-    ctx['num_entregado'] = Servicio.objects.filter(estado__exact=Servicio.ENTREGADO).count()
-
+    
+    try:
+        ctx['estadistica'] = Estadistica.objects.latest()
+    except Estadistica.DoesNotExist:
+        ctx['estadistica'] = None
+    
     if request.user.is_authenticated():
         ctx['servicioForm']      = ServicioForm()
         ctx['personaForm']       = PersonaForm()
@@ -74,11 +73,10 @@ def servicio(request, id):
     ctx['servicio']    = Servicio.objects.get(id=id)
     ctx['componentes'] = ctx['servicio'].componentes.all()
 
-    ctx['num_total']     = Servicio.objects.all().count()   
-    ctx['num_cola']      = Servicio.objects.filter(estado__exact=Servicio.EN_COLA).count()
-    ctx['num_revision']  = Servicio.objects.filter(estado__exact=Servicio.EN_REVISION).count()
-    ctx['num_reparado']  = Servicio.objects.filter(estado__exact=Servicio.REPARADO).count()
-    ctx['num_entregado'] = Servicio.objects.filter(estado__exact=Servicio.ENTREGADO).count()
+    try:
+        ctx['estadistica'] = Estadistica.objects.latest()
+    except Estadistica.DoesNotExist:
+        ctx['estadistica'] = None
 
     if request.user.is_authenticated():
         ctx['servicioForm']        = ServicioForm(instance=ctx['servicio'])
@@ -87,7 +85,6 @@ def servicio(request, id):
         ctx['tipoServicioForm']    = TipoServicioForm()
         ctx['marcaForm']           = MarcaForm()
         ctx['componenteForm']      = ComponenteForm()
-
 
     return render(request, 'main/servicio.html', ctx)
 
@@ -160,11 +157,11 @@ def guardar_servicio(request):
         new_servicio.estado = Servicio.EN_COLA
         new_servicio.save()
         form.save_m2m()
+        registrar_estadisticas() # registro estadistacas en base de datos
         return {'success': True, 'url': new_servicio.get_absolute_url()}
     print colored(form.errors, "red", attrs=['bold'])
     form_html = render_crispy_form(form, context=RequestContext(request))
     return {'success': False, 'form_html': form_html}
-
 
 @json_view
 def guardar_servicio_tecnico(request):
@@ -188,7 +185,16 @@ def guardar_servicio_estado(request):
 
     servicio = Servicio.objects.get(pk=servicio_id)
     servicio.estado = estado
-    servicio.save(update_fields=['estado', 'updated'])
+
+    # guardamos fecha de entrega del servicio
+    if estado == Servicio.ENTREGADO:
+        servicio.entregado = datetime.now()
+    else:
+       servicio.entregado = None 
+    
+    servicio.save(update_fields=['estado', 'updated','entregado'])
+
+    registrar_estadisticas() # registro estadistacas en base de datos
 
     return {'success': True, 'estado':servicio.estado}
 
@@ -240,3 +246,21 @@ def guardar_componente(request):
     print form.errors
     form_html = render_crispy_form(form, context=RequestContext(request))
     return {'success': False, 'form_html': form_html}
+
+
+
+
+
+############# UTILES #################
+
+
+def registrar_estadisticas():
+    """ cuando creamos o actualizamos un servicio, creamos un registro en Estadistica """
+    total        = Servicio.objects.all().count()
+    en_cola      = Servicio.objects.filter(estado=Servicio.EN_COLA).count()
+    en_revision  = Servicio.objects.filter(estado=Servicio.EN_REVISION).count()
+    reparados    = Servicio.objects.filter(estado=Servicio.REPARADO).count()
+    entregados   = Servicio.objects.filter(estado=Servicio.ENTREGADO).count()
+
+    e = Estadistica(total=total, en_cola=en_cola, en_revision=en_revision, reparados=reparados, entregados=entregados)
+    e.save()

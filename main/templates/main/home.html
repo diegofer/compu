@@ -31,27 +31,27 @@
 	<div class="list-group nav-servicios">
 
 		<a href="{% url 'home' %}" class="list-group-item {% active request "^/$" %}">
-			<span class="badge">{{num_total}}</span> 
+			<span class="badge">{{estadistica.total|default:"0"}}</span> 
 			<i class="fa fa-calendar fw"></i> Vista General 
 		</a>
 
 		<a href="{% url 'home' SERVICIO.EN_COLA %}" class="list-group-item {% active request "^/en-cola/" %} ">
-			<span class="badge">{{num_cola}}</span>
+			<span class="badge">{{estadistica.en_cola|default:"0"}}</span>
 			<i class="fa fa-clock-o fw"></i>  En Espera
 		</a>
 
 		<a href="{% url 'home' SERVICIO.EN_REVISION %}" class="list-group-item {% active request "^/en-revision/" %}"> 
-			<span class="badge">{{num_revision}}</span>
+			<span class="badge">{{estadistica.en_revision|default:"0"}}</span>
 			<i class="fa fa-wrench fw"></i> En Revisión
 		</a>
 
 		<a href="{% url 'home' SERVICIO.REPARADO %}" class="list-group-item {% active request "^/reparado/" %} ">
-			<span class="badge">{{num_reparado}}</span>
+			<span class="badge">{{estadistica.reparados|default:"0"}}</span>
 			<i class="fa fa-check fw"></i> Reparados
 		</a>
 
 		<a href="{% url 'home' SERVICIO.ENTREGADO %}" class="list-group-item {% active request "^/entregado/" %} ">
-			<span class="badge">{{num_entregado}}</span>
+			<span class="badge">{{estadistica.entregados|default:"0"}}</span>
 			<i class="fa fa-smile-o fw"></i> Entregados
 		</a>	
 

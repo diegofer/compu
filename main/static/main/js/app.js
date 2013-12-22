@@ -18,7 +18,9 @@ $( document ).ready( function(){
             formPersona      = modalPersona.find('form').html(),
             formTipo         = modalTipoServicio.find('form').html(),
             formMarca        = modalMarca.find('form').html(),
-            formComponente   = modalComponente.find('form').html();
+            formComponente   = modalComponente.find('form').html(),
+
+            wd  = window || document;
 
 
 
@@ -218,7 +220,7 @@ $( document ).ready( function(){
                 modalUpdate = $('#modal-update').modal({backdrop: 'static'});
 
                 okBtn = modalUpdate.find('.ok-btn').one('click', function(){
-                    wd = window || document;
+                    
                     return wd.location.reload(true);
                 });
 
@@ -302,37 +304,15 @@ $( document ).ready( function(){
                             servicio_id: $('#servicio-id').val(),
                             csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
                         };
+                        console.log(data.estado);
 
                     $.post(urlGuardarServicioEstado, data)
                         .fail(function() {
                             alert( "error" );
                         })
                         .always(function(data){
-                            
-                            $('#logo-servicio .icon-servicio').removeClass('en-cola en-revision reparado entregado').addClass(data.estado);
-                            $('#td-estado').text(data.estado);
-                            var estado = $('#estado-label').removeClass('label-danger label-warning label-success label-info');
-                            estado.text(data.estado);
-
-
-                            estadoBtn.removeClass().addClass('estado-btn btn btn-default');
-
-                            if (data.estado == 'en-cola') {
-                                btnActual.removeClass().addClass('estado-btn btn btn-danger active');
-                                estado.addClass('label-danger');
-                            }
-                            if (data.estado == 'en-revision') {
-                                btnActual.removeClass().addClass('estado-btn btn btn-warning active');
-                                estado.addClass('label-warning');
-                            }
-                            if (data.estado == 'reparado') {
-                                btnActual.removeClass().addClass('estado-btn btn btn-success active');
-                                estado.addClass('label-success');
-                            }
-                            if (data.estado == 'entregado') {
-                                btnActual.removeClass().addClass('estado-btn btn btn-info active');
-                                estado.addClass('label-info');
-                            }               
+                            if (data.success) wd.location.reload(true);
+                            else alert('no se puedo actualizar el estado, intentalo nuevamente');                     
                         });
                         
                 },

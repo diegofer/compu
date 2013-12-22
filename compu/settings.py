@@ -95,17 +95,22 @@ INSTALLED_APPS += (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #'django_admin_bootstrapped.bootstrap3',
     'django_admin_bootstrapped',
     'django.contrib.admin',
     
     # app contribuidas
     'crispy_forms',
     'south',
+    'permissions_widget',
 
     # app propias
     'main',
     'usuarios',
 )
+
+PERMISSIONS_WIDGET_EXCLUDE_APPS = []#'south', 'sessions', 'contenttypes', 'admin']
+PERMISSIONS_WIDGET_EXCLUDE_MODELS = []#'auth.permission']
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
