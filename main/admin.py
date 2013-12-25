@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
+
 from main.models import Persona, TipoServicio, Marca, Componente, Servicio, Estadistica
+from usuarios.models import Usuario
 
 
 class ServicioAdmin(admin.ModelAdmin):
@@ -16,6 +18,11 @@ class ServicioAdmin(admin.ModelAdmin):
 
         e = Estadistica(total=total, en_cola=en_cola, en_revision=en_revision, reparados=reparados, entregados=entregados)
         e.save()
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "tecnico":
+            kwargs["queryset"] = Usuario.objects.filter(tipo__in=[Usuario.TECNICO,Usuario.ADMIN])
+        return super(ServicioAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
         
 
 class EstadisticaAdmin(admin.ModelAdmin):

@@ -1,9 +1,29 @@
-{% extends 'main/home.html' %}
+{% extends 'main/shell.html' %}
 {% load main_tags %}
 {% load crispy_forms_tags %}
 
 {% block title %} Servicio {{servicio.id}} {% endblock %}
 
+{% block js_head %}
+
+	{% if user.is_authenticated %}
+	<script>
+		var urlGuardarServicio          = '{% url "guardar_servicio" %}';
+		var urlGuardarServicioTecnico   = '{% url "guardar_servicio_tecnico" %}';
+		var urlGuardarServicioEstado    = '{% url "guardar_servicio_estado" %}';
+		var urlGuardarPersona           = '{% url "guardar_persona" %}';
+		var urlGuardarTipoServicio      = '{% url "guardar_tipo_servicio" %}';
+		var urlGuardarMarca             = '{% url "guardar_marca" %}';
+		var urlGuardarComponente        = '{% url "guardar_componente" %}';
+	</script>
+	{% endif %}
+
+{% endblock js_head %}
+
+
+{% block sidebar_left %}
+	{% include 'main/widgets/nav_servicios.html' %}
+{% endblock sidebar_left %}
 
 {% block header %}
 	<ul class="nav navbar-nav">
@@ -58,7 +78,9 @@
 				{{servicio.tipo.nombre}} {{servicio.marca.nombre}} 
 
 			</h1>
-			<span id="estado-label" class="label estado {{servicio.estado|labelizar}} ">{{servicio.estado}} </span> <br/><br/>
+			<span id="estado-label" class="label estado {{servicio.estado|labelizar}} ">{{servicio.estado}} </span> 
+			&nbsp;{{servicio.entregado|date:"D d M f a"}} <br/><br/>
+
 
 			<div id="conten-estado"  class="btn-group">
 			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.EN_COLA}}" id="{{servicio.EN_COLA}}"
@@ -80,7 +102,7 @@
 			{% csrf_token %}
 
 
-			{{servicio.entregado|default:"no entregado"}}
+			
 		</div>
 
 	</div> <!-- end row -->

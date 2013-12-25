@@ -21,6 +21,12 @@ urlpatterns = patterns('',
    
     url(r'^servicio/(\d+)/$', 'main.views.servicio', name='servicio' ),
     url(r'^persona/(\d+)/$', 'main.views.persona', name='persona' ),
+    
+
+    url(r'^clientes/$', 'main.views.clientes', name='clientes' ),
+    url(r'^search_cliente/$', 'main.views.search_cliente', name='search_cliente' ),
+
+
 
     url(r'^$', 'main.views.home', name='home'),
     url(r'^(?P<estado>[-\w]+)/$', 'main.views.home', name='home'), 

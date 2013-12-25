@@ -31,3 +31,11 @@ def actualizar():
 ################ COMANDOS GIT  ################
 def git_pull():
 	local('git pull')
+
+
+################ COMANDOS DJANGO  ################
+def dumpdata_group():
+	local(django_manage('./manage.py dumpdata --indent=4 --natural auth.Group > main/fixtures/initial_data.json'))
+
+def django_manage(command='help', virtualenv='compu'):
+	return "/bin/bash -l -c 'source /usr/local/bin/virtualenvwrapper.sh && workon %s && %s '" %(virtualenv, command)

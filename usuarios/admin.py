@@ -64,7 +64,7 @@ class UsuarioAdmin(UserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('email', 'tipo', 'dni', 'is_admin', 'is_active',)
+    list_display = ('email', 'tipo', 'dni', 'is_active', 'is_admin', 'is_superuser',)
     list_filter = ('is_admin', 'is_active',)
 
     fieldsets = (

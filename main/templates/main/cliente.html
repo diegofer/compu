@@ -3,7 +3,16 @@
 
 {% block title %}Persona{% endblock %}
 
-{% block header %}Cliente{% endblock %}
+{% block sidebar_left %}
+	{% include 'main/widgets/nav_clientes.html' %}
+{% endblock sidebar_left %}
+
+
+{% block header %}
+	<p class="navbar-text">Cliente</p>
+		
+{% endblock header %}
+
 
 
 {% block content %} 

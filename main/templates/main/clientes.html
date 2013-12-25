@@ -1,0 +1,85 @@
+{% extends 'main/shell.html' %}
+
+{% block title %} Clientes {% endblock %}
+
+
+{% block sidebar_left %}
+	{% include 'main/widgets/nav_clientes.html' %}
+{% endblock sidebar_left %}
+
+{% block header %}
+
+	<ul class="nav navbar-nav">
+		<li class="active"><a href="#">Clientes</a></li>
+	</ul>
+
+	<form id="search-clientes" class="navbar-form navbar-left dropdown" role="search">
+	    
+	    <input  type="text" class="form-control search-query dropdown-toggle" data-toggle="dropdown" placeholder="Buscar cliente">
+	    <ul class="dropdown-menu"> </ul>
+
+	</form>
+
+
+
+	{% if user.is_authenticated %}
+
+	<form role="form" class="navbar-form navbar-right" >
+		<button id="delete-servicio-btn" class="btn btn-danger" disabled="disabled">
+		 	<i class="fa fa-trash-o"></i> <!-- <span class="glyphicon glyphicon-edit"></span> -->
+		</button>
+		<button id="edit-servicio-btn" class="btn btn-primary" >
+		 	<i class="fa fa-pencil-square-o"></i>  <!-- <span class="glyphicon glyphicon-edit"></span>  -->
+		</button>
+	</form> 
+
+	{% endif %}
+
+{% endblock header %}
+
+
+{% block content %} 
+
+	<div class="jumbotron">
+		<h1><i class="fa fa-users"></i> Clientes</h1>
+		<p>Busque por nombre, apellidos o cédula...</p>
+	</div>
+
+{% endblock %}
+
+
+{% block js_body %} 
+	<script>
+		$('#search-clientes input').on('keypress', function() {
+			if (event.keyCode === 13) { 
+                event.preventDefault();
+            }
+		})
+
+		$('#search-clientes input').on('keyup', function() {
+			var datos = {
+				key: $('#search-clientes .search-query').val(),
+			};
+
+			$.get('{% url "search_cliente" %}', datos)
+				
+				.always(function(data) {
+					var list = '';
+					if (data.length == 0) {
+						list += '<li><a href="#">Oops, no se encontraron resultados</a></li>';
+					} else {					
+						$.each(data, function(i, cliente) {
+							list += '<li><a href="/persona/'+cliente.pk+'/">'+cliente.fields.nombre+' '+cliente.fields.apellido+' '+cliente.fields.cedula+'</a></li>';
+						});
+					}
+
+					$('#search-clientes .dropdown-menu').html(list);
+					$('#search-clientes').addClass('open');
+				});
+		});
+
+
+
+
+	</script>
+{% endblock %}

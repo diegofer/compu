@@ -143,7 +143,7 @@ $( document ).ready( function(){
 
                 iconFormat: function(state) {
                     if (!state.id) return state.text; // optgroup
-                    return "<i class='fa fa-fw fa-"+state.text+"'></i> "+ state.text; //state.text;
+                    return "<i class='fa fa-fw fa-"+state.id+"'></i> "+ state.text; //state.text;
                 },
             
             

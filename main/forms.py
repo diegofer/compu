@@ -15,7 +15,7 @@ from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, H
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, StrictButton, FieldWithButtons
 
 from main.models import Servicio, Persona, TipoServicio, Marca, Componente
-
+from usuarios.models import Usuario
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=TextInput(attrs={'class': 'form-control','placeholder': 'ingrese email'}))
@@ -66,7 +66,7 @@ class ServicioTecnicoForm(ModelForm):
 
         self.fields['tecnico'].label = ""
 
-        #self.fields['tecnico'].queryset = Persona.objects.filter(tipo__exact=Persona.TECNICO)
+        self.fields['tecnico'].queryset = Usuario.objects.filter(tipo__in=[Usuario.TECNICO,Usuario.ADMIN])
 
         self.helper.form_id     = 'form-servicio-tecnico'
 

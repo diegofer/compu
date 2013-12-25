@@ -4,9 +4,13 @@ from django.template import RequestContext
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
+from django.core import serializers
 from django.core.urlresolvers import reverse
+from django.db.models import Q
+
 from datetime import datetime
 import json
+
 
 
 
@@ -90,12 +94,21 @@ def servicio(request, id):
 
 
 
+def clientes(request):
+    return render(request, 'main/clientes.html')
+
+def search_cliente(request):
+    key       = request.GET['key']
+    clientes  = Persona.objects.filter( Q(nombre__icontains=key) | Q(apellido__icontains=key) | Q(cedula__icontains=key) ) #Q(nombre__icontains=search) | Q(apellido__icontains=search) | Q(cedula__icontains=search) )
+    data      = serializers.serialize('json', clientes, fields=('nombre','apellido', 'cedula'))
+   
+    return HttpResponse(data, mimetype="application/json")
 
 def persona(request, id):
     loginForm = LoginForm()
     persona = Persona.objects.get(id=id)
     servicios = Servicio.objects.filter(cliente__pk=persona.id).order_by('-created')
-    return render(request, 'main/persona.html', locals())
+    return render(request, 'main/cliente.html', locals())
 
 
 ######## ACTUALIZAR APP #############

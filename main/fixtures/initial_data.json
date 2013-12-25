@@ -1,0 +1,129 @@
+[
+{
+    "pk": 1, 
+    "model": "auth.group", 
+    "fields": {
+        "name": "administrador", 
+        "permissions": [
+            [
+                "add_componente", 
+                "main", 
+                "componente"
+            ], 
+            [
+                "change_componente", 
+                "main", 
+                "componente"
+            ], 
+            [
+                "add_marca", 
+                "main", 
+                "marca"
+            ], 
+            [
+                "change_marca", 
+                "main", 
+                "marca"
+            ], 
+            [
+                "add_persona", 
+                "main", 
+                "persona"
+            ], 
+            [
+                "change_persona", 
+                "main", 
+                "persona"
+            ], 
+            [
+                "add_servicio", 
+                "main", 
+                "servicio"
+            ], 
+            [
+                "change_servicio", 
+                "main", 
+                "servicio"
+            ], 
+            [
+                "add_tiposervicio", 
+                "main", 
+                "tiposervicio"
+            ], 
+            [
+                "change_tiposervicio", 
+                "main", 
+                "tiposervicio"
+            ], 
+            [
+                "add_usuario", 
+                "usuarios", 
+                "usuario"
+            ], 
+            [
+                "change_usuario", 
+                "usuarios", 
+                "usuario"
+            ]
+        ]
+    }
+},
+{
+    "pk": 2, 
+    "model": "auth.group", 
+    "fields": {
+        "name": "tecnico", 
+        "permissions": [
+            [
+                "add_persona", 
+                "main", 
+                "persona"
+            ], 
+            [
+                "change_persona", 
+                "main", 
+                "persona"
+            ], 
+            [
+                "add_servicio", 
+                "main", 
+                "servicio"
+            ], 
+            [
+                "change_servicio", 
+                "main", 
+                "servicio"
+            ]
+        ]
+    }
+},
+{
+    "pk": 3, 
+    "model": "auth.group", 
+    "fields": {
+        "name": "empleado", 
+        "permissions": [
+            [
+                "add_persona", 
+                "main", 
+                "persona"
+            ], 
+            [
+                "change_persona", 
+                "main", 
+                "persona"
+            ], 
+            [
+                "add_servicio", 
+                "main", 
+                "servicio"
+            ], 
+            [
+                "change_servicio", 
+                "main", 
+                "servicio"
+            ]
+        ]
+    }
+}
+]

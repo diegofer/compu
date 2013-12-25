@@ -90,8 +90,8 @@ WSGI_APPLICATION = 'compu.wsgi.application'
 
 INSTALLED_APPS += (
     # app nativas
-    'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.auth',  # auth debe ir despues de contenttypes porque usamos fixtures en Group que tiene dependencias en contenttypes
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -105,8 +105,8 @@ INSTALLED_APPS += (
     'permissions_widget',
 
     # app propias
-    'main',
     'usuarios',
+    'main',    
 )
 
 PERMISSIONS_WIDGET_EXCLUDE_APPS = []#'south', 'sessions', 'contenttypes', 'admin']
