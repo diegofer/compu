@@ -10,6 +10,23 @@
 
 {% block header %}
 	<p class="navbar-text">Cliente</p>
+
+	<form id="search-form" class="navbar-form navbar-left dropdown" role="search">    
+	    <input  type="text" class="form-control search-query dropdown-toggle" data-toggle="dropdown" placeholder="Buscar cliente"> 
+	</form>
+
+	{% if user.is_authenticated %}
+
+		<form role="form" class="navbar-form navbar-right" >
+			<button id="delete-servicio-btn" class="btn btn-danger" disabled="disabled">
+			 	<i class="fa fa-trash-o"></i> <!-- <span class="glyphicon glyphicon-edit"></span> -->
+			</button>
+			<button id="edit-servicio-btn" class="btn btn-primary" >
+			 	<i class="fa fa-pencil-square-o"></i>  <!-- <span class="glyphicon glyphicon-edit"></span>  -->
+			</button>
+		</form> 
+
+	{% endif %}
 		
 {% endblock header %}
 
@@ -110,5 +127,11 @@
 
 
 </div><!--  end #persona-->
-
+	{% include 'main/tpl/itemClienteTpl.html' %}
 {% endblock content %}
+
+
+{% block js_body %} 
+	<script src="{{STATIC_URL}}main/js/underscore-min.js"></script>	
+	<script src="{{STATIC_URL}}main/js/clientes.js"></script>	
+{% endblock %}
