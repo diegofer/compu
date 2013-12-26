@@ -2,14 +2,20 @@
 
 	<div class="panel-heading">CLIENTES</div>
 
+	<div class="panel-body">
+		<div class="list-group nav-servicios">
 
-	<div class="list-group nav-servicios">
+			<a href="{% url 'clientes' %}" class="list-group-item">
+				<span class="badge"><i class="fa fa-arrow-right"></i></span> 
+				<i class="fa fa-users fw"></i> Inicio Clientes
+			</a>
 
-		<a href="{% url 'home' %}" class="list-group-item">
-			<span class="badge"><i class="fa fa-arrow-right"></i></span> 
-			<i class="fa fa-home fw"></i> Home
-		</a>
+		</div>
 
+		<div class="well well-sm">
+			<p>Busque clientes por nombre, apellido o cédula.</p>
+		</div>
+		
 	</div>
 	
 

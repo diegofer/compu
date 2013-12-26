@@ -1,7 +1,7 @@
 $( document ).ready( function(){
 
-	var template    = _.template( $('.item-cliente-tpl').html() ),
-		url         = '/search_cliente/',
+	var template    = _.template( $('.item-servicio-tpl').html() ),
+		url         = '/search_servicio/',
 		$searchForm = $('#search-form');
 
 
@@ -25,14 +25,13 @@ $( document ).ready( function(){
 				if (data.length == 0) {
 					$menu.html('<li class="dropdown-header">Oops, No se encontraron resultados..!</li>');
 				} else {					
-					$.each(data, function(i, cte) {
-						var cliente = {
-							pk       : cte.pk,
-							fullName : truncText(cte.fields.nombre+' '+cte.fields.apellido, 27),
-							cedula   : cte.fields.cedula
+					$.each(data, function(i, serv) {
+						var servicio = {
+							pk       : serv.pk,
+							estado   : serv.fields.estado
 						}
 
-						$menu.append( template(cliente) );
+						$menu.append( template(servicio) );
 					});
 				}
 

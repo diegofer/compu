@@ -24,7 +24,9 @@ urlpatterns = patterns('',
     
 
     url(r'^clientes/$', 'main.views.clientes', name='clientes' ),
+    
     url(r'^search_cliente/$', 'main.views.search_cliente', name='search_cliente' ),
+    url(r'^search_servicio/$', 'main.views.search_servicio', name='search_servicio' ),
 
 
 

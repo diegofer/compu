@@ -12,7 +12,12 @@
 	<p class="navbar-text">Cliente</p>
 
 	<form id="search-form" class="navbar-form navbar-left dropdown" role="search">    
-	    <input  type="text" class="form-control search-query dropdown-toggle" data-toggle="dropdown" placeholder="Buscar cliente"> 
+		<div class="form-group" style="width:200px;">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fa fa-search"></i></span>
+		    	<input  type="text" class="form-control search-query dropdown-toggle" data-toggle="dropdown" placeholder="Buscar cliente"> 
+		    </div>
+	    </div>
 	</form>
 
 	{% if user.is_authenticated %}
@@ -34,100 +39,102 @@
 
 {% block content %} 
 
-<div id="persona">
+	<div id="persona">
 
-	<div class="row encabezado">
-		
-		<div class="col-md-2 foto">
+		<div class="row encabezado">
 			
-			<i class="fa fa-user icon-persona"></i>
-			
-		</div>
-		
-		<div class="col-md-10">
-			
-			<h1>
-				<span class="label pull-right label-info">Cliente</span>
-				{{persona.nombre}}
-			</h1>
-			<h3>{{persona.apellido}}</h3>
-
-		</div>
-
-	</div> <!-- end row -->
-	<br/>
-
-
-	<div class="row">
-		
-		<div class="col-md-8">
-
-			<h3>Datos Personales</h3>
-
-					<table class="table table-striped">
-						<tbody>	
-							<tr>
-								<td>Cédula: </td>
-								<td><i class="fa fa-check-square-o"></i>&nbsp;&nbsp; {{persona.cedula}}</td>
-							</tr>
-							<tr>
-								<td>Dirección: </td>
-								<td><i class="fa fa-map-marker"></i>&nbsp;&nbsp;&nbsp; {{persona.direccion}}</td>
-							</tr>
-							<tr>
-								<td>Teléfono: </td>
-								<td><i class="fa fa-phone"></i>&nbsp;&nbsp; {{persona.telefono}}</td>
-							</tr>
-							{% if persona.email %}
-							<tr>
-								<td>Email: </td>
-								<td><i class="fa fa-envelope-o"></i>&nbsp;&nbsp; {{persona.email}}</td>
-							</tr>
-							{% endif %}
-
-						</tbody>
-						
-					</table>
+			<div class="col-md-2 foto">
 				
-			<br/>
-
-			<h3><i class="fa fa-wrench fw"></i> Servicios</h3>
-
-			{% for servicio in servicios %}
-				{% include "main/widgets/itemServicio.html" %}
-
-			{% empty %}
-			<h3>No hay servicios aun</h3>
-			{% endfor %}
-
+				<i class="fa fa-user icon-persona"></i>
+				
+			</div>
 			
-		</div>  
+			<div class="col-md-10">
+				
+				<h1>
+					<span class="label pull-right label-info">Cliente</span>
+					{{persona.nombre}}
+				</h1>
+				<h3>{{persona.apellido}}</h3>
+
+			</div>
+
+		</div> <!-- end row -->
+		<br/>
 
 
-		<div class="col-md-4">
+		<div class="row">
+			
+			<div class="col-md-8">
 
-			<h3>Editar</h3>				
+				<h3>Datos Personales</h3>
 
+						<table class="table table-striped">
+							<tbody>	
+								<tr>
+									<td>Cédula: </td>
+									<td><i class="fa fa-check-square-o"></i>&nbsp;&nbsp; {{persona.cedula}}</td>
+								</tr>
+								<tr>
+									<td>Dirección: </td>
+									<td><i class="fa fa-map-marker"></i>&nbsp;&nbsp;&nbsp; {{persona.direccion}}</td>
+								</tr>
+								<tr>
+									<td>Teléfono: </td>
+									<td><i class="fa fa-phone"></i>&nbsp;&nbsp; {{persona.telefono}}</td>
+								</tr>
+								{% if persona.email %}
+								<tr>
+									<td>Email: </td>
+									<td><i class="fa fa-envelope-o"></i>&nbsp;&nbsp; {{persona.email}}</td>
+								</tr>
+								{% endif %}
+
+							</tbody>
+							
+						</table>
+					
+				<br/>
+
+				<h3><i class="fa fa-wrench fw"></i> Servicios</h3>
+
+				{% for servicio in servicios %}
+					{% include "main/widgets/itemServicio.html" %}
+
+				{% empty %}
+				<h3>No hay servicios aun</h3>
+				{% endfor %}
+
+				
+			</div>  
+
+
+			<div class="col-md-4">
+
+				<h3>Editar</h3>				
+
+		
+				<a href="#" class="btn btn-info" role="button">	
+					<i class="fa fa-edit"></i>			 		 
+					Editar
+				</a>
+
+				<a href="#" class="btn btn-danger" role="button">	
+					<i class="fa fa-trash-o"></i>			 		 
+					Eliminar
+				</a>		
+					
+				
+			</div>
+
+		</div> <!-- end row -->
+
+
+
+	</div><!--  end #persona-->
 	
-			<a href="#" class="btn btn-info" role="button">	
-				<i class="fa fa-edit"></i>			 		 
-				Editar
-			</a>
-
-			<a href="#" class="btn btn-danger" role="button">	
-				<i class="fa fa-trash-o"></i>			 		 
-				Eliminar
-			</a>		
-				
-			
-		</div>
-
-	</div> <!-- end row -->
-
-
-
-</div><!--  end #persona-->
 	{% include 'main/tpl/itemClienteTpl.html' %}
+
 {% endblock content %}
 
 

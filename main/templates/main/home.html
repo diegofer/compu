@@ -42,6 +42,15 @@
 		</a></li>
 	</ul> <!-- end navbar-header -->
 
+	<form id="search-form" class="navbar-form navbar-left dropdown" role="search">    
+		<div class="form-group" style="width:200px;">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fa fa-search"></i></span>
+		    	<input  type="text" class="form-control search-query dropdown-toggle" data-toggle="dropdown" placeholder="Buscar cliente"> 
+		    </div>
+	    </div>
+	</form>
+
 
 	{% if user.is_authenticated %}
 
@@ -88,7 +97,14 @@
 
 {% endif %}
 
+	{% include 'main/tpl/itemServicioTpl.html' %}
+
 {% endblock content %}
+
+{% block js_body %} 
+	<script src="{{STATIC_URL}}main/js/underscore-min.js"></script>	
+	<script src="{{STATIC_URL}}main/js/servicios.js"></script>	
+{% endblock %}
 
 
 

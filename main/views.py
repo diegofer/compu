@@ -99,10 +99,17 @@ def clientes(request):
 
 def search_cliente(request):
     key       = request.GET['key']
-    clientes  = Persona.objects.filter( Q(nombre__icontains=key) | Q(apellido__icontains=key) | Q(cedula__icontains=key) ) #Q(nombre__icontains=search) | Q(apellido__icontains=search) | Q(cedula__icontains=search) )
+    clientes  = Persona.objects.filter( Q(nombre__icontains=key) | Q(apellido__icontains=key) | Q(cedula__icontains=key) )
     data      = serializers.serialize('json', clientes, fields=('nombre','apellido', 'cedula'))
    
     return HttpResponse(data, mimetype="application/json")
+
+def search_servicio(request):
+    key        = request.GET['key']
+    servicios  = Servicio.objects.filter(pk=key)
+    data       = serializers.serialize('json', servicios, fields=('estado','tipo'))
+
+    return HttpResponse(data, mimetype='application/json')
 
 def persona(request, id):
     loginForm = LoginForm()
