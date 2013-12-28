@@ -13,6 +13,13 @@ $( document ).ready( function(){
 	})
 
 	$searchForm.find('input').on('keyup', function() {
+
+		if (/^\s+$/.test(event.target.value) || event.target.value == '' ) {
+			$searchForm.find('.dropdown-menu').remove();
+			return;
+		};	 
+
+
 		var datos = {
 			key: $searchForm.find('.search-query').val(),
 		};
@@ -34,6 +41,7 @@ $( document ).ready( function(){
 
 						$menu.append( template(cliente) );
 					});
+					$menu.find('li:last').remove();  // remover el ultimo divider
 				}
 
 				$searchForm.find('.dropdown-menu').remove();

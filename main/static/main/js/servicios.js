@@ -5,14 +5,28 @@ $( document ).ready( function(){
 		$searchForm = $('#search-form');
 
 
-
 	$searchForm.find('input').on('keypress', function() {
 		if (event.keyCode === 13) { 
             event.preventDefault();
         }
 	})
 
-	$searchForm.find('input').on('keyup', function() {
+	$searchForm.find('input').on('keyup', function(event) {
+
+		if (!/^([0-9])*$/.test(event.target.value)) {
+			$searchForm.find('.dropdown-menu').remove();
+			$searchForm.find('.form-group').addClass('has-error');
+			return;
+		}
+		if (event.target.value == '') {
+			$searchForm.find('.form-group').removeClass('has-error');
+			$searchForm.find('.dropdown-menu').remove();		
+			return;
+		}
+
+		$searchForm.find('.form-group').removeClass('has-error');
+      		
+
 		var datos = {
 			key: $searchForm.find('.search-query').val(),
 		};
@@ -33,6 +47,7 @@ $( document ).ready( function(){
 
 						$menu.append( template(servicio) );
 					});
+					$menu.find('li:last').remove();  // remover el ultimo divider
 				}
 
 				$searchForm.find('.dropdown-menu').remove();
