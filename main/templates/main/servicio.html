@@ -200,9 +200,13 @@
 
 			
 				
-				{% if servicio.tecnico %}
-				<div class="panel panel-default servicio-person">
-					<div class="panel-heading">TÉCNICO</div>
+			{% if servicio.tecnico %}
+
+				<div id="panel-tecnico-exist" class="panel panel-default servicio-person">
+					<div class="panel-heading">
+						TÉCNICO   
+						<button type="button" class="btn btn-default btn-xs pull-right hidden editar"><i class="fa fa-pencil-square-o"></i></button>  
+					</div>
 					<div class="panel-body">
 						
 						<i class="fa fa-user icon-person"></i>
@@ -212,18 +216,43 @@
 						</a>		
 					</div>
 				</div>
-				{% else %}
-				<div id="panel-tecnico" class="panel panel-danger servicio-person">
-					<div class="panel-heading">TÉCNICO NO ASIGNADO</div>
+
+			{% endif %}
+
+				<div id="panel-tecnico-form" class="panel panel-warning servicio-person">
+					<div class="panel-heading">
+						ASIGNAR TÉCNICO
+						
+						<button type="button" class="btn btn-warning btn-xs pull-right {% if not servicio.tecnico %}hidden {% endif %} cerrar" >
+							<i class="fa fa-times"></i>
+						</button> 
+						
+					</div>
 					<div class="panel-body">
 						{% if user.is_authenticated %}
 						{% crispy servicioTecnicoForm %}
 						{% endif %}
 					</div>		
 				</div>
-				
 
-				{% endif %}
+				<script type="text/template" class="panel-tecnico-exist-tpl">
+					<div id="panel-tecnico-exist" class="panel panel-default servicio-person">
+						<div class="panel-heading">
+							TÉCNICO   
+							<button type="button" class="btn btn-default btn-xs pull-right hidden editar"><i class="fa fa-pencil-square-o"></i></button>  
+						</div>
+						<div class="panel-body">
+							
+							<i class="fa fa-user icon-person"></i>
+			
+							<a href="<%= url_tecnico %>" class="btn btn-info btn-block btn-lg" role="button">				 		 
+								<%= tecnico %>
+							</a>		
+						</div>
+					</div>
+				</script>
+
+				
 			
 
 			
@@ -261,6 +290,86 @@
 
 
 {% block js_body %} 
-	<script src="{{STATIC_URL}}main/js/underscore-min.js"></script>	
 	<script src="{{STATIC_URL}}main/js/servicios.js"></script>	
+	
+	<script>
+		var $panelTecnicoForm    = $('#panel-tecnico-form'),
+			$cerrarFormBtn       = $panelTecnicoForm.find('.cerrar'),
+			$panelTecnicoExist   = $('#panel-tecnico-exist'),
+			panelTecnicoExistTpl = _.template( $('.panel-tecnico-exist-tpl').html() );
+
+		
+		if ($panelTecnicoExist.length) { 
+			$panelTecnicoForm.hide();
+			setEvents();
+		}
+
+		function setEvents() {
+			$('#panel-tecnico-exist').hover(alHoverIn, alHoverOut);
+		}   
+		
+			function alHoverIn(){
+				$(this).find('.editar').removeClass('hidden').addClass('show');
+				$('#panel-tecnico-exist .editar').one('click', editarTecnico);
+			}
+
+			function alHoverOut(){
+				$(this).find('.editar').removeClass('show').addClass('hidden');
+			}
+
+
+		
+
+		function editarTecnico() {
+			$('#panel-tecnico-exist').slideUp();
+			$panelTecnicoForm.slideDown(); 
+			$cerrarFormBtn.removeClass('hidden');
+			$cerrarFormBtn.one('click', cerrarPanelTecnicoForm); 
+		}
+
+		function cerrarPanelTecnicoForm() {
+			$panelTecnicoForm.slideUp();
+			$('#panel-tecnico-exist').slideDown();
+		}
+
+		/////////////////  AJAX //////////////////
+
+		setActionsFormServicioTecnico();
+
+		function setActionsFormServicioTecnico() {
+            $panelTecnicoForm.find('#id_tecnico').select2();
+            $panelTecnicoForm.find('#guardar-servicio-tecnico-btn').on('click', guardarServicioTecnico);
+        }
+
+        function guardarServicioTecnico() {
+        	var $btn =  $(event.target).button('loading');
+        	var value = $panelTecnicoForm.find('#id_tecnico').val();
+
+        	if ( value == null || value.length == 0 || /^\s+$/.test(value) ) {
+        		$panelTecnicoForm.find('.form-group').addClass('has-error');
+        		return;
+        	}
+        	
+        	var data = $('#form-servicio-tecnico').serialize();
+        	post = $.post(urlGuardarServicioTecnico, data );
+
+        	 post.always(function(data){
+        	 	$('#panel-tecnico-exist').remove();
+	        	$panelTecnicoForm.after( panelTecnicoExistTpl(data) );
+	        	$panelTecnicoForm.slideUp();
+	        	$btn.button('reset');
+	        	setEvents();
+	        });
+        }
+
+	       
+
+
+
+
+
+	</script>
+
+
+
 {% endblock %}

@@ -70,12 +70,10 @@ def hacer_logout(request):
 
 
 def servicio(request, id):
-    loginForm = LoginForm()
+    servicio = Servicio.objects.get(id=id)
+    ctx = {'loginForm':LoginForm(), 'servicio': servicio, 'SERVICIO':Servicio}
 
-    ctx = {'loginForm':loginForm, 'SERVICIO':Servicio}
-
-    ctx['servicio']    = Servicio.objects.get(id=id)
-    ctx['componentes'] = ctx['servicio'].componentes.all()
+    ctx['componentes'] = servicio.componentes.all()
 
     try:
         ctx['estadistica'] = Estadistica.objects.latest()
@@ -83,12 +81,16 @@ def servicio(request, id):
         ctx['estadistica'] = None
 
     if request.user.is_authenticated():
-        ctx['servicioForm']        = ServicioForm(instance=ctx['servicio'])
-        ctx['servicioTecnicoForm'] = ServicioTecnicoForm()
+        ctx['servicioForm']        = ServicioForm(instance=servicio)
         ctx['personaForm']         = PersonaForm()
         ctx['tipoServicioForm']    = TipoServicioForm()
         ctx['marcaForm']           = MarcaForm()
         ctx['componenteForm']      = ComponenteForm()
+
+        if servicio.tecnico:
+            ctx['servicioTecnicoForm'] = ServicioTecnicoForm(instance=servicio)
+        else:
+            ctx['servicioTecnicoForm'] = ServicioTecnicoForm()
 
     return render(request, 'main/servicio.html', ctx)
 

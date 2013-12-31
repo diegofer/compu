@@ -74,7 +74,7 @@ class ServicioTecnicoForm(ModelForm):
         self.helper.layout = Layout(
             'tecnico',
             Hidden('id_servicio', '{{servicio.id}}'),
-            StrictButton('Asignar Tecnico', css_id="guardar-servicio-tecnico-btn", data_loading_text="Guardando...", css_class="btn-danger btn-block btn-lg"),
+            StrictButton('Asignar Tecnico', css_id="guardar-servicio-tecnico-btn", data_loading_text="Guardando...", css_class="btn-warning btn-block btn-lg"),
         )
     
 
