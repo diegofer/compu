@@ -44,8 +44,9 @@ $( document ).ready( function(){
 							pk       : serv.pk,
 							estado   : serv.fields.estado
 						}
+						console.log(serv);
 
-						$menu.append( template(servicio) );
+						$menu.append( template(serv) );
 					});
 					$menu.find('li:last').remove();  // remover el ultimo divider
 				}

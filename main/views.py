@@ -108,8 +108,8 @@ def search_cliente(request):
 
 def search_servicio(request):
     key        = request.GET['key']
-    servicios  = Servicio.objects.filter(pk=key)
-    data       = serializers.serialize('json', servicios, fields=('estado','tipo'))
+    servicios  = Servicio.objects.filter(pk__startswith=key)        
+    data = serializers.serialize('json', servicios, relations=('tipo',), fields=('estado','tipo',), extras=('get_absolute_url',) ) 
 
     return HttpResponse(data, mimetype='application/json')
 

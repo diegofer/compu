@@ -1,16 +1,16 @@
 <script type="text/template" class="item-servicio-tpl">
 	<li>
-		<a href="/servicio/<%= pk %>/">
+		<a href="<%= extras.get_absolute_url %>">
 			
 			<div class="row">
 
 				<div class="col-xs-2" style="font-size:30px; text-align:center;">
-					<i class="fa fa-home"></i> 
+					<i class="fa fa-<%= fields.tipo.fields.icon %> icon <%= fields.estado %>"></i> 
 				</div>
 
 				<div class="col-xs-10">
 					<h5 style="margin:2px 0;" >Servicio No. <%= pk %></h5>
-					<span class="label label-default"><%= estado %> </span> 					
+					<span class="label label-default"><%= fields.estado %> </span> 					
 				</div>
 
 			</div>

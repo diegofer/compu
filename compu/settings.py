@@ -114,6 +114,7 @@ PERMISSIONS_WIDGET_EXCLUDE_APPS = []#'south', 'sessions', 'contenttypes', 'admin
 PERMISSIONS_WIDGET_EXCLUDE_MODELS = []#'auth.permission']
 
 
+
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
@@ -166,5 +167,9 @@ DEBUG_TOOLBAR_CONFIG = {  # 2/3 para django-debug-toolbar
 #     'debug_toolbar.panels.logger.LoggingPanel',
 #     #'debug_toolbar.panels.redirects.InterceptRedirectsPanel',
 # )
+
+SERIALIZATION_MODULES = {
+    'json': 'wadofstuff.django.serializers.json'
+}
 
 
