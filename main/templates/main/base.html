@@ -60,9 +60,34 @@
 	<script src="{{STATIC_URL}}main/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>	
 	<script src="{{STATIC_URL}}main/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.es.js"></script>	
 
+	<script>
+		window.onload  = inicio();
+
+		function inicio() {
+			var $cargando = $('.cargando');
+
+            $(document).ajaxStart(function(){
+                $cargando.removeClass('hidden').addClass('show');
+            }).ajaxStop(function(){
+               $cargando.removeClass('show').addClass('hidden');
+            });
+
+            $('a[href^="/"]').click(function(e) {
+			    console.log(e.target); 
+			    console.log('LLAMADA A URL'); 
+			    $cargando.removeClass('hidden').addClass('show');
+			});
+        }
+
+
+		        
+    </script>
+
+
 	{% if user.is_authenticated %}
-	<script src="{{STATIC_URL}}main/js/app.js?v=004"></script>	
+		<script src="{{STATIC_URL}}main/js/app.js?v=004"></script>	
 	{% endif %}
+
 	{% block js_body %} {% endblock %}
 </body>
 </html>

@@ -27,8 +27,6 @@ $( document ).ready( function(){
         var compu = {
 
             initCompu: function() {
-
-                this.setSpinner();
                 
                 this.setActionsFormServicio();  
                 this.setActionsFormTipo();  
@@ -54,18 +52,6 @@ $( document ).ready( function(){
                 modalMarca.on('hidden.bs.modal', this.alHideMarca);     
                 modalComponente.on('hidden.bs.modal', this.alHideComponente);       
             },
-
-
-            setSpinner: function() {
-                $('.cargando').hide();
-                $(document).ajaxStart(function(){
-                    $('.cargando').show();
-                }).ajaxStop(function(){
-                    $('.cargando').hide();
-                });
-            },
-            
-
 
 
             setActionsFormServicio: function() {

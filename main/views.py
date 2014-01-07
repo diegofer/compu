@@ -11,9 +11,6 @@ from django.db.models import Q
 from datetime import datetime
 import json
 
-
-
-
 from crispy_forms.utils import render_crispy_form
 from jsonview.decorators import json_view
 #from reportlab.pdfgen import canvas para generar pdf
@@ -22,8 +19,8 @@ from termcolor import colored
 #import fabfile as f
 
 from main.models import *
-from main.forms import LoginForm, ServicioForm, PersonaForm, TipoServicioForm, MarcaForm, ComponenteForm, ServicioTecnicoForm
-
+from main.forms import *
+from usuarios.models import Usuario
 
 
 
@@ -118,6 +115,18 @@ def persona(request, id):
     persona = Persona.objects.get(id=id)
     servicios = Servicio.objects.filter(cliente__pk=persona.id).order_by('-created')
     return render(request, 'main/cliente.html', locals())
+
+
+def usuario(request, id):
+    loginForm = LoginForm()
+    usuario =  Usuario.objects.get(pk=id)
+    usuarios = Usuario.objects.exclude(is_superuser=True)
+
+    if usuario.tipo == Usuario.TECNICO or usuario.tipo == Usuario.ADMIN :
+        servicios = Servicio.objects.filter(tecnico__pk=usuario.id, estado=Servicio.EN_COLA)
+        num_servicios = Servicio.objects.filter(tecnico__pk=usuario.id).count()
+
+    return render(request, 'main/usuario.html', locals())
 
 
 ######## ACTUALIZAR APP #############

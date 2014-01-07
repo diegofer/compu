@@ -21,6 +21,7 @@ urlpatterns = patterns('',
    
     url(r'^servicio/(\d+)/$', 'main.views.servicio', name='servicio' ),
     url(r'^persona/(\d+)/$', 'main.views.persona', name='persona' ),
+    url(r'^usuario/(\d+)/$', 'main.views.usuario', name='usuario' ),
     
 
     url(r'^clientes/$', 'main.views.clientes', name='clientes' ),

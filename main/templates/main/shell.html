@@ -24,6 +24,9 @@
                 <li class="item-home {% active request "^/$" %}"><a href="/">Servicios</a></li>
                 <li class="{% active request "^/clientes/" %}"><a href="{% url 'clientes' %}">Clientes</a></li>
                 <li class="item-ayuda"><a href="#">Personal</a></li>
+                <li class="active cargando hidden">
+                    <a><i class="fa fa-refresh fa-spin"></i></a>
+                </li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
@@ -41,7 +44,7 @@
                     <ul class="dropdown-menu ">
                         
                         {% if user.is_authenticated %}
-                        <li> <a href="#"><span class="glyphicon glyphicon-user"></span> Ver Perfil </a> </li>
+                        <li> <a href="{{user.get_absolute_url}}"><span class="glyphicon glyphicon-user"></span> Ver Perfil </a> </li>
                         <li> <a href="{% url 'hacer_logout' %}"><i class="fa fa-sign-out"></i> Salir </a> </li>
                         {% else %}
                             <form class="form-login navbar-form" method="post" action="{% url 'home' %}"> {% csrf_token %}
@@ -133,4 +136,6 @@
 
 {% include 'main/widgets/update.html' %}
 
+
 {% endblock body %}
+

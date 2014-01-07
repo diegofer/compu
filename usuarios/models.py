@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.core.urlresolvers import reverse
+
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin, Group
 
 
@@ -64,7 +66,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 	    return self.email
 
 	def get_absolute_url(self):
-		return '/usuario/' #reverse('main.views.persona', args=[str(self.id)])
+		return reverse('main.views.usuario', args=[str(self.id)])
 
 	def __unicode__(self):
 		return self.email

@@ -1,0 +1,171 @@
+{% extends 'main/shell.html' %}
+
+
+{% block title %}Usuario{% endblock %}
+
+{% block sidebar_left %}
+	<div class="panel panel-default">
+
+		<div class="panel-heading">USUARIOS</div>
+
+		<div class="panel-body">
+
+			<div class="list-group">
+			{% for user in usuarios  %}
+				<a href="{{user.get_absolute_url}}" class="list-group-item">
+					<span class="badge"><i class="fa fa-arrow-right"></i></span> 
+					<i class="fa fa-user fw"></i> {{user.nombre}}
+				</a>
+			{% endfor %}
+			</div>
+			
+		</div>
+
+		<div class="panel-footer">
+			<p>Los usuarios pueden hacer loguin y entrar al sistema.</p>
+		</div>
+		
+
+	</div> <!-- end panel -->
+{% endblock sidebar_left %}
+
+
+{% block header %} 
+	<ul class="nav navbar-nav">
+		<li class="active" ><a href="javascript:;">USUARIO</a></li>
+		<li><a href="javascript:history.back(1)"><i class="fa fa-reply fw"></i> Regresar</a></li>
+	</ul>
+{% endblock header %}
+
+
+{% block content %} 
+	<div id="persona">
+
+		<div class="row encabezado">
+			
+			<div class="col-md-2 foto">
+				
+				<i class="fa fa-user icon-persona"></i>
+				
+			</div>
+			
+			<div class="col-md-10">
+				
+				<h1>
+					<span class="label pull-right label-info"> {{usuario.tipo|upper}} </span>
+					{{usuario.nombre}}
+				</h1>
+				<h3>{{usuario.apellidos}}</h3>
+
+			</div>
+
+		</div> <!-- end row -->
+		<br/>
+
+
+		<div class="row">
+			
+			<div class="col-md-8">
+
+				<h3>Datos Personales</h3>
+
+						<table class="table table-striped">
+							<tbody>	
+								<tr>
+									<td>Cédula: </td>
+									<td><i class="fa fa-check-square-o"></i>&nbsp;&nbsp; {{usuario.dni}}</td>
+								</tr>
+								<tr>
+									<td>Teléfono: </td>
+									<td><i class="fa fa-phone"></i>&nbsp;&nbsp; {{usuario.telefono}}</td>
+								</tr>
+								{% if usuario.email %}
+								<tr>
+									<td>Email: </td>
+									<td><i class="fa fa-envelope-o"></i>&nbsp;&nbsp; {{usuario.email}}</td>
+								</tr>
+								{% endif %}
+
+							</tbody>
+							
+						</table>
+					
+				<br/>
+
+
+				<div class="row">
+
+					<div class="col-xs-4 center">
+						<div class="list-group">
+				    		<a href="#" class="list-group-item">
+						        <span style="font-size:4em;" > {{num_servicios}} </span> 
+						    	<h4> <span class="label label-success">Servicios</span> </h4>
+					    	</a>
+					   </div>
+					</div>
+
+					<div class="col-xs-4">hoal</div>
+					<div class="col-xs-4">hola</div>
+					
+
+
+						
+				</div>
+
+
+
+				
+			</div> <!--  end col-md-8 -->
+
+
+			<div class="col-md-4">
+
+				<div class="panel panel-default">
+					<div class="panel-heading">SERVICIOS PARA REVISAR</div>
+					
+					<div class="list-group">
+					{% for servicio in servicios %}					
+						<a href="{{servicio.get_absolute_url}}" class="list-group-item">
+							
+							<div class="row">
+
+								<div class="col-xs-2" style="font-size:30px; text-align:center;">
+									<i class="fa fa-{{servicio.tipo.icon}} icon {{servicio.estado}} %>"></i> 
+								</div>
+
+								<div class="col-xs-10">
+									<h5 style="margin:2px 0;" >Servicio No. {{servicio.id}}</h5>
+									<span class="label label-danger"> {{servicio.estado}} </span> 					
+								</div>
+
+							</div>
+
+						</a>
+					{% endfor %}
+					</div>
+				
+
+
+				</div>				
+
+			
+					
+				
+			</div>
+
+		</div> <!-- end row -->
+
+
+
+	</div><!--  end #usuario-->
+
+
+	
+{% endblock content %} 
+
+
+
+
+{% block js_body %} 
+
+{% endblock js_body %} 

@@ -83,6 +83,13 @@ MIDDLEWARE_CLASSES = (
    
 )
 
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+#         'LOCATION': 'cache_compu',
+#     }
+# }
+
 ROOT_URLCONF = 'compu.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.

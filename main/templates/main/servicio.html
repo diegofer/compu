@@ -28,7 +28,6 @@
 {% block header %}
 	<ul class="nav navbar-nav">
 		<li class="active"><a href="#">Servicio Detallado</a></li>
-		<li class="cargando"><a href="#"><i class="fa fa-spinner fa-spin"></i></a></li>
 	</ul>
 
 	<form id="search-form" class="navbar-form navbar-left dropdown" role="search">    
@@ -211,7 +210,7 @@
 						
 						<i class="fa fa-user icon-person"></i>
 		
-						<a href="{% url 'persona' servicio.tecnico.id %}" class="btn btn-info btn-block btn-lg" role="button">				 		 
+						<a href="{{servicio.tecnico.get_absolute_url}}" class="btn btn-info btn-block btn-lg" role="button">				 		 
 							{{servicio.tecnico.get_full_name}}
 						</a>		
 					</div>
