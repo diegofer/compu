@@ -60,6 +60,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 	REQUIRED_FIELDS = ['dni']
 
 	def get_full_name(self):
+		if self.nombre:
+			return self.nombre
 		return self.email
 
 	def get_short_name(self):
