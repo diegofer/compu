@@ -4,6 +4,32 @@
 
 {% block title %} Servicio {{servicio.id}} {% endblock %}
 
+{% block css %}
+	<style type="text/css" media="print">
+		
+    		@page {		
+				margin: 5mm;
+				size: 139.7mm 215.9mm;
+			}
+	
+			body {padding-top: 0;}
+			.header {margin-bottom: 7px;}
+			.header h3 { margin-top: 0;}
+   			
+   			.ficha-2 {height: 110px;}
+    		.ficha-2 h4 { margin-top: 2px;}
+    		.ficha-2 h6 {margin-top: -7px;}
+    		.ficha-2 .logo { text-align: center; padding-top: 10px;}
+    		.ficha-2 span { font-size: 11px;}
+
+    		.ficha-3 {height: 60px;}
+    		.ficha-3 .caja-1 {text-align: center;}
+
+    		.nota {text-align: justify;}
+
+	</style>
+{% endblock css %}
+
 {% block js_head %}
 
 	{% if user.is_authenticated %}
@@ -64,12 +90,8 @@
 
 {% block content %}
 
-<div id="msg-success" class="alert alert-success hidden">
-	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-	El estado de este servicio se actualizó correctamente
-</div>
 
-<div id="servicio">
+<div id="servicio" class="hidden-print">
 
 	
 
@@ -84,7 +106,6 @@
 			<h1>
 				<span class="label label-primary pull-right">No. {{servicio.id}}</span>
 				{{servicio.tipo.nombre}} {{servicio.marca.nombre}} 
-
 			</h1>
 			<span id="estado-label" class="label estado {{servicio.estado|labelizar}} ">{{servicio.estado}} </span> 
 			&nbsp;{{servicio.entregado|date:"D d M f a"}} <br/><br/>
@@ -278,14 +299,20 @@
 
 
 
-		<!--################# FACTURA ##################-->
-		{% include 'main/print/facturaServicio.html' %}
+		
 
 	{% endif %}
 
 	{% include 'main/tpl/itemServicioTpl.html' %}
 
 {% endblock content %}
+
+
+{% block print %}
+<!--################# FACTURA ##################-->
+		{% include 'main/print/facturaServicio.html' %}
+{% endblock print %}
+
 
 
 {% block js_body %} 
@@ -296,6 +323,8 @@
 			$cerrarFormBtn       = $panelTecnicoForm.find('.cerrar'),
 			$panelTecnicoExist   = $('#panel-tecnico-exist'),
 			panelTecnicoExistTpl = _.template( $('.panel-tecnico-exist-tpl').html() );
+		$('#print-servicio-btn').on('click', printServicio);
+
 
 		
 		if ($panelTecnicoExist.length) { 
@@ -361,6 +390,31 @@
 	        });
         }
 
+		function printServicio (event) {
+			event.preventDefault();
+			console.log('hola soy print');
+			window.print();
+			window.focus();
+			window.close();
+
+		    // 
+		    // var factura = $('#factura-servicio').html();
+		      
+		    // var printWindow = window.open("Impresion", '_blank', 'resizable=1,scrollbars=1,left=500,top=000,width=868'); 
+		    // printWindow.document.write(factura); 
+
+		    // printWindow.document.close(); 
+
+		    // Establecemos el foco.
+		    //printWindow.focus(); 
+
+		    // Lanzamos la impresión.
+		    //printWindow.print();   
+
+		    //printWindow.close();
+		}
+
+
 	       
 
 
@@ -372,3 +426,4 @@
 
 
 {% endblock %}
+

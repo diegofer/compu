@@ -37,7 +37,6 @@ $( document ).ready( function(){
 
                 $('#guardar-servicio-btn').on('click', this.guardarServicio);
                 $('#edit-servicio-btn').on('click', {modal:modalServicio}, this.showModal);
-                $('#print-servicio-btn').on('click', {factura:'factura'}, this.printServicio);
                 
                 $('#guardar-persona-btn').on('click', this.guardarPersona);
                 $('#guardar-tipo-servicio-btn').on('click', this.guardarTipoServicio);
@@ -164,29 +163,6 @@ $( document ).ready( function(){
             /////////   PRINT METODOS  /////////
 
 
-            printServicio: function (event) {
-
-                event.preventDefault();
-                console.log('empece a imprimit');
-                var factura = $('#factura-servicio').html();
-                console.log(factura);
-
-    
-                var printWindow = window.open("", '_blank', 'resizable=1,scrollbars=1,left=500,top=000,width=868'); 
-                printWindow.document.write(factura); 
-
-                printWindow.document.close(); 
-            
-                // Establecemos el foco.
-                printWindow.focus(); 
-            
-                // Lanzamos la impresión.
-                printWindow.print();   
-
-                printWindow.close();
-            },
-
-
             update: function(event) {
 
                 modalUpdate = $('#modal-update').modal({backdrop: 'static'});
@@ -269,8 +245,7 @@ $( document ).ready( function(){
                     
                     var estadoBtn = $('#conten-estado .estado-btn').addClass('disabled'),
                         btnActual = $(event.currentTarget),
-                        $msgSucces = $('#msg-success'),
-
+                        
                         data = {
                             estado: event.currentTarget.id,
                             servicio_id: $('#servicio-id').val(),

@@ -5,7 +5,7 @@
 {% block body %}
 
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-	<div class="container">
+	<div class="container hidden-print">
 
 		<div class="navbar-header">
             <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-content-collapse">
@@ -135,6 +135,9 @@
 
 
 {% include 'main/widgets/update.html' %}
+
+{% block print %}{% endblock %}
+
 
 
 {% endblock body %}

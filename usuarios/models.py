@@ -65,12 +65,16 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 		return self.email
 
 	def get_short_name(self):
-	    return self.email
+		if self.nombre:
+			return self.nombre
+		return self.email
 
 	def get_absolute_url(self):
 		return reverse('main.views.usuario', args=[str(self.id)])
 
 	def __unicode__(self):
+		if self.nombre:
+			return self.nombre
 		return self.email
 
 	@property
