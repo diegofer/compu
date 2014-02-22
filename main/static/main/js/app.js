@@ -33,7 +33,6 @@ $( document ).ready( function(){
                 this.setActionsFormComponente();                
 
                 $('#servicio-btn').on('click',{modal:modalServicio}, this.showModal);
-                    $('.estado-btn').on('click', this.guardarEstado);
 
                 $('#guardar-servicio-btn').on('click', this.guardarServicio);
                 $('#edit-servicio-btn').on('click', {modal:modalServicio}, this.showModal);
@@ -223,11 +222,6 @@ $( document ).ready( function(){
             },
             
 
-            
-            
-
-
-
             /////////   AJAX METODOS  /////////
 
             guardarServicio: function(event) {
@@ -241,28 +235,6 @@ $( document ).ready( function(){
                 });
             },
 
-                guardarEstado: function(event) {
-                    
-                    var estadoBtn = $('#conten-estado .estado-btn').addClass('disabled'),
-                        btnActual = $(event.currentTarget),
-                        
-                        data = {
-                            estado: event.currentTarget.id,
-                            servicio_id: $('#servicio-id').val(),
-                            csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
-                        };
-                        console.log(data.estado);
-
-                    $.post(urlGuardarServicioEstado, data)
-                        .fail(function() {
-                            alert( "error" );
-                        })
-                        .always(function(data){
-                            if (data.success) wd.location.reload(true);
-                            else alert('no se puedo actualizar el estado, intentalo nuevamente');                     
-                        });
-                        
-                },
 
 
                 fadeElement: function() {

@@ -132,7 +132,7 @@
 					{% if servicio.estado == servicio.REPARADO or servicio.estado == servicio.ENTREGADO  %}
 						<strong>Técnico:</strong>  {{servicio.tecnico}}
 					{% else %}
-						<strong>Fecha de entrega:</strong>  {{servicio.plazo}}
+						<strong>Fecha de entrega:</strong>  {{servicio.plazo|date:"D d M f a"}}
 					{% endif %}	
 				</div>
 			</div>

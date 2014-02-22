@@ -41,6 +41,10 @@
 		var urlGuardarTipoServicio      = '{% url "guardar_tipo_servicio" %}';
 		var urlGuardarMarca             = '{% url "guardar_marca" %}';
 		var urlGuardarComponente        = '{% url "guardar_componente" %}';
+
+		var servicio = {
+            tecnico: '{{servicio.tecnico|default:""}}'            
+        };
 	</script>
 	{% endif %}
 
@@ -316,114 +320,7 @@
 
 
 {% block js_body %} 
-	<script src="{{STATIC_URL}}main/js/servicios.js"></script>	
-	
-	<script>
-		var $panelTecnicoForm    = $('#panel-tecnico-form'),
-			$cerrarFormBtn       = $panelTecnicoForm.find('.cerrar'),
-			$panelTecnicoExist   = $('#panel-tecnico-exist'),
-			panelTecnicoExistTpl = _.template( $('.panel-tecnico-exist-tpl').html() );
-		$('#print-servicio-btn').on('click', printServicio);
-
-
-		
-		if ($panelTecnicoExist.length) { 
-			$panelTecnicoForm.hide();
-			setEvents();
-		}
-
-		function setEvents() {
-			$('#panel-tecnico-exist').hover(alHoverIn, alHoverOut);
-		}   
-		
-			function alHoverIn(){
-				$(this).find('.editar').removeClass('hidden').addClass('show');
-				$('#panel-tecnico-exist .editar').one('click', editarTecnico);
-			}
-
-			function alHoverOut(){
-				$(this).find('.editar').removeClass('show').addClass('hidden');
-			}
-
-
-		
-
-		function editarTecnico() {
-			$('#panel-tecnico-exist').slideUp();
-			$panelTecnicoForm.slideDown(); 
-			$cerrarFormBtn.removeClass('hidden');
-			$cerrarFormBtn.one('click', cerrarPanelTecnicoForm); 
-		}
-
-		function cerrarPanelTecnicoForm() {
-			$panelTecnicoForm.slideUp();
-			$('#panel-tecnico-exist').slideDown();
-		}
-
-		/////////////////  AJAX //////////////////
-
-		setActionsFormServicioTecnico();
-
-		function setActionsFormServicioTecnico() {
-            $panelTecnicoForm.find('#id_tecnico').select2();
-            $panelTecnicoForm.find('#guardar-servicio-tecnico-btn').on('click', guardarServicioTecnico);
-        }
-
-        function guardarServicioTecnico() {
-        	var $btn =  $(event.target).button('loading');
-        	var value = $panelTecnicoForm.find('#id_tecnico').val();
-
-        	if ( value == null || value.length == 0 || /^\s+$/.test(value) ) {
-        		$panelTecnicoForm.find('.form-group').addClass('has-error');
-        		return;
-        	}
-        	
-        	var data = $('#form-servicio-tecnico').serialize();
-        	post = $.post(urlGuardarServicioTecnico, data );
-
-        	 post.always(function(data){
-        	 	$('#panel-tecnico-exist').remove();
-	        	$panelTecnicoForm.after( panelTecnicoExistTpl(data) );
-	        	$panelTecnicoForm.slideUp();
-	        	$btn.button('reset');
-	        	setEvents();
-	        });
-        }
-
-		function printServicio (event) {
-			event.preventDefault();
-			console.log('hola soy print');
-			window.print();
-			window.focus();
-			window.close();
-
-		    // 
-		    // var factura = $('#factura-servicio').html();
-		      
-		    // var printWindow = window.open("Impresion", '_blank', 'resizable=1,scrollbars=1,left=500,top=000,width=868'); 
-		    // printWindow.document.write(factura); 
-
-		    // printWindow.document.close(); 
-
-		    // Establecemos el foco.
-		    //printWindow.focus(); 
-
-		    // Lanzamos la impresión.
-		    //printWindow.print();   
-
-		    //printWindow.close();
-		}
-
-
-	       
-
-
-
-
-
-	</script>
-
-
-
+	<script src="{{STATIC_URL}}main/js/app/servicios.js"></script>	
+	<script src="{{STATIC_URL}}main/js/app/servicio.js"></script>	
 {% endblock %}
 
