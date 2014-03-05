@@ -92,7 +92,7 @@ $(document).ready(function(){
 
 	function notaModoNormal() {
 		setEventsPanelNota();
-		activarEdit();
+		//activarEdit();
 		$itemNota.slideDown();
 		$formNota.slideUp();
 		$cerrarFormNotaBtn.removeClass('show').addClass('hidden');

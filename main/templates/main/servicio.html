@@ -200,30 +200,27 @@
 			{% endif %}
 			
 
-			<br/>
+			<div class="well well-sm" style="margin-bottom: 10px;">
+				&nbsp;<i class="fa fa-puzzle-piece"></i> &nbsp; Componentes
+			</div>
+			
+			<div class="row">
 
-			<h4>
-				<i class="fa fa-puzzle-piece"></i>
-				&nbsp; Componentes
-			</h4>
+				{% for componente in componentes %}
+					<div class="col-md-3 center">
+				    	<!-- <div class="well well-sm"> -->
+				    	<div class="list-group">
+				    		<a href="#" class="list-group-item">
+						        <i class="fa fa-3x fa-{{componente.icon}}"></i>
+						    	<h6>{{componente.nombre}}</h6>
+					    	</a>
+					   </div>
+					</div>
+				{% empty %}
+					No hay componentes
+				{% endfor %}
+			</div>
 
-			<div class="row componentes">
-
-			{% for componente in componentes %}
-				<div class="col-md-4 center">
-			    	<!-- <div class="well well-sm"> -->
-			    	<div class="list-group">
-			    		<a href="#" class="list-group-item">
-					        <i class="fa fa-4x fa-{{componente.icon}}"></i>
-					    	<h6>{{componente.nombre|upper}}</h6>
-				    	</a>
-				   </div>
-				</div>
-			{% empty %}
-				No hay componentes
-			{% endfor %}
-
-			</div> <!-- end row componentes  -->
 		</div> 
 
 
