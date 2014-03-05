@@ -124,9 +124,6 @@ select {
 #servicio .servicio-person {
   text-align: center;
 }
-#servicio .servicio-person .icon-person {
-  font-size: 60px;
-}
 .progress-servicio {
   margin-top: 20px;
   margin-bottom: 40px;

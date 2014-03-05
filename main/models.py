@@ -87,6 +87,8 @@ class Servicio(models.Model):
 	entregado   = models.DateTimeField(blank=True, null=True)
 	estado      = models.CharField(max_length=12, choices=ESTADO, default=EN_COLA, blank=True)
 	plazo       = models.DateTimeField(default=datetime.now()+timedelta(days=1), blank=True)
+	nota        = models.TextField("Nota Técnica", blank=True)
+	
 
 	def __unicode__(self):
 		return "%s de %s" %( self.tipo.nombre, self.cliente.nombre )

@@ -50,7 +50,7 @@ class ServicioForm(ModelForm):
 
     class Meta:
         model = Servicio
-        exclude = ['estado', 'tecnico']
+        exclude = ['estado', 'tecnico', 'nota']
         localized_fields = ('plazo',)
         widgets = {
             'plazo': DateTimeInput(format=Servicio.DATA_TIME_FORMAT),
@@ -63,24 +63,42 @@ class ServicioTecnicoForm(ModelForm):
         super(ServicioTecnicoForm, self).__init__(*args, **kwargs)
 
         self.helper = FormHelper(self)
-
         self.fields['tecnico'].label = ""
-
         self.fields['tecnico'].queryset = Usuario.objects.filter(tipo__in=[Usuario.TECNICO,Usuario.ADMIN])
-
         self.helper.form_id     = 'form-servicio-tecnico'
-
 
         self.helper.layout = Layout(
             'tecnico',
             Hidden('id_servicio', '{{servicio.id}}'),
-            StrictButton('Asignar Tecnico', css_id="guardar-servicio-tecnico-btn", data_loading_text="Guardando...", css_class="btn-warning btn-block btn-lg"),
+            StrictButton('Asignar Tecnico', css_id="guardar-servicio-tecnico-btn", data_loading_text="Guardando...", css_class="btn-warning btn-block btn-sm"),
         )
-    
 
     class Meta:
         model = Servicio
         fields = ['tecnico']
+
+
+class ServicioNotaForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ServicioNotaForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper(self)
+        self.helper.form_show_labels = False
+        self.helper.form_id     = 'form-servicio-nota'
+        #self.helper.form_class  = 'hidden'
+        self.helper.layout = Layout(
+            Field('nota', rows="4"),
+            Hidden('id_servicio', '{{servicio.id}}'),
+            StrictButton('guardar datos de mantenimiento', css_id="guardar-servicio-nota-btn", css_class="btn-success btn-block btn-xs", data_loading_text="guardando..."),
+        )
+
+
+    class Meta:
+        model = Servicio
+        fields = ['nota']
+
+        
         
 
 class PersonaForm(ModelForm):

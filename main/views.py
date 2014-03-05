@@ -89,6 +89,12 @@ def servicio(request, id):
         else:
             ctx['servicioTecnicoForm'] = ServicioTecnicoForm()
 
+        if servicio.nota:
+            ctx['servicioNotaForm'] = ServicioNotaForm(instance=servicio)
+        else:
+            ctx['servicioNotaForm'] = ServicioNotaForm()
+
+
     return render(request, 'main/servicio.html', ctx)
 
 
@@ -194,20 +200,6 @@ def guardar_servicio(request):
     form_html = render_crispy_form(form, context=RequestContext(request))
     return {'success': False, 'form_html': form_html}
 
-@json_view
-def guardar_servicio_tecnico(request):
-    servicio = Servicio.objects.get(pk=request.POST['id_servicio'])
-    form = ServicioTecnicoForm(request.POST or None, instance=servicio)
-
-    if request.POST['tecnico']:
-        
-        if form.is_valid():
-            servicio = form.save()
-            return {'success': True, 'tecnico': servicio.tecnico.get_full_name(), 'url_tecnico': servicio.tecnico.get_absolute_url() }
-        print form.errors 
-    form_html = render_crispy_form(form, context=RequestContext(request))
-    return {'success': False, 'form_html': form_html, 'id_servicio': servicio.id}
-
 
 @json_view
 def guardar_servicio_estado(request):
@@ -228,6 +220,33 @@ def guardar_servicio_estado(request):
     registrar_estadisticas() # registro estadistacas en base de datos
 
     return {'success': True, 'estado':servicio.estado}
+
+
+@json_view
+def guardar_servicio_nota(request):
+    servicio = Servicio.objects.get(pk=request.POST['id_servicio'])
+    form     = ServicioNotaForm(request.POST or None, instance=servicio)
+
+    if request.POST['nota']:
+        if form.is_valid():
+            servicio = form.save()
+            return {'success': True, 'nota': servicio.nota}
+        print form.errors
+
+
+@json_view
+def guardar_servicio_tecnico(request):
+    servicio = Servicio.objects.get(pk=request.POST['id_servicio'])
+    form = ServicioTecnicoForm(request.POST or None, instance=servicio)
+
+    if request.POST['tecnico']:
+        
+        if form.is_valid():
+            servicio = form.save()
+            return {'success': True, 'tecnico': servicio.tecnico.get_full_name(), 'url_tecnico': servicio.tecnico.get_absolute_url() }
+        print form.errors 
+    form_html = render_crispy_form(form, context=RequestContext(request))
+    return {'success': False, 'form_html': form_html, 'id_servicio': servicio.id}
 
 
 

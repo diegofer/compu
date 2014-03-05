@@ -61,7 +61,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
 	def get_full_name(self):
 		if self.nombre:
-			return self.nombre
+			return "%s %s" %(self.nombre, self.apellidos)
 		return self.email
 
 	def get_short_name(self):
@@ -74,7 +74,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
 	def __unicode__(self):
 		if self.nombre:
-			return self.nombre
+			return "%s %s" %(self.nombre, self.apellidos)
 		return self.email
 
 	@property
