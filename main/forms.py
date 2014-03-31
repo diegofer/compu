@@ -98,6 +98,28 @@ class ServicioNotaForm(ModelForm):
         model = Servicio
         fields = ['nota']
 
+class ServicioPrecioForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ServicioPrecioForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper(self)
+        self.helper.form_show_labels = False
+        self.helper.form_id     = 'form-servicio-precio'
+        #self.helper.form_class  = 'hidden'
+        self.helper.layout = Layout(
+            'precio',
+            Hidden('id_servicio', '{{servicio.id}}'),
+            StrictButton('guardar precio', css_id="guardar-servicio-precio-btn", css_class="btn-success btn-block btn-xs", data_loading_text="guardando..."),
+        )
+
+
+    class Meta:
+        model = Servicio
+        fields = ['precio']
+
+
+
         
         
 

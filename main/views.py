@@ -94,6 +94,8 @@ def servicio(request, id):
         else:
             ctx['servicioNotaForm'] = ServicioNotaForm()
 
+        ctx['servicioPrecioForm'] = ServicioPrecioForm()
+
 
     return render(request, 'main/servicio.html', ctx)
 

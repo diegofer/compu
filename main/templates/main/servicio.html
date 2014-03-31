@@ -13,6 +13,7 @@
 			}
 	
 			body {padding-top: 0;}
+			.well {margin-bottom: 10px;}
 			.header {margin-bottom: 7px;}
 			.header h3 { margin-top: 0;}
    			
@@ -115,25 +116,54 @@
 			<span id="estado-label" class="label estado {{servicio.estado|labelizar}} ">{{servicio.estado}} </span> 
 			&nbsp;{{servicio.entregado|date:"D d M f a"}} <br/><br/>
 
+			<div class="row">
+				<div class="col-xs-4">
 
-			<div id="conten-estado"  class="btn-group">
-			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.EN_COLA}}" id="{{servicio.EN_COLA}}"
-			    		title="en cola"> 
-			    	<i class="fa fa-clock-o fw"></i> 
-			    </button>
-			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.EN_REVISION}}" id="{{servicio.EN_REVISION}}" title="en revisión">
-			    	<i class="fa fa-wrench"></i>
-			    </button>
-			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.REPARADO}}" id="{{servicio.REPARADO}}" title="reparado" >
-			    	<i class="fa fa-check"></i>
-			    </button>
-			    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.ENTREGADO}}" id="{{servicio.ENTREGADO}}" title="entregado">
-			    	<i class="fa fa-smile-o"></i>
-			    </button>			    
+					<div id="conten-estado"  class="btn-group">
+					    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.EN_COLA}}" id="{{servicio.EN_COLA}}"
+					    		title="en cola"> 
+					    	<i class="fa fa-clock-o fw"></i> 
+					    </button>
+					    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.EN_REVISION}}" id="{{servicio.EN_REVISION}}" title="en revisión">
+					    	<i class="fa fa-wrench"></i>
+					    </button>
+					    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.REPARADO}}" id="{{servicio.REPARADO}}" title="reparado" >
+					    	<i class="fa fa-check"></i>
+					    </button>
+					    <button type="button" class="estado-btn btn {{servicio.estado|estado_btn:servicio.ENTREGADO}}" id="{{servicio.ENTREGADO}}" title="entregado">
+					    	<i class="fa fa-smile-o"></i>
+					    </button>			    
+					</div>
+
+					<input id="servicio-id" type="hidden" value="{{servicio.id}}">
+					{% csrf_token %}
+
+				</div>
+
+				<div class="col-xs-4">
+
+					<div class="input-group">
+						<input type="text" class="form-control">
+
+						<div class="input-group-btn">
+					        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+					        	 <span class="caret"></span>
+					        </button>
+					        <ul class="dropdown-menu pull-right">
+					            <li> {% crispy servicioPrecioForm %}</li>					          
+					        </ul>
+					    </div><!-- /btn-group -->
+
+					</div>
+
+					
+
+				</div>
 			</div>
+				
 
-			<input id="servicio-id" type="hidden" value="{{servicio.id}}">
-			{% csrf_token %}
+
+			
 
 
 			

@@ -88,6 +88,7 @@ class Servicio(models.Model):
 	estado      = models.CharField(max_length=12, choices=ESTADO, default=EN_COLA, blank=True)
 	plazo       = models.DateTimeField(default=datetime.now()+timedelta(days=1), blank=True)
 	nota        = models.TextField("Nota Técnica", blank=True)
+	precio      = models.PositiveIntegerField(blank=True, null=True)
 	
 
 	def __unicode__(self):
