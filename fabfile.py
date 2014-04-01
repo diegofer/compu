@@ -7,33 +7,29 @@ import re
 
 RUTA_PROYECTO = os.path.join(os.path.dirname(os.path.abspath(__file__)))
 
-STYLUS_PATH = 'main/static/main/css/stylus/'
-STYLUS_FILE = 'main/static/main/css/stylus/style.styl' 
+
+####################################################
+##              SERVIDOR DE PRODUCCION            ##
+####################################################
+COMPUCLINICA_PATH   = 'home/diego/compuclinica/compu'
+IMPRETINTAS_PATH    = 'home/diego/impretintas/compu'
+
+def actualizar_github():
+	local('git add . && git commit -a')
+	local('git push origin master')
 
 
 
 
-def initial_data():
-	local('./manage.py dumpdata --indent=4 --exclude=main --exclude=south --exclude=auth.permission --exclude=contenttypes --exclude=admin.logentry --exclude=sessions  > usuarios/fixtures/initial_data.json')
 
 
-################ COMANDOS STYLUS  ################
 
-def watch_stylus(): 
-	with lcd(STYLUS_PATH):
-		local('stylus -w -o ../  %s' % STYLUS_FILE)
-
-
-def actualizar():
-	git_pull()
-
-
-################ COMANDOS GIT  ################
-def git_pull():
-	local('git pull')
 
 
 ################ COMANDOS DJANGO  ################
+def initial_data():
+	local('./manage.py dumpdata --indent=4 --exclude=main --exclude=south --exclude=auth.permission --exclude=contenttypes --exclude=admin.logentry --exclude=sessions  > usuarios/fixtures/initial_data.json')
+
 def dumpdata_group():
 	local(django_manage('./manage.py dumpdata --indent=4 --natural auth.Group > main/fixtures/initial_data.json'))
 
